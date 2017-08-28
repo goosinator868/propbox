@@ -1,6 +1,6 @@
 # Templates Folder
 
-This folder contains HTML Templates.
+This folder contains HTML templates.
 
 
 | File Name      | Description                                   |
