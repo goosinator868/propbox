@@ -29,7 +29,7 @@ class AddItem(webapp2.RequestHandler):
                 creator_id=auth.get_user_id(self.request),
                 name=self.request.get('name'),
                 description=self.request.get('description', default_value=''),
-                qr_code=1234)
+                qr_code=1234, type=self.request.get('type'))
             newItem.put()
             self.redirect("/")
         except:
