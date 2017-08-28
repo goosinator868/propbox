@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+  <link rel="import" href="/static/common.html">
+
+  <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
+
+  <script>
+    $(document).ready(function(){
+      SetUpNavBar(SetUpFirebase);
+    });
+  </script>
+
+  <title>Prop Box</title>
+</head>
+
+<body>
+  <div id="navbar_holder"></div>
+  <div id="left-pane">
+    <!-- View current items -->
+    <div>
+      {% for item in items %}
+        <div class="item_container">
+          <h2>{{item.name}}</h2>
+          <h4>created by : {{item.creator_id}} at {{item.updated.strftime('%-I:%M:%S%p %b %d %Y')}}</h4>
+          <p>{{item.description}}</p>
+          <form action="/delete_item" method="post">
+            <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+            <input type="submit" value="delete">
+          </form>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div id="right-pane">
+    <!-- New item form -->
+    <div class="form">
+        <h1> Create New Item </h1>
+        <form action="/add_item" method="post">
+          <input name="name" type="text" placeholder="name"><br>
+          <textarea name="description" placeholder="description"></textarea><br>
+          <input type="submit" value="create">
+        </form>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+runtime: python27
+api_version: 1
+threadsafe: true
+
+libraries:
+- name: webapp2
+  version: latest
+- name: jinja2
+  version: latest
+
+handlers:
+- url: /scripts
+  static_dir: scripts
+
+- url: /stylesheets
+  static_dir: stylesheets
+
+- url: /static
+  static_dir: static
+
+- url: /.*
+  script: main.app
+  secure: always
+
+
+env_variables:
+  # Replace with your Firebase project ID.
+  FIREBASE_PROJECT_ID: 'uah-management-prototype'

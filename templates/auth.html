@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <!-- Firebase requirements (used by later imports) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.css">
+
+  <!-- First party imports in specific dependency ordering -->
+  <script src="/scripts/cookies.js"></script>
+  <script src="/scripts/auth_page_auth.js"></script>
+  <title>Prop Box</title>
+</head>
+<body>
+  <div id="logged-out">
+    <h1>Prop Box</h1>
+    <h3>Sign in to access your warehouse</h3>
+    <!-- Magic ID for firebase login UI -->
+    <div id="firebaseui-auth-container"></div>
+  </div>
+
+  <div id="logged-in">
+    <h1>Redirecting, <span id="user"></span>!</h1>
+  </div>
+
+</body>
+</html>
