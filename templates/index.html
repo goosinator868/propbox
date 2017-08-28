@@ -44,7 +44,18 @@
             <option>Costume</option>
             <option>Prop</option>
           </select>
-          <input type="submit" value="create">
+          <input type="submit" value="Create">
+        </form>
+    </div>
+
+    <!-- Search form -->
+    <div class="form">
+        <h1> Filter Items </h1>
+        <form action="/filter_displayed_items" method="post">
+            <input name="filter_by_name" type="text" placeholder="name"><br>
+            <input name="filter_by_costume" type="checkbox" value="yes"> Costume <br>
+            <input name="filter_by_prop" type="checkbox" value="yes"> Prop <br>
+            <input type="submit" value="Search">
         </form>
     </div>
   </div>

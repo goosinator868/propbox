@@ -11,6 +11,7 @@ from google.appengine.ext import ndb
 # First party imports
 from warehouse_models import Item
 import auth
+import list_filter
 
 ## Handlers
 class MainPage(webapp2.RequestHandler):
@@ -19,7 +20,29 @@ class MainPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
         query = Item.query().order(-Item.updated)
         items = query.fetch()
+        #items = FilterVisibleList(items)
         self.response.write(template.render({'items': items}))
+
+class FilterItems(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        try:
+            UpdateVisibleList(name_filter, costume_filter, prop_filter)
+            self.redirect("/")
+        except:
+            # Should never be here unless the token has expired,
+            # meaning that we forgot to refresh their token.
+            self.redirect("/enforce_auth")
+    def post(self):
+        try:
+            name_filter = self.request.get('filter_by_name')
+            costume_filter = self.request.get('filter_by_costume', default_value="no")
+            prop_filter=self.request.get('filter_by_prop', default_value="no")
+            self.redirect("/")
+        except:
+            # Should never be here unless the token has expired,
+            # meaning that we forgot to refresh their token.
+            self.redirect("/enforce_auth")
 
 class AddItem(webapp2.RequestHandler):
     @auth.login_required
@@ -29,7 +52,8 @@ class AddItem(webapp2.RequestHandler):
                 creator_id=auth.get_user_id(self.request),
                 name=self.request.get('name'),
                 description=self.request.get('description', default_value=''),
-                qr_code=1234, type=self.request.get('type'))
+                qr_code=1234,
+                type=self.request.get('type'))
             newItem.put()
             self.redirect("/")
         except:
@@ -60,5 +84,6 @@ app = webapp2.WSGIApplication([
     ('/delete_item', DeleteItem),
     ('/add_item', AddItem),
     ('/enforce_auth', AuthHandler),
+    ('/filter_displayed_items', FilterItems),
     ('/.*', MainPage),
 ], debug=True)
