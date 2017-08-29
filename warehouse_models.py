@@ -14,3 +14,10 @@ class Item(ndb.Model):
     deleted = ndb.BooleanProperty(required=True,default=False)
     #outdated is True if there is a newer version to be shown; items with outdated=True will not be displayed.
     outdated = ndb.BooleanProperty(required=True,default=False)
+
+#Returns a clone of a given item.
+def cloneItem(oldItem):
+    return Item(creator_id=oldItem.creator_id,
+    	name=oldItem.name,
+    	description=oldItem.description,
+    	qr_code=oldItem.qr_code)

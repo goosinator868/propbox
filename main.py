@@ -10,7 +10,7 @@ from time import sleep
 from google.appengine.ext import ndb
 
 # First party imports
-from warehouse_models import Item
+from warehouse_models import Item, cloneItem
 import auth
 
 #Little helper function for rendering the main page.
@@ -46,10 +46,16 @@ class AddItem(webapp2.RequestHandler):
 class DeleteItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
-        template = JINJA_ENVIRONMENT.get_template('templates/index.html')
+        #template = JINJA_ENVIRONMENT.get_template('templates/index.html')
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
         item.deleted = True
-        item.put()
+        toPut = [item]
+        while item.older_version:
+            item = item.older_version.get()
+            toPut.append(item)
+            item.deleted = True
+        for i in toPut:
+            i.put()
         # TODO: redirect back to items view.
         sleep(0.05)
         self.redirect("/")
@@ -58,10 +64,19 @@ class DeleteItem(webapp2.RequestHandler):
 class DeleteItemForever(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
-        template = JINJA_ENVIRONMENT.get_template('templates/review_edits.html')
+        #template = JINJA_ENVIRONMENT.get_template('templates/review_edits.html')
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
         if item.deleted:
-            item.key.delete()
+            toDelete = [item]
+            while item.older_version:
+                item = item.older_version.get()
+                toDelete.append(item)
+            logging.info("\n\n\n")
+            logging.info(toDelete)
+            while toDelete:
+                delete = toDelete.pop()
+                #logging.info(delete)
+                delete.key.delete()
         sleep(0.1)
         self.redirect('/load_edit_page')
 
@@ -69,11 +84,33 @@ class DeleteItemForever(webapp2.RequestHandler):
 class UndeleteItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
-        template = JINJA_ENVIRONMENT.get_template('templates/review_edits.html')
+        #template = JINJA_ENVIRONMENT.get_template('templates/review_edits.html')
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
-        if item.deleted:
+        item.deleted = False
+        item.put()
+        while item.older_version:
+            item = item.older_version.get()
             item.deleted = False
             item.put()
+        sleep(0.1)
+        self.redirect('/')
+
+#Currently marks an item as "edited" and updates the database.
+#TODO: Change method to actually send user to an edit page.
+#THIS IS A TEMPORARY METHOD!
+class EditItem(webapp2.RequestHandler):
+    #@auth.login_required
+    def post(self):
+        item = ndb.Key(urlsafe=self.request.get('item_id')).get()
+        newItem = cloneItem(item)
+        newItem.description += "(A CLONE)"
+        newItem = newItem.put().get()
+        item.outdated = True
+        item.newer_version = newItem.key
+        newItem.older_version = item.key
+        logging.info(item.to_dict())
+        item.put()
+        newItem.put()
         sleep(0.1)
         self.redirect('/')
 
@@ -85,18 +122,37 @@ class AuthHandler(webapp2.RequestHandler):
 
 #Loads the edit page.
 class LoadEditPage(webapp2.RequestHandler):
+    def post(self):
+        self.get()
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/review_edits.html')
-        query = Item.query().order(-Item.updated)
-        items = query.fetch()
+        items = Item.query().order(-Item.updated).fetch()
         deleted = []
-        outdated = []
+        hasOldVersion = []
+        newAndOld = []
         for item in items:
-            if item.deleted: 
+            if item.deleted and item.newer_version == None: 
                 deleted.append(item)
-            elif item.outdated: #TODO: fix outdated listing.
-                outdated.append(item)
-        self.response.write(template.render({'deleted':deleted,'outdated':outdated}))
+            elif item.older_version:
+                hasOldVersion.append(item)
+        for newest in hasOldVersion:
+            #Hides all but latest version. 
+            #TODO: Debate revision.
+            if newest.outdated is False and newest.deleted is False: 
+                newAndOld.append([newest,newest.older_version.get()])
+        self.response.write(template.render({'deleted':deleted,'revised':newAndOld}))
+
+#Keeps a revision.
+#TODO: Actually implement.
+class KeepRevision(webapp2.RequestHandler):
+    def post(self):
+        self.redirect('/load_edit_page')
+
+#Discards a revision.
+#TODO: Actually implement.
+class DiscardRevision(webapp2.RequestHandler):
+    def post(self):
+        self.redirect('/load_edit_page')
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -108,7 +164,10 @@ app = webapp2.WSGIApplication([
     ('/delete_item_forever', DeleteItemForever),
     ('/undelete_item', UndeleteItem),
     ('/add_item', AddItem),
+    ('/edit_item', EditItem),
     ('/enforce_auth', AuthHandler),
     ('/load_edit_page',LoadEditPage),
+    ('/keep_revision',KeepRevision),
+    ('/discard_revision',DiscardRevision),
     ('/.*', MainPage),
 ], debug=True)

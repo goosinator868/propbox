@@ -15,7 +15,7 @@
 
 <body>
   <div id="navbar_holder"></div>
-  <br/><div><form action="/"><input type="submit" value="Main Page"/></form><br/>
+  <br/><div><form action="/" method="get"><input type="submit" value="Main Page"/></form><br/>
   <div id="left-pane">
     Deleted List<br/>
     <div id="deleted_list">
@@ -24,6 +24,7 @@
           <h2>{{item.name}}</h2>
           <h4>created by : {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
           <p>{{item.description}}</p>
+          <p>{{item.key}}</p>
           <br/>
           <!-- <p>Deleted = {{item.deleted}} and Outdated = {{item.outdated}}</p> -->
         <form action="/delete_item_forever" method="post">
@@ -39,18 +40,30 @@
    </div>
    <div id="right-pane">
    Items with past versions<br/>
-    <div id="outdated_list">
-      {% for item in outdated %}
+    <div id="revised_list">
+      {% for item in revised %}
         <div class="item_container">
-          <h2>{{item.name}}</h2>
-          <h4>created by : {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
-          <p>{{item.description}}</p>
+          <strong>Previous Version</strong>
+          <h2>{{item[0].name}}</h2>
+          <h4>created by : {{item[0].creator_id}} at {{item[0].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+          <p>{{item[0].description}}</p>
           <br/>
-          <p>Deleted = {{item.deleted}} and Outdated = {{item.outdated}}</p>
-<!--           <form action="/delete_item" method="post">
-            <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-            <input type="submit" value="delete">
-          </form> -->
+          <p>Deleted = {{item[0].deleted}} and Outdated = {{item[0].outdated}}</p>
+          <div class="sub_item_container">
+            <h2>{{item[1].name}}</h2>
+            <h4>created by : {{item[1].creator_id}} at {{item[1].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+            <p>{{item[1].description}}</p>
+            <br/>
+            <p>Deleted = {{item[1].deleted}} and Outdated = {{item[1].outdated}}</p>
+          </div>
+          <form action="/keep_revision" method="post">
+            <input type="hidden" name="item_id" value="{{item[1].key.urlsafe()}}">
+            <input type="submit" value="Keep New Version">
+          </form>
+          <form action="/discard_revision" method="post">
+            <input type="hidden" name="item_id" value="{{item[1].key.urlsafe()}}">
+            <input type="submit" value="Discard changes">
+          </form>
         </div>
       {% endfor %}
     </div></div>
