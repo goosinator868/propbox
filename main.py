@@ -75,11 +75,59 @@ class AuthHandler(webapp2.RequestHandler):
 
 def FilterItems():
     if CostumeFilterEnabled() == True and PropFilterEnabled() == False:
-        query = Item.query(Item.type == "Costume")
+        query = Item.query(Item.type == "Costume").order(-Item.updated, Item.condition)
     elif CostumeFilterEnabled() == False and PropFilterEnabled() == True:
-        query = Item.query(Item.type == "Prop")
+        query = Item.query(Item.type == "Prop").order(-Item.updated, Item.condition)
     else:
-        query = Item.query().order(-Item.updated)
+        query = Item.query().order(-Item.updated, Item.condition)
+
+    # Handles Condition selection options
+    if ConditionGoodFilterEnabled():
+        if ConditionFairFilterEnabled():
+            if ConditionPoorFilterEnabled():
+                if ConditionRepairFilterEnabled():
+                    query = query.filter(ndb.OR(Item.condition == "Good", Item.condition == "Fair", Item.condition == "Poor", Item.condition == "Being Repaired"))
+                else:
+                    query = query.filter(ndb.OR(Item.condition == "Good", Item.condition == "Fair", Item.condition == "Poor"))
+            else:
+                if ConditionRepairFilterEnabled():
+                    query = query.filter(ndb.OR(Item.condition == "Good", Item.condition == "Fair", Item.condition == "Being Repaired"))
+                else:
+                    query = query.filter(ndb.OR(Item.condition == "Good", Item.condition == "Fair"))
+        else:
+            if ConditionPoorFilterEnabled():
+                if ConditionRepairFilterEnabled():
+                    query = query.filter(ndb.OR(Item.condition == "Good", Item.condition == "Poor", Item.condition == "Being Repaired"))
+                else:
+                    query = query.filter(ndb.OR(Item.condition == "Good", Item.condition == "Poor"))
+            else:
+                if ConditionRepairFilterEnabled():
+                    query = query.filter(ndb.OR(Item.condition == "Good", Item.condition == "Being Repaired"))
+                else:
+                    query = query.filter(Item.condition == "Good")
+    else:
+        if ConditionFairFilterEnabled():
+            if ConditionPoorFilterEnabled():
+                if ConditionRepairFilterEnabled():
+                    query = query.filter(ndb.OR(Item.condition == "Fair", Item.condition == "Poor", Item.condition == "Being Repaired"))
+                else:
+                    query = query.filter(ndb.OR(Item.condition == "Fair", Item.condition == "Poor"))
+            else:
+                if ConditionRepairFilterEnabled():
+                    query = query.filter(ndb.OR(Item.condition == "Fair", Item.condition == "Being Repaired"))
+                else:
+                    query = query.filter(Item.condition == "Being Repaired")
+        else:
+            if ConditionPoorFilterEnabled():
+                if ConditionRepairFilterEnabled():
+                    query = query.filter(ndb.OR(Item.condition == "Poor", Item.condition == "Being Repaired"))
+                else:
+                    query = query.filter(Item.condition == "Poor")
+            else:
+                if ConditionRepairFilterEnabled():
+                    query = query.filter(Item.condition == "Being Repaired")
+                else:
+                    query = query.filter(Item.condition == "")
 
     return query
 
