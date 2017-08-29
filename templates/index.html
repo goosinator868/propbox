@@ -17,7 +17,7 @@
 <body>
   <div id="navbar_holder"></div>
   <br/>
-  <div id="temp_nav_area">&nbsp;<form action='/load_edit_page' method='get'><input type='submit' value="Review Edits / Deletions"></input></form></div>
+  <div id="temp_nav_area">&nbsp;<form action='/review_edits' method='get'><input type='submit' value="Review Edits / Deletions"></input></form></div>
   <br/>
   <div id="left-pane">
     <!-- View current items -->
@@ -33,6 +33,10 @@
           <form action="/delete_item" method="post">
             <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
             <input type="submit" value="Delete">
+          </form>
+          <form action="/edit_item" method="get">
+            <input type="hidden" name="base_id" value="{{item.key.urlsafe()}}">
+            <input type="submit" value="Edit">
           </form>
         </div>
       {% endif %}
