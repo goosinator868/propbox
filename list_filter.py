@@ -15,27 +15,20 @@ import list_filter
 
 ## Global Variables
 name_filter = ""
-costume_filter = False
+costume_filter = True
 prop_filter = True
 
 ## Handlers
-def UpdateVisibleList(list):
-    new_list = [];
-    if costume_filter == True && prop_filter == False:
-        for item in list:
-            if item.type == "prop":
-                newlist.append(item)
-    elif costume_filter == False && prop_filter == True:
-        for item in list:
-            if item.type == "costume":
-                newlist.append(item)
+def CostumeFilterEnabled():
+    global costume_filter
+    return costume_filter
 
-    return newlist
+def PropFilterEnabled():
+    global prop_filter
+    return prop_filter
 
-
-
-def FilterVisibleList(name, costume, prop):
-    global name_filter, costume_filter, prop_filter
+def UpdateVisibleList(name, costume, prop):
+    global costume_filter, prop_filter, name_filter
     name_filter = name
     if costume == "yes":
         costume_filter = True
