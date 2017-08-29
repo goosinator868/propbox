@@ -48,15 +48,18 @@
         </form>
     </div>
 
-    <!-- Search form -->
-    <div class="form">
-        <h1> Filter Items </h1>
-        <form action="/filter_displayed_items" method="post">
-            <input name="filter_by_name" type="text" placeholder="name"><br>
-            <input name="filter_by_costume" type="checkbox" value="yes"> Costume <br>
-            <input name="filter_by_prop" type="checkbox" value="yes"> Prop <br>
-            <input type="submit" value="Search">
-        </form>
+    <div id="right-pane">
+        <!-- Search form -->
+        <div class="form">
+            <h1> Filter Items </h1>
+            <form action="/filter_displayed_items" method="post">
+                <input name="filter_by_name" type="text" placeholder="name"><br>
+                <input type="radio" name="filter_by_item" value="costume"> Costume<br>
+                <input type="radio" name="filter_by_item" value="prop"> Prop<br>
+                <input type="radio" name="filter_by_item" value="all" checked="checked"> All
+                <input type="submit" value="Search">
+            </form>
+        </div>
     </div>
   </div>
 </body>

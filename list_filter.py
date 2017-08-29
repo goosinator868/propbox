@@ -27,15 +27,15 @@ def PropFilterEnabled():
     global prop_filter
     return prop_filter
 
-def UpdateVisibleList(name, costume, prop):
+def UpdateVisibleList(name, type):
     global costume_filter, prop_filter, name_filter
     name_filter = name
-    if costume == "yes":
+    if type == "costume":
         costume_filter = True
-    else:
-        costume_filter = False
-
-    if prop == "yes":
-        prop_filter = True
-    else:
         prop_filter = False
+    elif type == "prop":
+        prop_filter = True
+        costume_filter = False
+    else:
+        prop_filter = True
+        costume_filter = True

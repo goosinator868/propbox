@@ -33,9 +33,10 @@ class FilterItems(webapp2.RequestHandler):
     def post(self):
         try:
             name_filter = self.request.get('filter_by_name')
-            costume_filter = self.request.get('filter_by_costume', default_value="no")
-            prop_filter=self.request.get('filter_by_prop', default_value="no")
-            UpdateVisibleList(name_filter, costume_filter, prop_filter)
+            #costume_filter = self.request.get('filter_by_costume', default_value="no")
+            #prop_filter=self.request.get('filter_by_prop', default_value="no")
+            type_filter = self.request.get('filter_by_item')
+            UpdateVisibleList(name_filter, type_filter)
             self.redirect("/")
         except:
             # Should never be here unless the token has expired,
