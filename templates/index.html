@@ -16,6 +16,9 @@
 
 <body>
   <div id="navbar_holder"></div>
+  <br/>
+  <div id="temp_nav_area">&nbsp;<form action='/load_edit_page' method='get'><input type='submit' value="Review Edits / Deletions"></input></form></div>
+  <br/>
   <div id="left-pane">
     <!-- View current items -->
     <div>
@@ -26,10 +29,10 @@
           <h4>created by : {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
           <p>{{item.description}}</p>
           <br/>
-          <p>Deleted = {{item.deleted}} and Outdated = {{item.outdated}}</p>
+          <!-- <p>Deleted = {{item.deleted}} and Outdated = {{item.outdated}}</p> -->
           <form action="/delete_item" method="post">
             <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-            <input type="submit" value="delete">
+            <input type="submit" value="Delete">
           </form>
         </div>
       {% endif %}

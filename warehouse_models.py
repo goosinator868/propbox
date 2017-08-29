@@ -13,4 +13,4 @@ class Item(ndb.Model):
     #deleted is True if an item was deleted by a user but has not yet been purged from the system.
     deleted = ndb.BooleanProperty(required=True,default=False)
     #outdated is True if there is a newer version to be shown; items with outdated=True will not be displayed.
-    outdated = ndb.BooleanProperty(required=True,default=True)
+    outdated = ndb.BooleanProperty(required=True,default=False)

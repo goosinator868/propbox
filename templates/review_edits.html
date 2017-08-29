@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+  <link rel="import" href="/static/common.html">
+
+  <script>
+    $(document).ready(function(){
+      SetUpNavBar(SetUpFirebase);
+    });
+  </script>
+
+  <title>Prop Box</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
+</head>
+
+<body>
+  <div id="navbar_holder"></div>
+  <br/><div><form action="/"><input type="submit" value="Main Page"/></form><br/>
+  <div id="left-pane">
+    Deleted List<br/>
+    <div id="deleted_list">
+      {% for item in deleted %}
+        <div class="item_container">
+          <h2>{{item.name}}</h2>
+          <h4>created by : {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+          <p>{{item.description}}</p>
+          <br/>
+          <!-- <p>Deleted = {{item.deleted}} and Outdated = {{item.outdated}}</p> -->
+        <form action="/delete_item_forever" method="post">
+            <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+            <input type="submit" value="Delete Forever">
+          </form>
+        <form action="/undelete_item" method="post">
+            <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+            <input type="submit" value="Restore Item">
+          </form>
+        </div>
+      {% endfor %}</div>
+   </div>
+   <div id="right-pane">
+   Items with past versions<br/>
+    <div id="outdated_list">
+      {% for item in outdated %}
+        <div class="item_container">
+          <h2>{{item.name}}</h2>
+          <h4>created by : {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+          <p>{{item.description}}</p>
+          <br/>
+          <p>Deleted = {{item.deleted}} and Outdated = {{item.outdated}}</p>
+<!--           <form action="/delete_item" method="post">
+            <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+            <input type="submit" value="delete">
+          </form> -->
+        </div>
+      {% endfor %}
+    </div></div>
+</body>
+</html>
