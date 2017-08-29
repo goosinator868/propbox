@@ -8,3 +8,4 @@ class Item(ndb.Model):
     description = ndb.StringProperty(required=False)
     qr_code = ndb.IntegerProperty(required=False)
     type = ndb.StringProperty(required=True)
+    condition = ndb.StringProperty(required=True)

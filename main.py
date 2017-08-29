@@ -18,25 +18,23 @@ class MainPage(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
-        if CostumeFilterEnabled() == True and PropFilterEnabled() == False:
-            query = Item.query(Item.type == "Costume")
-        elif CostumeFilterEnabled() == False and PropFilterEnabled() == True:
-            query = Item.query(Item.type == "Prop")
-        else:
-            query = Item.query().order(-Item.updated)
-
+        query = FilterItems()
         items = query.fetch()
         self.response.write(template.render({'items': items}))
 
-class FilterItems(webapp2.RequestHandler):
+class UpdateItemsFilter(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
         try:
             name_filter = self.request.get('filter_by_name')
-            #costume_filter = self.request.get('filter_by_costume', default_value="no")
-            #prop_filter=self.request.get('filter_by_prop', default_value="no")
-            type_filter = self.request.get('filter_by_item')
-            UpdateVisibleList(name_filter, type_filter)
+            type_filter = self.request.get('filter_by_type')
+            condition_filter_good = self.request.get('filter_by_condition_good', default_value=False)
+            condition_filter_fair = self.request.get('filter_by_condition_fair', default_value=False)
+            condition_filter_poor = self.request.get('filter_by_condition_poor', default_value=False)
+            condition_filter_repair = self.request.get('filter_by_condition_repair', default_value=False)
+            UpdateVisibleList(name_filter, type_filter, condition_filter_good,
+                condition_filter_fair, condition_filter_poor,
+                condition_filter_repair)
             self.redirect("/")
         except:
             # Should never be here unless the token has expired,
@@ -52,7 +50,8 @@ class AddItem(webapp2.RequestHandler):
                 name=self.request.get('name'),
                 description=self.request.get('description', default_value=''),
                 qr_code=1234,
-                type=self.request.get('type'))
+                type=self.request.get('type'),
+                condition=self.request.get('condition'))
             newItem.put()
             self.redirect("/")
         except:
@@ -74,6 +73,16 @@ class AuthHandler(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/auth.html')
         self.response.write(template.render({}))
 
+def FilterItems():
+    if CostumeFilterEnabled() == True and PropFilterEnabled() == False:
+        query = Item.query(Item.type == "Costume")
+    elif CostumeFilterEnabled() == False and PropFilterEnabled() == True:
+        query = Item.query(Item.type == "Prop")
+    else:
+        query = Item.query().order(-Item.updated)
+
+    return query
+
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
@@ -83,6 +92,6 @@ app = webapp2.WSGIApplication([
     ('/delete_item', DeleteItem),
     ('/add_item', AddItem),
     ('/enforce_auth', AuthHandler),
-    ('/filter_displayed_items', FilterItems),
+    ('/update_items_filter', UpdateItemsFilter),
     ('/.*', MainPage),
 ], debug=True)
