@@ -28,6 +28,7 @@ class AddItem(webapp2.RequestHandler):
             newItem = Item(
                 creator_id=auth.get_user_id(self.request),
                 name=self.request.get('name'),
+                image=self.request.get('image', default_value=''),
                 description=self.request.get('description', default_value=''),
                 qr_code=1234)
             newItem.put()
@@ -46,6 +47,13 @@ class DeleteItem(webapp2.RequestHandler):
         # TODO: redirect back to items view.
         self.redirect("/")
 
+class ViewImage(webapp2.RequestHandler):
+    def get(self):
+        item_key = ndb.Key(urlsafe=self.request.get('entity_id'))
+        item = item_key.get()
+        self.response.headers['Content-Type'] = 'image/png'
+        self.response.out.write(item.image)
+
 class AuthHandler(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/auth.html')
@@ -59,6 +67,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 app = webapp2.WSGIApplication([
     ('/delete_item', DeleteItem),
     ('/add_item', AddItem),
+    ('/view_image', ViewImage),
     ('/enforce_auth', AuthHandler),
     ('/.*', MainPage),
 ], debug=True)
