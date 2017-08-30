@@ -8,6 +8,7 @@ from time import sleep
 
 # Third party imports.
 from google.appengine.ext import ndb
+from google.appengine.ext.db import TransactionFailedError
 
 # First party imports
 from warehouse_models import Item, cloneItem
@@ -60,16 +61,19 @@ def CommitUnDelete(item_key):
 
 @ndb.transactional(xg=True, retries=1)
 def CommitPurge(item_key):
-    to_purge = set([item_key])
-    # Get all children
-    # Get all parents
-    for item in to_purge:
-        item.key.delete()
+    toDelete = [item_key]
+    while item_key.parent():
+        item_key = item_key.parent()
+        toDelete.append(item_key)
+    # logging.info("\n\n\n")
+    # logging.info(toDelete)
+    for k in toDelete:
+        k.delete()
 
 @ndb.transactional(xg=True, retries=1)
 def CommitEdit(old_key, new_item, was_orphan=False):
-    '''Stores the new item and ensures that the 
-       parent-child relationship is enforced between the 
+    '''Stores the new item and ensures that the
+       parent-child relationship is enforced between the
        old item and the new item.
 
        TRANSACTIONAL: This is transactional so all edits to the database
@@ -80,7 +84,7 @@ def CommitEdit(old_key, new_item, was_orphan=False):
        Args:
             old_key: The key of the item that this is an edit to.
             new_item: The new version of the item to be commited.
-            was_orphan: If the item was already stored in the database as an orphan 
+            was_orphan: If the item was already stored in the database as an orphan
                         (likely due to a edit item race)
     '''
     old_item = old_key.get()
@@ -125,7 +129,7 @@ class AddItem(webapp2.RequestHandler):
 
 class ResolveEdits(webapp2.RequestHandler):
     @auth.login_required
-    def get(self):        
+    def get(self):
         new_item = ndb.Key(urlsafe=self.request.get('new_item_key')).get()
         old_item = new_item.key.parent().get()
         old_item = FindUpdatedItem(old_item)
@@ -201,8 +205,8 @@ class DeleteItem(webapp2.RequestHandler):
         #template = JINJA_ENVIRONMENT.get_template('templates/index.html')
         id_string = self.request.get('item_id')
         try:
-        except OutdatedEditException as e:
             CommitDelete(ndb.Key(urlsafe=id_string))
+        except OutdatedEditException as e:
             # TODO: Expose this message to the user.
             logging.info('you are trying to delete an old version of this item, please reload the page and try again if you really wish to delete this item.')
         except TransactionFailedError as e:
@@ -222,8 +226,8 @@ class DeleteItemForever(webapp2.RequestHandler):
         # TODO: ensure this has no children.
         # TODO: delete all parents.
         try:
-        except TransactionFailedError as e:
             CommitPurge(item_key)
+        except TransactionFailedError as e:
              # TODO: Expose this message to the user.
             logging.info('could not purge the item, pelase try again')
         sleep(0.1)
@@ -247,21 +251,21 @@ class UndeleteItem(webapp2.RequestHandler):
 #Currently marks an item as "edited" and updates the database.
 #TODO: Change method to actually send user to an edit page.
 #THIS IS A TEMPORARY METHOD!
-class EditItem(webapp2.RequestHandler):
-    #@auth.login_required
-    def post(self):
-        item = ndb.Key(urlsafe=self.request.get('item_id')).get()
-        newItem = cloneItem(item)
-        newItem.description += "(A CLONE)"
-        newItem = newItem.put().get()
-        item.outdated = True
-        item.newer_version = newItem.key
-        newItem.older_version = item.key
-        logging.info(item.to_dict())
-        item.put()
-        newItem.put()
-        sleep(0.1)
-        self.redirect('/')
+# class EditItem(webapp2.RequestHandler):
+#     @auth.login_required
+#     def post(self):
+#         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
+#         newItem = cloneItem(item)
+#         newItem.description += "(A CLONE)"
+#         newItem = newItem.put().get()
+#         item.outdated = True
+#         item.newer_version = newItem.key
+#         newItem.older_version = item.key
+#         logging.info(item.to_dict())
+#         item.put()
+#         newItem.put()
+#         sleep(0.1)
+#         self.redirect('/')
 
 
 class AuthHandler(webapp2.RequestHandler):
@@ -280,15 +284,15 @@ class ReviewEdits(webapp2.RequestHandler):
         hasOldVersion = []
         newAndOld = []
         for item in items:
-            if item.deleted and item.newer_version == None: 
+            if item.deleted and item.child == None:
                 deleted.append(item)
-            elif item.older_version:
+            elif item.key.parent():
                 hasOldVersion.append(item)
         for newest in hasOldVersion:
-            #Hides all but latest version. 
+            #Hides all but latest version.
             #TODO: Debate revision.
-            if newest.outdated is False and newest.deleted is False: 
-                newAndOld.append([newest,newest.older_version.get()])
+            if newest.outdated is False and newest.deleted is False:
+                newAndOld.append([newest, newest.key.parent().get()])
         self.response.write(template.render({'deleted':deleted,'revised':newAndOld}))
 
 #Keeps a revision.
@@ -317,8 +321,6 @@ app = webapp2.WSGIApplication([
     ('/enforce_auth', AuthHandler),
     ('/review_edits', ReviewEdits),
     ('/resolve_edits', ResolveEdits),
-    ('/edit_item', EditItem),
-    ('/load_edit_page',LoadEditPage),
     ('/discard_revision',DiscardRevision),
     ('/keep_revision',KeepRevision),
     ('/.*', MainPage),

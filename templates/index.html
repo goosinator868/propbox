@@ -29,7 +29,7 @@
           <p>{{item.description}}</p>
           <br/>
           <p>Deleted = {{item.deleted}} and Outdated = {{item.outdated}}</p>
-          <p>Parent = {{item.newer_version}} and child = {{item.older_version}}</p>
+          <p>Parent = {{item.key.parent()}} and child = {{item.child}}</p>
           <form action="/delete_item" method="post">
             <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
             <input type="submit" value="Delete">
