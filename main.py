@@ -74,60 +74,22 @@ class AuthHandler(webapp2.RequestHandler):
         self.response.write(template.render({}))
 
 def FilterItems():
-    if CostumeFilterEnabled() == True and PropFilterEnabled() == False:
-        query = Item.query(Item.item_type == "Costume").order(-Item.updated, Item.condition)
-    elif CostumeFilterEnabled() == False and PropFilterEnabled() == True:
-        query = Item.query(Item.item_type == "Prop").order(-Item.updated, Item.condition)
-    else:
-        query = Item.query().order(-Item.updated, Item.condition)
-
-    # Handles Condition selection options
+    conditions_filter = []
     if ConditionGoodFilterEnabled():
-        if ConditionFairFilterEnabled():
-            if ConditionPoorFilterEnabled():
-                if ConditionRepairFilterEnabled():
-                    query = query.filter(ndb.OR(Item.condition == "Good", Item.condition == "Fair", Item.condition == "Poor", Item.condition == "Being Repaired"))
-                else:
-                    query = query.filter(ndb.OR(Item.condition == "Good", Item.condition == "Fair", Item.condition == "Poor"))
-            else:
-                if ConditionRepairFilterEnabled():
-                    query = query.filter(ndb.OR(Item.condition == "Good", Item.condition == "Fair", Item.condition == "Being Repaired"))
-                else:
-                    query = query.filter(ndb.OR(Item.condition == "Good", Item.condition == "Fair"))
-        else:
-            if ConditionPoorFilterEnabled():
-                if ConditionRepairFilterEnabled():
-                    query = query.filter(ndb.OR(Item.condition == "Good", Item.condition == "Poor", Item.condition == "Being Repaired"))
-                else:
-                    query = query.filter(ndb.OR(Item.condition == "Good", Item.condition == "Poor"))
-            else:
-                if ConditionRepairFilterEnabled():
-                    query = query.filter(ndb.OR(Item.condition == "Good", Item.condition == "Being Repaired"))
-                else:
-                    query = query.filter(Item.condition == "Good")
+        conditions_filter.append("Good")
+    if ConditionFairFilterEnabled():
+        conditions_filter.append("Fair")
+    if ConditionPoorFilterEnabled():
+        conditions_filter.append("Poor")
+    if ConditionRepairFilterEnabled():
+        conditions_filter.append("Being Repaired")
+
+    if CostumeFilterEnabled() == True and PropFilterEnabled() == False:
+        query = Item.query(ndb.AND(Item.condition == conditions_filter, Item.item_type == "Costume")).order(-Item.updated, Item.condition)
+    elif CostumeFilterEnabled() == False and PropFilterEnabled() == True:
+        query = Item.query(ndb.AND(Item.condition == conditions_filter, Item.item_type == "Prop")).order(-Item.updated, Item.condition)
     else:
-        if ConditionFairFilterEnabled():
-            if ConditionPoorFilterEnabled():
-                if ConditionRepairFilterEnabled():
-                    query = query.filter(ndb.OR(Item.condition == "Fair", Item.condition == "Poor", Item.condition == "Being Repaired"))
-                else:
-                    query = query.filter(ndb.OR(Item.condition == "Fair", Item.condition == "Poor"))
-            else:
-                if ConditionRepairFilterEnabled():
-                    query = query.filter(ndb.OR(Item.condition == "Fair", Item.condition == "Being Repaired"))
-                else:
-                    query = query.filter(Item.condition == "Being Repaired")
-        else:
-            if ConditionPoorFilterEnabled():
-                if ConditionRepairFilterEnabled():
-                    query = query.filter(ndb.OR(Item.condition == "Poor", Item.condition == "Being Repaired"))
-                else:
-                    query = query.filter(Item.condition == "Poor")
-            else:
-                if ConditionRepairFilterEnabled():
-                    query = query.filter(Item.condition == "Being Repaired")
-                else:
-                    query = query.filter(Item.condition == "")
+        query = Item.query(Item.condition.IN(conditions_filter)).order(-Item.updated, Item.condition)
 
     return query
 
