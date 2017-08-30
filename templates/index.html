@@ -22,7 +22,7 @@
       {% for item in items %}
         <div class="item_container">
           <h2>{{item.name}}</h2>
-          <h3>{{item.type}}</h3>
+          <h3>{{item.item_type}}</h3>
           <h4>Created by: {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
           <h5>Condition: {{item.condition}}</h5>
           <p>{{item.description}}</p>
@@ -63,9 +63,9 @@
             <form action="/update_items_filter" method="post">
                 <input name="filter_by_name" type="text" placeholder="name"><br>
                 <h2> Type </h2><br>
-                <input type="radio" name="filter_by_type" value="all" checked="checked"> All<br>
-                <input type="radio" name="filter_by_type" value="costume"> Costume<br>
-                <input type="radio" name="filter_by_type" value="prop"> Prop<br>
+                <input type="radio" name="filter_by_item_type" value="all" checked="checked"> All<br>
+                <input type="radio" name="filter_by_item_type" value="costume"> Costume<br>
+                <input type="radio" name="filter_by_item_type" value="prop"> Prop<br>
                 <h2> Condition </h2><br>
                 <input type="checkbox" name="filter_by_condition_good" value=True checked="checked"> Good<br>
                 <input type="checkbox" name="filter_by_condition_fair" value=True checked="checked"> Fair<br>

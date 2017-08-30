@@ -27,12 +27,12 @@ class UpdateItemsFilter(webapp2.RequestHandler):
     def post(self):
         try:
             name_filter = self.request.get('filter_by_name')
-            type_filter = self.request.get('filter_by_type')
+            item_type_filter = self.request.get('filter_by_item_type')
             condition_filter_good = self.request.get('filter_by_condition_good', default_value=False)
             condition_filter_fair = self.request.get('filter_by_condition_fair', default_value=False)
             condition_filter_poor = self.request.get('filter_by_condition_poor', default_value=False)
             condition_filter_repair = self.request.get('filter_by_condition_repair', default_value=False)
-            UpdateVisibleList(name_filter, type_filter, condition_filter_good,
+            UpdateVisibleList(name_filter, item_type_filter, condition_filter_good,
                 condition_filter_fair, condition_filter_poor,
                 condition_filter_repair)
             self.redirect("/")
@@ -50,7 +50,7 @@ class AddItem(webapp2.RequestHandler):
                 name=self.request.get('name'),
                 description=self.request.get('description', default_value=''),
                 qr_code=1234,
-                type=self.request.get('type'),
+                item_type=self.request.get('item_type'),
                 condition=self.request.get('condition'))
             newItem.put()
             self.redirect("/")
@@ -75,9 +75,9 @@ class AuthHandler(webapp2.RequestHandler):
 
 def FilterItems():
     if CostumeFilterEnabled() == True and PropFilterEnabled() == False:
-        query = Item.query(Item.type == "Costume").order(-Item.updated, Item.condition)
+        query = Item.query(Item.item_type == "Costume").order(-Item.updated, Item.condition)
     elif CostumeFilterEnabled() == False and PropFilterEnabled() == True:
-        query = Item.query(Item.type == "Prop").order(-Item.updated, Item.condition)
+        query = Item.query(Item.item_type == "Prop").order(-Item.updated, Item.condition)
     else:
         query = Item.query().order(-Item.updated, Item.condition)
 
