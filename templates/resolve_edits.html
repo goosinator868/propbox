@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+  <link rel="import" href="/static/common.html">
+
+  <script>
+    $(document).ready(function(){
+      SetUpNavBar(SetUpFirebase);
+    });
+  </script>
+
+  <title>Prop Box</title>
+</head>
+
+<body>
+  <div id="navbar_holder"></div>
+  <!-- New content here -->
+  <h2> Current version </h2>
+  <div class="item_container">
+    <h2>{{old_item.name}}</h2>
+    <p>{{old_item.description}}</p>
+    <br/>
+  </div>
+
+  <h2> Pending edit </h2>
+  <div class="item_container">
+    <h2>{{new_item.name}}</h2>
+    <p>{{new_item.description}}</p>
+    <br/>
+  </div>
+
+
+  <div class="form">
+    <h1> Final </h1>
+    <form action="/resolve_edits" method="post">
+      Name: <input name="name" type="text" value="{{new_item.name}}"><br>
+      Description: <textarea name="description">{{new_item.description}}</textarea><br>
+      <input type="hidden" name="old_item_key" value="{{old_item.key.urlsafe()}}">
+      <input type="hidden" name="new_item_key" value="{{new_item.key.urlsafe()}}">
+      <input type="submit" value="save">
+    </form>
+  </div>
+</body>
+</html>
