@@ -23,7 +23,6 @@
     <!-- View current items -->
     <div>
       {% for item in items %}
-      {% if item.deleted==false and item.outdated==false %}
         <div class="item_container">
           <h2>{{item.name}}</h2>
           <h4>created by : {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
@@ -35,11 +34,10 @@
             <input type="submit" value="Delete">
           </form>
           <form action="/edit_item" method="get">
-            <input type="hidden" name="base_id" value="{{item.key.urlsafe()}}">
+            <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
             <input type="submit" value="Edit">
           </form>
         </div>
-      {% endif %}
       {% endfor %}
     </div>
   </div>

@@ -23,6 +23,7 @@ An experiment with AppEngine to make a junior design project prototype.
 | Folder Name    | Description                                             |
 |----------------|---------------------------------------------------------|
 | scripts/       | This folder contains scripts for use in various places. |
-| static/        | This folder contains static HTML files.                 |
 | stylesheets/   | This folder contains CSS files.                         |
 | templates/     | This folder contains HTML templates.                    |
+| static/        | This folder contains any static files that are not js,  |
+|                | css, or jinja templates                                 |
