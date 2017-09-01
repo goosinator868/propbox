@@ -245,27 +245,8 @@ class UndeleteItem(webapp2.RequestHandler):
         except TransactionFailedError as e:
              # TODO: Expose this message to the user.
             logging.info('could not un-delete the item, pelase try again')
-        sleep(0.1)
+        sleep(0.1) #CUT FOR DEPLOYING
         self.redirect('/')
-
-#Currently marks an item as "edited" and updates the database.
-#TODO: Change method to actually send user to an edit page.
-#THIS IS A TEMPORARY METHOD!
-# class EditItem(webapp2.RequestHandler):
-#     @auth.login_required
-#     def post(self):
-#         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
-#         newItem = cloneItem(item)
-#         newItem.description += "(A CLONE)"
-#         newItem = newItem.put().get()
-#         item.outdated = True
-#         item.newer_version = newItem.key
-#         newItem.older_version = item.key
-#         logging.info(item.to_dict())
-#         item.put()
-#         newItem.put()
-#         sleep(0.1)
-#         self.redirect('/')
 
 
 class AuthHandler(webapp2.RequestHandler):
@@ -289,23 +270,27 @@ class ReviewEdits(webapp2.RequestHandler):
             elif item.key.parent():
                 hasOldVersion.append(item)
         for newest in hasOldVersion:
-            #Hides all but latest version.
-            #TODO: Debate revision.
             if newest.outdated is False and newest.deleted is False:
-                newAndOld.append([newest, newest.key.parent().get()])
+                history = []
+                parent = newest.key.parent()
+                while parent:
+                    history.append(parent.get())
+                    parent = parent.parent()
+                count = range(len(history))
+                newAndOld.append([newest, history, count])
         self.response.write(template.render({'deleted':deleted,'revised':newAndOld}))
 
 #Keeps a revision.
 #TODO: Actually implement.
 class KeepRevision(webapp2.RequestHandler):
     def post(self):
-        self.redirect('/load_edit_page')
+        self.redirect('/review_edits')
 
 #Discards a revision.
 #TODO: Actually implement.
 class DiscardRevision(webapp2.RequestHandler):
     def post(self):
-        self.redirect('/load_edit_page')
+        self.redirect('/review_edits')
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),

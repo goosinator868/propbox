@@ -43,29 +43,49 @@
     <div id="revised_list">
       {% for item in revised %}
         <div class="item_container">
-          <strong>Previous Version</strong>
+          <strong>Current Version</strong>
           <h2>{{item[0].name}}</h2>
           <h4>created by : {{item[0].creator_id}} at {{item[0].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
           <p>{{item[0].description}}</p>
           <br/>
           <p>Deleted = {{item[0].deleted}} and Outdated = {{item[0].outdated}}</p>
-          <div class="sub_item_container">
-            <h2>{{item[1].name}}</h2>
-            <h4>created by : {{item[1].creator_id}} at {{item[1].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
-            <p>{{item[1].description}}</p>
-            <br/>
-            <p>Deleted = {{item[1].deleted}} and Outdated = {{item[1].outdated}}</p>
-          </div>
-          <form action="/keep_revision" method="post">
-            <input type="hidden" name="item_id" value="{{item[1].key.urlsafe()}}">
-            <input type="submit" value="Keep New Version">
-          </form>
+          <!-- item[0] = newest, item[1] = history (list), item[2] = count (list of numbers) -->
+          {% for i in item[2] %}
+            <div class="sub_item_container" style="display: {% if i != 0 %} none{% else %} block{% endif %};" id="{{item[0].name+'_'+item[0].creator_id+'_'+i|string}}">
+              <strong>Previous Versions</strong>
+              <h2>{{item[1][i].name}}</h2>
+              <h4>created by : {{item[1][i].creator_id}} at {{item[1][i].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+              <p>{{item[1][i].description}}</p>
+              <br/>
+              <p>Deleted = {{item[1][i].deleted}} and Outdated = {{item[1][i].outdated}}</p>
+              <form action="/keep_revision" method="post">
+                <!-- TODO: Fix form. -->
+                <input type="hidden" name="item_id" value="{{item[1][i].key.urlsafe()}}">
+                <input type="submit" value="Revert To This Version">
+              </form>
+              <button onclick="switchItem('{{item[0].name+'_'+item[0].creator_id+'_'+i|string}}','{{item[0].name+'_'+item[0].creator_id+'_'+(i-1)|string}}')"{% if i == 0 %} disabled="disabled" style="color: #bbb;"{% endif %}">Previous</button> 
+              <button onclick="switchItem('{{item[0].name+'_'+item[0].creator_id+'_'+i|string}}','{{item[0].name+'_'+item[0].creator_id+'_'+(i+1)|string}}')"{% if i == item[2][-1] %} disabled="disabled" style="color: #bbb;" {% endif %};">Next</button>
+            </div>
+            {% endfor %}
           <form action="/discard_revision" method="post">
-            <input type="hidden" name="item_id" value="{{item[1].key.urlsafe()}}">
-            <input type="submit" value="Discard changes">
+            <input type="hidden" name="item_id" value="{{item[1][0].key.urlsafe()}}">
+            <input type="submit" value="Keep Current Version">
           </form>
         </div>
       {% endfor %}
     </div></div>
 </body>
+<script type="text/javascript">
+  function switchItem(hideID, showID) {
+    hide = document.getElementById(hideID);
+    show = document.getElementById(showID);
+    if (hide != null) {
+      hide.style.display = 'none';
+    }
+    if (show != null) {
+      show.style.display = 'block';
+    }
+    return;
+  }
+</script>
 </html>

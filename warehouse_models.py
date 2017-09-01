@@ -7,10 +7,7 @@ class Item(ndb.Model):
     name = ndb.StringProperty(required=True)
     description = ndb.StringProperty(required=False)
     qr_code = ndb.IntegerProperty(required=False)
-    # older version is not needed since there is a built in "parent"
-    # older_version and newer_version hold keys to other versions of the item in the database.
-    # older_version = ndb.KeyProperty(required=False)
-    # newer version unneeded because you can use ancestor key queries
+    #Newer Versions are children. Use Item.key.parent() to get older version.
     child = ndb.KeyProperty(required=False)
     #deleted is True if an item was deleted by a user but has not yet been purged from the system.
     deleted = ndb.BooleanProperty(required=True, default=False)
