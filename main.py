@@ -16,30 +16,16 @@ from list_filter import *
 ## Handlers
 class MainPage(webapp2.RequestHandler):
     @auth.login_required
+
     def get(self):
+        item_name_filter = self.request.get('filter_by_name')
+        item_type_filter = self.request.get('filter_by_item_type')
+        item_condition_filter = self.request.get('filter_by_condition', allow_multiple=True)
+        query = FilterItems(item_name_filter, item_type_filter, item_condition_filter)
+
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
-        query = FilterItems()
         items = query.fetch()
         self.response.write(template.render({'items': items}))
-
-class UpdateItemsFilter(webapp2.RequestHandler):
-    @auth.login_required
-    def post(self):
-        try:
-            name_filter = self.request.get('filter_by_name')
-            item_type_filter = self.request.get('filter_by_item_type')
-            condition_filter_good = self.request.get('filter_by_condition_good', default_value=False)
-            condition_filter_fair = self.request.get('filter_by_condition_fair', default_value=False)
-            condition_filter_poor = self.request.get('filter_by_condition_poor', default_value=False)
-            condition_filter_repair = self.request.get('filter_by_condition_repair', default_value=False)
-            UpdateVisibleList(name_filter, item_type_filter, condition_filter_good,
-                condition_filter_fair, condition_filter_poor,
-                condition_filter_repair)
-            self.redirect("/")
-        except:
-            # Should never be here unless the token has expired,
-            # meaning that we forgot to refresh their token.
-            self.redirect("/enforce_auth")
 
 class AddItem(webapp2.RequestHandler):
     @auth.login_required
@@ -73,24 +59,13 @@ class AuthHandler(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/auth.html')
         self.response.write(template.render({}))
 
-def FilterItems():
-    conditions_filter = []
-    if ConditionGoodFilterEnabled():
-        conditions_filter.append("Good")
-    if ConditionFairFilterEnabled():
-        conditions_filter.append("Fair")
-    if ConditionPoorFilterEnabled():
-        conditions_filter.append("Poor")
-    if ConditionRepairFilterEnabled():
-        conditions_filter.append("Being Repaired")
-
-    if CostumeFilterEnabled() == True and PropFilterEnabled() == False:
-        query = Item.query(ndb.AND(Item.condition == conditions_filter, Item.item_type == "Costume")).order(-Item.updated, Item.condition)
-    elif CostumeFilterEnabled() == False and PropFilterEnabled() == True:
-        query = Item.query(ndb.AND(Item.condition == conditions_filter, Item.item_type == "Prop")).order(-Item.updated, Item.condition)
+def FilterItems(item_name, item_type, item_condition):
+    if (item_type != "All" and item_type != ""):
+        query = Item.query(Item.item_type == item_type).order(Item.name)
     else:
-        query = Item.query(Item.condition.IN(conditions_filter)).order(-Item.updated, Item.condition)
+        query = Item.query().order(Item.name)
 
+    query = query.filter(Item.condition.IN(item_condition))
     return query
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -102,6 +77,5 @@ app = webapp2.WSGIApplication([
     ('/delete_item', DeleteItem),
     ('/add_item', AddItem),
     ('/enforce_auth', AuthHandler),
-    ('/update_items_filter', UpdateItemsFilter),
     ('/.*', MainPage),
 ], debug=True)

@@ -42,7 +42,7 @@
         <form action="/add_item" method="post">
            <input name="name" type="text" placeholder="name"><br>
           <textarea name="description" placeholder="description"></textarea><br>
-          <select name="type">
+          <select name="item_type">
             <option>Costume</option>
             <option>Prop</option>
           </select><br>
@@ -60,17 +60,17 @@
         <!-- Search form -->
         <div class="form">
             <h1> Filter Items </h1>
-            <form action="/update_items_filter" method="post">
+            <form action="/" method="get">
                 <input name="filter_by_name" type="text" placeholder="name"><br>
                 <h2> Type </h2><br>
-                <input type="radio" name="filter_by_item_type" value="all" checked="checked"> All<br>
-                <input type="radio" name="filter_by_item_type" value="costume"> Costume<br>
-                <input type="radio" name="filter_by_item_type" value="prop"> Prop<br>
+                <input type="radio" name="filter_by_item_type" value="All" checked="checked"> All<br>
+                <input type="radio" name="filter_by_item_type" value="Costume"> Costume<br>
+                <input type="radio" name="filter_by_item_type" value="Prop"> Prop<br>
                 <h2> Condition </h2><br>
-                <input type="checkbox" name="filter_by_condition_good" value=True checked="checked"> Good<br>
-                <input type="checkbox" name="filter_by_condition_fair" value=True checked="checked"> Fair<br>
-                <input type="checkbox" name="filter_by_condition_poor" value=True checked="checked"> Poor<br>
-                <input type="checkbox" name="filter_by_condition_repair" value=True checked="checked"> Being Repaired<br>
+                <input type="checkbox" name="filter_by_condition" value="Good" checked="checked" multiple="true">Good<br>
+                <input type="checkbox" name="filter_by_condition" value="Fair" checked="checked" multiple="true">Fair<br>
+                <input type="checkbox" name="filter_by_condition" value="Poor" checked="checked" multiple="true">Poor<br>
+                <input type="checkbox" name="filter_by_condition" value="Being Repaired" checked="checked" multiple="true">Being Repaired<br>
                 <input type="submit" value="Search">
             </form>
 

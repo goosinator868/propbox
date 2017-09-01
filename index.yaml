@@ -13,5 +13,41 @@ indexes:
 - kind: Item
   properties:
   - name: condition
+  - name: item_type
   - name: updated
     direction: desc
+
+- kind: Item
+  properties:
+  - name: condition
+  - name: name
+
+- kind: Item
+  properties:
+  - name: condition
+  - name: updated
+    direction: desc
+
+- kind: Item
+  properties:
+  - name: item_type
+  - name: name
+
+- kind: Item
+  properties:
+  - name: item_type
+  - name: updated
+    direction: desc
+
+- kind: Item
+  properties:
+  - name: item_type
+  - name: updated
+    direction: desc
+  - name: condition
+
+- kind: Item
+  properties:
+  - name: updated
+    direction: desc
+  - name: condition
