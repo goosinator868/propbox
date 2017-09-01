@@ -121,6 +121,7 @@ class AddItem(webapp2.RequestHandler):
                 description=self.request.get('description', default_value=''),
                 qr_code=1234)
             new_item.put()
+            sleep(0.1)
             self.redirect("/")
         except:
             # Should never be here unless the token has expired,
@@ -182,9 +183,11 @@ class EditItem(webapp2.RequestHandler):
             name=self.request.get('name'),
             description=self.request.get('description', default_value=''),
             qr_code=1234,
-            parent=old_item_key)
+            parent=old_item_key,
+            approved=False)
         try:
             CommitEdit(old_item_key, new_item)
+            sleep(0.1)
             self.redirect("/")
         except OutdatedEditException as e:
             new_item.orphan = True
@@ -213,7 +216,7 @@ class DeleteItem(webapp2.RequestHandler):
              # TODO: Expose this message to the user.
             logging.info('could not purge the item, pelase try again')
         # Redirect back to items view.
-        sleep(0.05)
+        sleep(0.1)
         self.redirect("/")
 
 # Deletes an item from the database for good. THIS CANNOT BE UNDONE.
@@ -231,7 +234,7 @@ class DeleteItemForever(webapp2.RequestHandler):
              # TODO: Expose this message to the user.
             logging.info('could not purge the item, pelase try again')
         sleep(0.1)
-        self.redirect('/load_edit_page')
+        self.redirect('/review_edits')
 
 # Undeletes an item, returning it to the main list. Reverses the changes made by DeleteItem.
 # TODO: Make transactional.
@@ -270,7 +273,7 @@ class ReviewEdits(webapp2.RequestHandler):
             elif item.key.parent():
                 hasOldVersion.append(item)
         for newest in hasOldVersion:
-            if newest.outdated is False and newest.deleted is False:
+            if newest.outdated is False and newest.deleted is False and newest.approved is False:
                 history = []
                 parent = newest.key.parent()
                 while parent:
@@ -280,17 +283,42 @@ class ReviewEdits(webapp2.RequestHandler):
                 newAndOld.append([newest, history, count])
         self.response.write(template.render({'deleted':deleted,'revised':newAndOld}))
 
-#Keeps a revision.
-#TODO: Actually implement.
+#Keeps the latest revision. Flags the revision as "approved" in the database.
 class KeepRevision(webapp2.RequestHandler):
     def post(self):
+        item = ndb.Key(urlsafe=self.request.get('item_id')).get()
+        item.approved = True
+        item.put()
+        sleep(0.1)
         self.redirect('/review_edits')
 
 #Discards a revision.
-#TODO: Actually implement.
 class DiscardRevision(webapp2.RequestHandler):
     def post(self):
+        selected_item = ndb.Key(urlsafe=self.request.get('item_id'))
+        si = selected_item.get()
+        si.approved = True
+        si.outdated = False
+        si.put()
+        discarded_item = ndb.Key(urlsafe=self.request.get('newest_id'))
+        while discarded_item != selected_item: 
+            logging.info(discarded_item.get().description)
+            next_item = discarded_item.parent()
+            discarded_item.delete()
+            discarded_item = next_item
+            logging.info(discarded_item.get().description)
+        sleep(0.1)
         self.redirect('/review_edits')
+
+#Allows for undoing an item approval
+class RevertItem(webapp2.RequestHandler):
+    def post(self):
+        item = ndb.Key(urlsafe=self.request.get('item_id')).get()
+        item.approved = False
+        item.put()
+        sleep(0.1)
+        self.redirect('/review_edits')
+
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -308,5 +336,6 @@ app = webapp2.WSGIApplication([
     ('/resolve_edits', ResolveEdits),
     ('/discard_revision',DiscardRevision),
     ('/keep_revision',KeepRevision),
+    ('/revert_item', RevertItem),
     ('/.*', MainPage),
 ], debug=True)
