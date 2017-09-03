@@ -42,12 +42,12 @@ class MainPage(webapp2.RequestHandler):
 
             items = query.fetch()
             # send to display
-            self.response.write(template.render({'items': items}))
+            self.response.write(template.render({'items': items, 'item_name_filter': item_name_filter}))
         except:
             # first time opening or item has been added
             query = Item.query()
             items = query.fetch()
-            self.response.write(template.render({'items': items}))
+            self.response.write(template.render({'items': items, 'item_name_filter': item_name_filter}))
 
 class AddItem(webapp2.RequestHandler):
     @auth.login_required

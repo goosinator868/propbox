@@ -20,18 +20,20 @@
     <!-- View current items -->
     <div>
       {% for item in items %}
-        <div class="item_container">
-          <h2>{{item.name}}</h2>
-          <h3>{{item.item_type}}</h3>
-          <h4>Created by: {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
-          <h5>Condition: {{item.condition}}</h5>
-          <p>{{item.description}}</p>
-          <p>Article:{{item.clothing_article_type}}</p>
-          <form action="/delete_item" method="post">
-            <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-            <input type="submit" value="delete">
-          </form>
-        </div>
+        {% if item_name_filter|lower in item.name|lower %}
+            <div class="item_container">
+              <h2>{{item.name}}</h2>
+              <h3>{{item.item_type}}</h3>
+              <h4>Created by: {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+              <h5>Condition: {{item.condition}}</h5>
+              <p>{{item.description}}</p>
+              <p>Article:{{item.clothing_article_type}}</p>
+              <form action="/delete_item" method="post">
+                <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+                <input type="submit" value="delete">
+              </form>
+            </div>
+        {% endif %}
       {% endfor %}
     </div>
   </div>

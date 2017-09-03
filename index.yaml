@@ -50,12 +50,6 @@ indexes:
 - kind: Item
   properties:
   - name: condition
-  - name: tags
-  - name: name
-
-- kind: Item
-  properties:
-  - name: condition
   - name: item_type
   - name: name
 
@@ -69,6 +63,12 @@ indexes:
 - kind: Item
   properties:
   - name: condition
+  - name: name
+
+- kind: Item
+  properties:
+  - name: condition
+  - name: tags
   - name: name
 
 - kind: Item
