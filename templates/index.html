@@ -24,6 +24,7 @@
           <h2>{{item.name}}</h2>
           <h4>created by : {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
           <p>{{item.description}}</p>
+          <img src="view_image?entity_id={{item.key.urlsafe()}}" class="thumbnail" />
           <form action="/delete_item" method="post">
             <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
             <input type="submit" value="delete">
@@ -37,8 +38,9 @@
     <!-- New item form -->
     <div class="form">
         <h1> Create New Item </h1>
-        <form action="/add_item" method="post">
+        <form action="/add_item" enctype="multipart/form-data" method="post">
           <input name="name" type="text" placeholder="name"><br>
+          <input name="image" type="file" accept=".png, .gif, .jpg, .jpeg"><br>
           <textarea name="description" placeholder="description"></textarea><br>
           <input type="submit" value="create">
         </form>
