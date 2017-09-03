@@ -79,7 +79,6 @@ class AddItem(webapp2.RequestHandler):
                 creator_id=auth.get_user_id(self.request),
                 name=self.request.get('name'),
                 image=img,
-                description=self.request.get('description', default_value=''),
                 qr_code=1234,
                 item_type=costume_or_prop,
                 condition=self.request.get('condition'),
