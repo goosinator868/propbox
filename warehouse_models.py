@@ -12,3 +12,4 @@ class Item(ndb.Model):
     clothing_size_string = ndb.StringProperty(required=False)
     clothing_size_num = ndb.StringProperty(required=False)
     clothing_article_type = ndb.StringProperty(required=False)
+    tags = ndb.StringProperty(required=False, repeated=True)

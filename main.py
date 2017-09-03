@@ -54,7 +54,7 @@ class AddItem(webapp2.RequestHandler):
             costume_or_prop = self.request.get('item_type')
             costume_size_number = self.request.get('clothing_size_number')
             costume_size_word = self.request.get('clothing_size_string')
-
+            tags_string = self.request.get('tags')
             # Override certain inputs due to costume and prop defaults
             if costume_or_prop == "Costume" and article_type == "N/A":
                 # An article type was not selected thus is filtered as an
@@ -66,6 +66,9 @@ class AddItem(webapp2.RequestHandler):
                 costume_size_number = "N/A"
                 costume_size_word = "N/A"
 
+            # tags is a string. Needs to parsed into an array
+            tags_list = ParseTags(tags_string)
+
             # Create Item and add to the list
             newItem = Item(
                 creator_id=auth.get_user_id(self.request),
@@ -76,7 +79,8 @@ class AddItem(webapp2.RequestHandler):
                 condition=self.request.get('condition'),
                 clothing_article_type=article_type,
                 clothing_size_num=costume_size_number,
-                clothing_size_string=costume_size_word)
+                clothing_size_string=costume_size_word,
+                tags=tags_list)
             newItem.put()
             self.redirect("/")
         except:
@@ -122,6 +126,31 @@ def FilterItems(item_name, item_type, item_condition, costume_article, costume_s
 
     query = query.filter(Item.condition.IN(item_condition))
     return query
+
+# Converts text list of tags to array of tags
+def ParseTags(tags_string):
+    tags_list = []
+
+    # Find newline character
+    tag_end_index = tags_string.find("\n")
+
+    # Check newline character exists in string
+    while tag_end_index != -1:
+        # Add tag to list
+        tags_list.append(tags_string[:tag_end_index])
+        # Shrink or delete string based on how much material is left in string
+        if tag_end_index + 1 < len(tags_string):
+            tags_string = tags_string[tag_end_index + 1:len(tags_string)]
+        else:
+            tags_string = ""
+
+        tag_end_index = tags_string.find("\n")
+
+    # Potentially still has a tag not covered. Adds last tag to list if possible
+    if len(tags_string) != 0:
+        tags_list.append(tags_string)
+
+    return tags_list
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),

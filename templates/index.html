@@ -97,6 +97,8 @@
               <option>L</option>
               <option>XL</option>
           </select><br>
+          <h4>Tags</h4>
+          <textarea name="tags" placeholder="One tag per line"></textarea><br>
           <input type="submit" value="Create">
         </form>
     </div>
@@ -107,11 +109,11 @@
             <h1> Filter Items </h1>
             <form action="/" method="get">
                 <input name="filter_by_name" type="text" placeholder="name"><br>
-                <h2> Type </h2><br>
+                <h4> Type </h4><br>
                 <input type="radio" name="filter_by_item_type" value="All" checked="checked"> All<br>
                 <input type="radio" name="filter_by_item_type" value="Costume"> Costume<br>
                 <input type="radio" name="filter_by_item_type" value="Prop"> Prop<br>
-                <h2> Article </h2>
+                <h4> Article </h4>
                 <input type="checkbox" name="filter_by_article" value="Top" checked="checked" multiple="true"> Tops<br>
                 <input type="checkbox" name="filter_by_article" value="Bottom" checked="checked" multiple="true"> Bottoms<br>
                 <input type="checkbox" name="filter_by_article" value="Dress" checked="checked" multiple="true"> Dresses<br>
@@ -119,7 +121,7 @@
                 <input type="checkbox" name="filter_by_article" value="Hat" checked="checked" multiple="true"> Hats<br>
                 <input type="checkbox" name="filter_by_article" value="Coat/Jacket" checked="checked" multiple="true"> Coats/Jackets<br>
                 <input type="checkbox" name="filter_by_article" value="Other" checked="checked" multiple="true"> Other<br>
-                <h2> Size </h2>
+                <h4> Size </h4>
                 <input type="checkbox" name="filter_by_costume_size_string" value="XS" checked="checked" multiple="true"> XS<br>
                 <input type="checkbox" name="filter_by_costume_size_string" value="S" checked="checked" multiple="true"> S<br>
                 <input type="checkbox" name="filter_by_costume_size_string" value="M" checked="checked" multiple="true"> M<br>
@@ -148,7 +150,7 @@
                 <input type="checkbox" name="filter_by_costume_size_number" value="19" checked="checked" multiple="true"> 19<br>
                 <input type="checkbox" name="filter_by_costume_size_number" value="20" checked="checked" multiple="true"> 20
 
-                <h2> Condition </h2><br>
+                <h4> Condition </h4><br>
                 <input type="checkbox" name="filter_by_condition" value="Good" checked="checked" multiple="true"> Good<br>
                 <input type="checkbox" name="filter_by_condition" value="Fair" checked="checked" multiple="true"> Fair<br>
                 <input type="checkbox" name="filter_by_condition" value="Poor" checked="checked" multiple="true"> Poor<br>
