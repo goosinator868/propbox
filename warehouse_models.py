@@ -5,6 +5,7 @@ class Item(ndb.Model):
     creator_id = ndb.StringProperty(required=True)
     updated = ndb.DateTimeProperty(auto_now_add=True)
     name = ndb.StringProperty(required=True)
+    image = ndb.BlobProperty(required=False)
     description = ndb.StringProperty(required=False)
     qr_code = ndb.IntegerProperty(required=False)
     #Newer Versions are children. Use Item.key.parent() to get older version.
@@ -17,9 +18,11 @@ class Item(ndb.Model):
     orphan = ndb.BooleanProperty(required=True, default=False)
 
 #Returns a clone of a given item.
-def cloneItem(oldItem):
+def cloneItem(oldItem, parentKey=None):
     return Item(creator_id=oldItem.creator_id,
     	name=oldItem.name,
     	description=oldItem.description,
     	qr_code=oldItem.qr_code,
-    	approved=oldItem.approved)
+    	approved=oldItem.approved,
+    	image=oldItem.image,
+    	parent=parentKey)

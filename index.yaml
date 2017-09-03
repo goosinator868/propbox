@@ -12,6 +12,19 @@ indexes:
 
 - kind: Item
   properties:
+  - name: clothing_article_type
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: name
+
+- kind: Item
+  properties:
+  - name: condition
+  - name: name
+
+- kind: Item
+  properties:
   - name: deleted
   - name: orphan
   - name: outdated

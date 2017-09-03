@@ -4,6 +4,7 @@
   display: inline-block;
   border-radius: 5px;
   margin: 5px;
+  position: relative;
 }
 
 .sub_item_container {
@@ -29,4 +30,18 @@
     padding: 5px;
     width: 50%;
     float: right;
+}
+
+.item_container h2, h4, p {
+  width: 60%;
+}
+
+.thumbnail {
+  background-color: #DDD;
+  position: absolute;
+  float: right;
+  height: 160px;
+  top: 0;
+  right: 0;
+  padding: 8px;
 }

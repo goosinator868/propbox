@@ -118,6 +118,7 @@ class AddItem(webapp2.RequestHandler):
             new_item = Item(
                 creator_id=auth.get_user_id(self.request),
                 name=self.request.get('name'),
+                image=self.request.get('image', default_value=''),
                 description=self.request.get('description', default_value=''),
                 qr_code=1234)
             new_item.put()
@@ -178,13 +179,11 @@ class EditItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
         old_item_key = ndb.Key(urlsafe=self.request.get('old_item_key'))
-        new_item = Item(
-            creator_id=auth.get_user_id(self.request),
-            name=self.request.get('name'),
-            description=self.request.get('description', default_value=''),
-            qr_code=1234,
-            parent=old_item_key,
-            approved=False)
+        new_item = cloneItem(old_item_key.get(), old_item_key)
+        new_item.creator_id = auth.get_user_id(self.request)
+        new_item.name=self.request.get('name')
+        new_item.description=self.request.get('description', default_value='')
+
         try:
             CommitEdit(old_item_key, new_item)
             sleep(0.1)
@@ -218,6 +217,13 @@ class DeleteItem(webapp2.RequestHandler):
         # Redirect back to items view.
         sleep(0.1)
         self.redirect("/")
+
+class ViewImage(webapp2.RequestHandler):
+    def get(self):
+        item_key = ndb.Key(urlsafe=self.request.get('entity_id'))
+        item = item_key.get()
+        self.response.headers['Content-Type'] = 'image/png'
+        self.response.out.write(item.image)
 
 # Deletes an item from the database for good. THIS CANNOT BE UNDONE.
 # TODO: Make transactional.
@@ -273,6 +279,7 @@ class ReviewEdits(webapp2.RequestHandler):
             elif item.key.parent():
                 hasOldVersion.append(item)
         for newest in hasOldVersion:
+            logging.info(newest)
             if newest.outdated is False and newest.deleted is False and newest.approved is False:
                 history = []
                 parent = newest.key.parent()
@@ -280,6 +287,7 @@ class ReviewEdits(webapp2.RequestHandler):
                     history.append(parent.get())
                     parent = parent.parent()
                 count = range(len(history))
+                logging.info(history)
                 newAndOld.append([newest, history, count])
         self.response.write(template.render({'deleted':deleted,'revised':newAndOld}))
 
@@ -330,6 +338,7 @@ app = webapp2.WSGIApplication([
     ('/delete_item_forever', DeleteItemForever),
     ('/undelete_item', UndeleteItem),
     ('/add_item', AddItem),
+    ('/view_image', ViewImage),
     ('/edit_item', EditItem),
     ('/enforce_auth', AuthHandler),
     ('/review_edits', ReviewEdits),

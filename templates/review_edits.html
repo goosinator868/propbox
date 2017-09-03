@@ -24,6 +24,7 @@
           <h2>{{item.name}}</h2>
           <h4>created by : {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
           <p>{{item.description}}</p>
+          <img src="view_image?entity_id={{item.key.urlsafe()}}" class="thumbnail" />
           <p>{{item.key}}</p>
           <br/>
           <!-- <p>Deleted = {{item.deleted}} and Outdated = {{item.outdated}}</p> -->
@@ -49,6 +50,7 @@
           <h2>{{item[0].name}}</h2>
           <h4>created by : {{item[0].creator_id}} at {{item[0].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
           <p>{{item[0].description}}</p>
+          <img src="view_image?entity_id={{item[0].key.urlsafe()}}" class="thumbnail" />
           <br/>
           <p>Deleted = {{item[0].deleted}} and Outdated = {{item[0].outdated}}</p>
           <!-- item[0] = newest, item[1] = history (list), item[2] = count (list of numbers) -->
@@ -58,6 +60,8 @@
               <h2>{{item[1][i].name}}</h2>
               <h4>created by : {{item[1][i].creator_id}} at {{item[1][i].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
               <p>{{item[1][i].description}}</p>
+              <!-- TODO: FIX image view for past versions. -->
+              <img src="view_image?entity_id={{item[1][i].key.urlsafe()}}" class="thumbnail" />
               <br/>
               <p>Deleted = {{item[1][i].deleted}} and Outdated = {{item[1][i].outdated}}</p>
               <form action="/discard_revision" method="post">
