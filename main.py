@@ -18,14 +18,19 @@ class MainPage(webapp2.RequestHandler):
     @auth.login_required
 
     def get(self):
-        item_name_filter = self.request.get('filter_by_name')
-        item_type_filter = self.request.get('filter_by_item_type')
-        item_condition_filter = self.request.get('filter_by_condition', allow_multiple=True)
-        query = FilterItems(item_name_filter, item_type_filter, item_condition_filter)
-
-        template = JINJA_ENVIRONMENT.get_template('templates/index.html')
-        items = query.fetch()
-        self.response.write(template.render({'items': items}))
+        try:
+            template = JINJA_ENVIRONMENT.get_template('templates/index.html')
+            item_name_filter = self.request.get('filter_by_name')
+            item_type_filter = self.request.get('filter_by_item_type')
+            item_condition_filter = self.request.get('filter_by_condition', allow_multiple=True)
+            query = FilterItems(item_name_filter, item_type_filter, item_condition_filter)
+            #query = Item.query()
+            items = query.fetch()
+            self.response.write(template.render({'items': items}))
+        except:
+            query = Item.query()
+            items = query.fetch()
+            self.response.write(template.render({'items': items}))
 
 class AddItem(webapp2.RequestHandler):
     @auth.login_required
