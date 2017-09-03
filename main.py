@@ -24,11 +24,14 @@ class MainPage(webapp2.RequestHandler):
 class AddItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
+        img = self.request.get('image', default_value='')
+        if img == '':
+            img = None
         try:
             newItem = Item(
                 creator_id=auth.get_user_id(self.request),
                 name=self.request.get('name'),
-                image=self.request.get('image', default_value=''),
+                image=img,
                 description=self.request.get('description', default_value=''),
                 qr_code=1234)
             newItem.put()
