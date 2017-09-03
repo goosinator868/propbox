@@ -112,6 +112,7 @@ class MainPage(webapp2.RequestHandler):
         self.response.write(template.render(FetchList()))
 
 class AddItem(webapp2.RequestHandler):
+    #TODO: Find out why this ends up loading the review edits page.
     @auth.login_required
     def post(self):
         img = self.request.get('image', default_value='')
@@ -268,6 +269,7 @@ class AuthHandler(webapp2.RequestHandler):
 
 class ReviewEdits(webapp2.RequestHandler):
 # Loads the edit page.
+# TODO: FIGURE OUT WHY THIS PAGE LOADS WHEN ADDING A SECOND ITEM.
     def post(self):
         self.get()
     def get(self):
