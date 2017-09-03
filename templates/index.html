@@ -32,6 +32,7 @@
             {% if item_name_filter|lower in item.name|lower %}
             <div class="item_container">
                 <h2>{{item.name}}</h2>
+                <img src="view_image?entity_id={{item.key.urlsafe()}}" class="thumbnail" />
                 <h3>{{item.item_type}}</h3>
                 <h4>Created by: {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
                 <h5>Condition: {{item.condition}}</h5>
