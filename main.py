@@ -29,13 +29,16 @@ class MainPage(webapp2.RequestHandler):
             item_article_filter = self.request.get('filter_by_article', allow_multiple=True)
             costume_size_string_filter = self.request.get('filter_by_costume_size_string', allow_multiple=True)
             costume_size_number_filter = self.request.get('filter_by_costume_size_number', allow_multiple=True)
+            tags_filter = self.request.get('filter_by_tags')
+            tags_grouping_filter = self.request.get('filter_by_tag_grouping')
             query = FilterItems(
                 item_name_filter,
                 item_type_filter,
                 item_condition_filter,
                 item_article_filter,
                 costume_size_string_filter,
-                costume_size_number_filter)
+                costume_size_number_filter,
+                tags_filter, tags_grouping_filter)
 
             items = query.fetch()
             # send to display
@@ -103,7 +106,8 @@ class AuthHandler(webapp2.RequestHandler):
         self.response.write(template.render({}))
 
 # Filters viewable items based on selected boxes in MainPage
-def FilterItems(item_name, item_type, item_condition, costume_article, costume_size_string, costume_size_number):
+def FilterItems(item_name, item_type, item_condition, costume_article,
+    costume_size_string, costume_size_number, tags_filter, tag_grouping):
     if (item_type != "All" and item_type != ""):
         if (item_type == "Costume"):
             if (len(costume_size_string) == 5):
@@ -125,6 +129,15 @@ def FilterItems(item_name, item_type, item_condition, costume_article, costume_s
         query = Item.query().order(Item.name)
 
     query = query.filter(Item.condition.IN(item_condition))
+
+    tags_list = ParseTags(tags_filter)
+    if len(tags_list) != 0:
+        if tag_grouping == "inclusive":
+            query = query.filter(Item.tags.IN(tags_list))
+        else:
+            for tag in tags_list:
+                query = query.filter(Item.tags == tag)
+
     return query
 
 # Converts text list of tags to array of tags
@@ -137,7 +150,7 @@ def ParseTags(tags_string):
     # Check newline character exists in string
     while tag_end_index != -1:
         # Add tag to list
-        tags_list.append(tags_string[:tag_end_index])
+        tags_list.append(tags_string[:tag_end_index - 1])
         # Shrink or delete string based on how much material is left in string
         if tag_end_index + 1 < len(tags_string):
             tags_string = tags_string[tag_end_index + 1:len(tags_string)]

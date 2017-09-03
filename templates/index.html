@@ -98,7 +98,7 @@
               <option>XL</option>
           </select><br>
           <h4>Tags</h4>
-          <textarea name="tags" placeholder="One tag per line"></textarea><br>
+          <textarea name="tags" placeholder="separate tags with enter key"></textarea><br>
           <input type="submit" value="Create">
         </form>
     </div>
@@ -155,6 +155,11 @@
                 <input type="checkbox" name="filter_by_condition" value="Fair" checked="checked" multiple="true"> Fair<br>
                 <input type="checkbox" name="filter_by_condition" value="Poor" checked="checked" multiple="true"> Poor<br>
                 <input type="checkbox" name="filter_by_condition" value="Being Repaired" checked="checked" multiple="true"> Being Repaired<br>
+
+                <h4> Tags </h4><br>
+                <input type="radio" name="filter_by_tag_grouping" value="inclusive" checked="checked"> Has One of Listed
+                <input type="radio" name="filter_by_tag_grouping" value="exclusive"> Has All of Listed<br>
+                <textarea name="filter_by_tags" placeholder="separate tags with enter key"></textarea><br>
                 <input type="submit" value="Search">
             </form>
 
