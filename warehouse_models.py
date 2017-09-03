@@ -5,6 +5,7 @@ class Item(ndb.Model):
     creator_id = ndb.StringProperty(required=True)
     updated = ndb.DateTimeProperty(auto_now_add=True)
     name = ndb.StringProperty(required=True)
+    image = ndb.BlobProperty(required=False)
     description = ndb.StringProperty(required=False)
     qr_code = ndb.IntegerProperty(required=False)
     item_type = ndb.StringProperty(required=True)
