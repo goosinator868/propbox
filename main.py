@@ -51,6 +51,9 @@ class MainPage(webapp2.RequestHandler):
 class AddItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
+        img = self.request.get('image', default_value='')
+        if img == '':
+            img = None
         try:
             article_type = self.request.get('article')
             costume_or_prop = self.request.get('item_type')
@@ -75,7 +78,7 @@ class AddItem(webapp2.RequestHandler):
             newItem = Item(
                 creator_id=auth.get_user_id(self.request),
                 name=self.request.get('name'),
-                image=self.request.get('image', default_value=''),
+                image=img,
                 description=self.request.get('description', default_value=''),
                 qr_code=1234,
                 item_type=costume_or_prop,
