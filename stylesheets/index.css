@@ -11,6 +11,30 @@
   display: inline-block;
 }
 
+.addItemDropdown {
+    font-size: 16px;
+    padding: 20px;
+    margin: 5px;
+    height: 30px;
+    border-radius: 8px 8px 8px 8px;
+    border: 0px;
+    background-color: #DDD;
+}
+
+.submitButton {
+    padding: 5px 10px 5px 10px;
+    border-radius: 8px 8px 8px 8px;
+    border: 0px;
+    background-color: #DDD;
+}
+
+.submitButton:hover {
+    padding: 5px 10px 5px 10px;
+    border-radius: 8px 8px 8px 8px;
+    border: 0px;
+    background-color: #a5a5a5;
+}
+
 #left-pane {
     padding: 5px;
     width: 50%;
