@@ -9,3 +9,6 @@ class Item(ndb.Model):
     qr_code = ndb.IntegerProperty(required=False)
     item_type = ndb.StringProperty(required=True)
     condition = ndb.StringProperty(required=True)
+    clothing_size_string = ndb.StringProperty(required=False)
+    clothing_size_num = ndb.StringProperty(required=False)
+    clothing_article_type = ndb.StringProperty(required=False)

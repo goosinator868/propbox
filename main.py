@@ -11,7 +11,7 @@ from google.appengine.ext import ndb
 # First party imports
 from warehouse_models import Item
 import auth
-from list_filter import *
+#from enums import *
 
 ## Handlers
 class MainPage(webapp2.RequestHandler):
@@ -19,12 +19,16 @@ class MainPage(webapp2.RequestHandler):
 
     def get(self):
         try:
+            # Load html template
             template = JINJA_ENVIRONMENT.get_template('templates/index.html')
+
+            # Filter search items
             item_name_filter = self.request.get('filter_by_name')
             item_type_filter = self.request.get('filter_by_item_type')
             item_condition_filter = self.request.get('filter_by_condition', allow_multiple=True)
-            query = FilterItems(item_name_filter, item_type_filter, item_condition_filter)
-            #query = Item.query()
+            item_article_filter = self.request.get('filter_by_article', allow_multiple=True)
+            query = FilterItems(item_name_filter, item_type_filter, item_condition_filter, item_article_filter)
+
             items = query.fetch()
             self.response.write(template.render({'items': items}))
         except:
@@ -36,13 +40,26 @@ class AddItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
         try:
+            article_type = self.request.get('article')
+            costume_or_prop = self.request.get('item_type')
+            costume_size_number = self.request.get('size_number')
+            costume_size_word = self.request.get('size_string')
+            if costume_or_prop == "Costume" and article_type == "":
+                article_type = "Other"
+            elif costume_or_prop == "Prop":
+                article_type = "N/A"
+                costume_size_number = "N/A"
+                costume_size_word = "N/A"
             newItem = Item(
                 creator_id=auth.get_user_id(self.request),
                 name=self.request.get('name'),
                 description=self.request.get('description', default_value=''),
                 qr_code=1234,
-                item_type=self.request.get('item_type'),
-                condition=self.request.get('condition'))
+                item_type=costume_or_prop,
+                condition=self.request.get('condition'),
+                clothing_article_type=article_type,
+                clothing_size_num=self.request.get('size_number'),
+                clothing_size_string=self.request.get('size_string'))
             newItem.put()
             self.redirect("/")
         except:
@@ -64,11 +81,14 @@ class AuthHandler(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/auth.html')
         self.response.write(template.render({}))
 
-def FilterItems(item_name, item_type, item_condition):
+def FilterItems(item_name, item_type, item_condition, costume_article):
     if (item_type != "All" and item_type != ""):
         query = Item.query(Item.item_type == item_type).order(Item.name)
     else:
         query = Item.query().order(Item.name)
+
+    if (item_type == "Costume"):
+        query = query.filter(Item.clothing_article_type.IN(costume_article))
 
     query = query.filter(Item.condition.IN(item_condition))
     return query
