@@ -16,7 +16,6 @@ import auth
 ## Handlers
 class MainPage(webapp2.RequestHandler):
     @auth.login_required
-
     def get(self):
         try:
             # Load html template
@@ -108,6 +107,7 @@ class AuthHandler(webapp2.RequestHandler):
 # Filters viewable items based on selected boxes in MainPage
 def FilterItems(item_name, item_type, item_condition, costume_article,
     costume_size_string, costume_size_number, tags_filter, tag_grouping):
+    # Check if costume or prop is selected individually
     if (item_type != "All" and item_type != ""):
         if (item_type == "Costume"):
             if (len(costume_size_string) == 5):
