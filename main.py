@@ -27,7 +27,8 @@ class MainPage(webapp2.RequestHandler):
             item_type_filter = self.request.get('filter_by_item_type')
             item_condition_filter = self.request.get('filter_by_condition', allow_multiple=True)
             item_article_filter = self.request.get('filter_by_article', allow_multiple=True)
-            query = FilterItems(item_name_filter, item_type_filter, item_condition_filter, item_article_filter)
+            costume_size_filter = self.request.get('filter_by_costume_size_string', allow_multiple=True)
+            query = FilterItems(item_name_filter, item_type_filter, item_condition_filter, item_article_filter, costume_size_filter)
 
             items = query.fetch()
             self.response.write(template.render({'items': items}))
@@ -42,9 +43,9 @@ class AddItem(webapp2.RequestHandler):
         try:
             article_type = self.request.get('article')
             costume_or_prop = self.request.get('item_type')
-            costume_size_number = self.request.get('size_number')
-            costume_size_word = self.request.get('size_string')
-            if costume_or_prop == "Costume" and article_type == "":
+            costume_size_number = self.request.get('clothing_size_number')
+            costume_size_word = self.request.get('clothing_size_string')
+            if costume_or_prop == "Costume" and article_type == "N/A":
                 article_type = "Other"
             elif costume_or_prop == "Prop":
                 article_type = "N/A"
@@ -58,8 +59,8 @@ class AddItem(webapp2.RequestHandler):
                 item_type=costume_or_prop,
                 condition=self.request.get('condition'),
                 clothing_article_type=article_type,
-                clothing_size_num=self.request.get('size_number'),
-                clothing_size_string=self.request.get('size_string'))
+                clothing_size_num=costume_size_number,
+                clothing_size_string=costume_size_word)
             newItem.put()
             self.redirect("/")
         except:
@@ -81,14 +82,18 @@ class AuthHandler(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/auth.html')
         self.response.write(template.render({}))
 
-def FilterItems(item_name, item_type, item_condition, costume_article):
+def FilterItems(item_name, item_type, item_condition, costume_article, costume_size_string):
     if (item_type != "All" and item_type != ""):
-        query = Item.query(Item.item_type == item_type).order(Item.name)
+        if (item_type == "Costume"):
+            if (len(costume_size_string) == 5):
+                costume_size_string.append("N/A")
+            query = Item.query(ndb.AND(Item.item_type == item_type, Item.clothing_article_type.IN(costume_article), Item.clothing_size_string.IN(costume_size_string))).order(Item.name)
+        else:
+            query = Item.query(Item.item_type == item_type).order(Item.name)
     else:
         query = Item.query().order(Item.name)
 
-    if (item_type == "Costume"):
-        query = query.filter(Item.clothing_article_type.IN(costume_article))
+        #query.filter(Item.clothing_size_string.IN(costume_size_string))
 
     query = query.filter(Item.condition.IN(item_condition))
     return query
