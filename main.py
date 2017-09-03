@@ -27,12 +27,21 @@ class MainPage(webapp2.RequestHandler):
             item_type_filter = self.request.get('filter_by_item_type')
             item_condition_filter = self.request.get('filter_by_condition', allow_multiple=True)
             item_article_filter = self.request.get('filter_by_article', allow_multiple=True)
-            costume_size_filter = self.request.get('filter_by_costume_size_string', allow_multiple=True)
-            query = FilterItems(item_name_filter, item_type_filter, item_condition_filter, item_article_filter, costume_size_filter)
+            costume_size_string_filter = self.request.get('filter_by_costume_size_string', allow_multiple=True)
+            costume_size_number_filter = self.request.get('filter_by_costume_size_number', allow_multiple=True)
+            query = FilterItems(
+                item_name_filter,
+                item_type_filter,
+                item_condition_filter,
+                item_article_filter,
+                costume_size_string_filter,
+                costume_size_number_filter)
 
             items = query.fetch()
+            # send to display
             self.response.write(template.render({'items': items}))
         except:
+            # first time opening or item has been added
             query = Item.query()
             items = query.fetch()
             self.response.write(template.render({'items': items}))
@@ -45,12 +54,19 @@ class AddItem(webapp2.RequestHandler):
             costume_or_prop = self.request.get('item_type')
             costume_size_number = self.request.get('clothing_size_number')
             costume_size_word = self.request.get('clothing_size_string')
+
+            # Override certain inputs due to costume and prop defaults
             if costume_or_prop == "Costume" and article_type == "N/A":
+                # An article type was not selected thus is filtered as an
+                # 'Other' item by default
                 article_type = "Other"
             elif costume_or_prop == "Prop":
+                # Props do not have sizes or article types
                 article_type = "N/A"
                 costume_size_number = "N/A"
                 costume_size_word = "N/A"
+
+            # Create Item and add to the list
             newItem = Item(
                 creator_id=auth.get_user_id(self.request),
                 name=self.request.get('name'),
@@ -82,18 +98,27 @@ class AuthHandler(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/auth.html')
         self.response.write(template.render({}))
 
-def FilterItems(item_name, item_type, item_condition, costume_article, costume_size_string):
+# Filters viewable items based on selected boxes in MainPage
+def FilterItems(item_name, item_type, item_condition, costume_article, costume_size_string, costume_size_number):
     if (item_type != "All" and item_type != ""):
         if (item_type == "Costume"):
             if (len(costume_size_string) == 5):
                 costume_size_string.append("N/A")
-            query = Item.query(ndb.AND(Item.item_type == item_type, Item.clothing_article_type.IN(costume_article), Item.clothing_size_string.IN(costume_size_string))).order(Item.name)
+
+            # Query separated into an if statement to diminish search time
+            if (len(costume_size_number) == 21):
+                query = Item.query(ndb.AND(Item.item_type == item_type,
+                    Item.clothing_article_type.IN(costume_article),
+                    Item.clothing_size_string.IN(costume_size_string))).order(Item.name)
+            else:
+                query = Item.query(ndb.AND(Item.item_type == item_type,
+                    Item.clothing_article_type.IN(costume_article),
+                    Item.clothing_size_string.IN(costume_size_string),
+                    Item.clothing_size_num.IN(costume_size_number))).order(Item.name)
         else:
             query = Item.query(Item.item_type == item_type).order(Item.name)
     else:
         query = Item.query().order(Item.name)
-
-        #query.filter(Item.clothing_size_string.IN(costume_size_string))
 
     query = query.filter(Item.condition.IN(item_condition))
     return query
