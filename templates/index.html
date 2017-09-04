@@ -23,12 +23,15 @@
 </head>
 
 <body>
-    <div id="navbar_holder"></div>
+  <div id="navbar_holder"></div>
+  <br/>
+  <div id="temp_nav_area">&nbsp;<form action='/review_edits' method='get'><input type='submit' value="Review Edits / Deletions"></input></form></div>
+  <br/>
     <div id="left-pane">
         <!-- View current items -->
         <div>
             {% for item in items %}
-            {% if item_name_filter|lower in item.name|lower %}
+            {% if item_name_filter|lower in item.name|lower and item.deleted==False and item.outdated==False and item.orphan==False %}
             <div class="item_container">
                 <h2>{{item.name}}</h2>
                 <a href="view_image?image_id={{item.key.urlsafe()}}">
@@ -38,15 +41,25 @@
                 <h4>Created by {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
                 <h5><b>Condition</b>: {{item.condition}}</h5>
                 <p>{{item.description}}</p>
-                <p><b>Article</b>: {{item.clothing_article_type}}</p>
-                <form action="/delete_item" method="post">
-                    <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-                    <input type="submit" value="delete">
-                </form>
-            </div>
-            {% endif %}
-            {% endfor %}
+                <p>Article:{{item.clothing_article_type}}</p>
+                <p>Tags:{% for tag in item.tags %} {{tag}},{% endfor %}<p>
+                <p>(Deleted = {{item.deleted}}, Outdated = {{item.outdated}}, approved = {{item.approved}}.)</p>
+          <form action="/delete_item" method="post">
+            <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+            <input type="submit" value="Delete">
+          </form>
+          <form action="/edit_item" method="get">
+            <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+            <input type="submit" value="Edit">
+          </form>
+          <form action="/revert_item" method="post">
+            <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+            <input type="submit" value="Revert To Earlier Version">
+          </form>
         </div>
+        {% endif %}
+        {% endfor %}
+    </div>
     </div>
 
     <div id="right-pane">
@@ -127,6 +140,7 @@
                     <input type="radio" name="filter_by_item_type" value="All" checked="checked" onclick="hideFilterCostumeForm(this);"> All<br>
                     <input type="radio" name="filter_by_item_type" value="Costume" onclick="displayFilterCostumeForm(this);"> Costume<br>
                     <input type="radio" name="filter_by_item_type" value="Prop" onclick="hideFilterCostumeForm(this);"> Prop<br>
+                    <!-- Alternatively, disabled="disabled" for hiding this section? -->
                     <div style="visibility:hidden" id="costume_specific_forms">
                         <h4> Article </h4>
                         <input type="checkbox" name="filter_by_article" value="Top" checked="checked" multiple="true"> Tops<br>

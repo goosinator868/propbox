@@ -7,6 +7,14 @@
   position: relative;
 }
 
+.sub_item_container {
+  background-color: #EEE;
+  padding: 7px;
+  display: inline-block;
+  border-radius: 5px;
+  margin: 5px;
+}
+
 .form {
   padding: 5px;
   display: inline-block;

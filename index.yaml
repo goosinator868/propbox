@@ -79,6 +79,21 @@ indexes:
 
 - kind: Item
   properties:
+  - name: deleted
+  - name: orphan
+  - name: outdated
+  - name: name
+
+- kind: Item
+  properties:
+  - name: deleted
+  - name: orphan
+  - name: outdated
+  - name: updated
+    direction: desc
+
+- kind: Item
+  properties:
   - name: item_type
   - name: name
 
