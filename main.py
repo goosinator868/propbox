@@ -13,11 +13,6 @@ from google.appengine.ext.db import TransactionFailedError
 # First party imports
 from warehouse_models import Item, cloneItem
 import auth
-#from enums import *
-
-# # Little helper function for rendering the main page.
-# def FetchList():
-#     return {'items':Item.query(Item.outdated == False, Item.deleted == False, Item.orphan == False).order(-Item.updated).fetch()}
 
 # Finds the most recent version of an item.
 def FindUpdatedItem(item):
@@ -98,8 +93,11 @@ def CommitEdit(old_key, new_item, was_orphan=False):
     if was_orphan:
         if not new_item.key.get().orphan:
             raise AlreadyCommitedException()
+        # Create a new copy with the correct parent
+        copy = cloneItem(new_item, parentKey=old_key)
+        new_item.key.delete()
+        new_item = copy
     old_item.outdated = True
-    new_item.parent = old_key
     new_key = new_item.put()
     old_item.child = new_key
     old_item.put()
@@ -115,10 +113,10 @@ class MainPage(webapp2.RequestHandler):
             # Filter search items
             item_name_filter = self.request.get('filter_by_name')
             item_type_filter = self.request.get('filter_by_item_type')
-            item_condition_filter = self.request.get('filter_by_condition', allow_multiple=True)
-            item_article_filter = self.request.get('filter_by_article', allow_multiple=True)
-            costume_size_string_filter = self.request.get('filter_by_costume_size_string', allow_multiple=True)
-            costume_size_number_filter = self.request.get('filter_by_costume_size_number', allow_multiple=True)
+            item_condition_filter = self.request.get_all('filter_by_condition')
+            item_article_filter = self.request.get_all('filter_by_article')
+            costume_size_string_filter = self.request.get_all('filter_by_costume_size_string')
+            costume_size_number_filter = self.request.get_all('filter_by_costume_size_number')
             tags_filter = self.request.get('filter_by_tags')
             tags_grouping_filter = self.request.get('filter_by_tag_grouping')
             query = FilterItems(
@@ -398,7 +396,7 @@ class ReviewEdits(webapp2.RequestHandler):
             elif item.key.parent():
                 hasOldVersion.append(item)
         for newest in hasOldVersion:
-            logging.info(newest)
+            # logging.info(newest)
             if newest.outdated is False and newest.deleted is False and newest.approved is False:
                 history = []
                 parent = newest.key.parent()
@@ -406,7 +404,7 @@ class ReviewEdits(webapp2.RequestHandler):
                     history.append(parent.get())
                     parent = parent.parent()
                 count = range(len(history))
-                logging.info(history)
+                # logging.info(history)
                 newAndOld.append([newest, history, count])
         self.response.write(template.render({'deleted':deleted,'revised':newAndOld}))
 
