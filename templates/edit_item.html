@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+  <link rel="import" href="/static/common.html">
+
+  <script>
+    $(document).ready(function(){
+      SetUpNavBar(SetUpFirebase);
+    });
+  </script>
+
+  <title>Prop Box</title>
+</head>
+
+<body>
+  <div id="navbar_holder"></div>
+  <!-- New content here -->
+  <h2> Original </h2>
+  <div class="item_container">
+    <h2>{{item.name}}</h2>
+    <p>{{item.description}}</p>
+    <br/>
+  </div>
+  <div class="form">
+    <h1> Edit Item </h1>
+    <form action="/edit_item" method="post">
+      Name: <input name="name" type="text" value="{{item.name}}"><br>
+      Description: <textarea name="description">{{item.description}}</textarea><br>
+      <input type="hidden" name="old_item_key" value="{{item.key.urlsafe()}}">
+      <input type="submit" value="save">
+    </form>
+  </div>
+</body>
+</html>
