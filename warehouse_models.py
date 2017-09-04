@@ -6,7 +6,7 @@ class Item(ndb.Model):
     updated = ndb.DateTimeProperty(auto_now_add=True)
     name = ndb.StringProperty(required=True)
     image = ndb.BlobProperty(required=False)
-    description = ndb.StringProperty(required=False)
+    description = ndb.TextProperty(required=False)
     qr_code = ndb.IntegerProperty(required=False)
     item_type = ndb.StringProperty(required=True)
     condition = ndb.StringProperty(required=True)
