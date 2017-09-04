@@ -43,6 +43,7 @@
           <form action="/revert_item" method="post">
             <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
             <input type="submit" value="Revert To Earlier Version">
+          </form>
         </div>
       {% endfor %}
     </div>
