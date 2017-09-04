@@ -104,7 +104,7 @@ class DeleteItem(webapp2.RequestHandler):
 
 class ViewImage(webapp2.RequestHandler):
     def get(self):
-        item_key = ndb.Key(urlsafe=self.request.get('entity_id'))
+        item_key = ndb.Key(urlsafe=self.request.get('image_id'))
         item = item_key.get()
         self.response.headers['Content-Type'] = 'image/png'
         self.response.out.write(item.image)
