@@ -44,24 +44,58 @@
 
 <body>
 
-{% for item in deleted %}
+  {% for item in deleted %}
   <div id="confirm_delete_{{item.key.urlsafe()}}" class="modal">
     <div class="modal-content">
-      <span class="close" onclick="closeDeleteConfirm('{{item.key.urlsafe()}}')">&times;</span>
+      <span class="close" onclick="closeConfirm('delete','{{item.key.urlsafe()}}',-1)">&times;</span>
       <center><p>Do you really want to delete <strong>{{item.name}}</strong>?</p>
       <p>This cannot be undone.</p>
-      <button id="cancel" onclick="closeDeleteConfirm('{{item.key.urlsafe()}}')">No.</button>
+      <button id="cancel" onclick="closeConfirm('delete','{{item.key.urlsafe()}}',-1)">No.</button>
       <form action="/delete_item_forever" method="post" style="display: inline-block;">
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
         <input type="submit" value="Yes, Delete Forever">
       </form></center>
     </div>
   </div>
-{% endfor %}
+  {% endfor %}
+
+  {% for item in revised %}
+  {% for i in item[2] %}
+  <div id="confirm_rollback_{{i|string}}_{{item[0].key.urlsafe()}}" class="modal">
+    <div class="modal-content">
+    <span class="close" onclick="closeConfirm('rollback','{{item[0].key.urlsafe()}}',{{i}})">&times;</span>
+      <center><p>Do you really want to revert <strong>{{item[0].name}}</strong> to the earlier version of <strong>{{item[1][i].name}}</strong>?</p>
+      <p>This cannot be undone.</p>
+
+      <div class="sub_item_container" style="display: inline-block;">
+        <strong>Current Version</strong>
+        <h2>{{item[0].name}}</h2>
+        <h4>created by : {{item[0].creator_id}} at {{item[0].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+        <p>{{item[0].description}}</p>
+        </div> → 
+      <div class="sub_item_container" style="display: inline-block;">
+        <strong>Previous Versions</strong>
+        <h2>{{item[1][i].name}}</h2>
+        <h4>created by : {{item[1][i].creator_id}} at {{item[1][i].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+        <p>{{item[1][i].description}}</p>
+      </div>
+      
+      <br/>
+      <button id="cancel" onclick="closeConfirm('rollback','{{item[0].key.urlsafe()}}',{{i}})">No.</button>
+      <form action="/discard_revision" method="post" style="display: inline-block;">
+        <input type="hidden" name="item_id" value="{{item[1][i].key.urlsafe()}}">
+        <input type="hidden" name="newest_id" value="{{item[0].key.urlsafe()}}">
+        <input type="submit" value="Yes, Revert To Earlier Version">
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+  {% endfor %}
 
 
   <div id="navbar_holder"></div>
   <br/><div><form action="/" method="get"><input type="submit" value="Main Page"/></form><br/>
+  
   <div id="left-pane">
     Deleted List<br/>
     <div id="deleted_list">
@@ -73,7 +107,7 @@
           <img src="view_image?image_id={{item.key.urlsafe()}}" class="thumbnail" />
           <p>{{item.key}}</p>
           <br/>
-        <button onclick="showDeleteConfirm('{{item.key.urlsafe()}}')">Delete Forever</button>
+        <button onclick="showConfirm('delete','{{item.key.urlsafe()}}',-1)">Delete Forever</button>
 
         <form action="/undelete_item" method="post">
             <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
@@ -83,9 +117,8 @@
       {% endfor %}</div>
    </div>
 
-
-   <div id="right-pane">
-   Items with past versions<br/>
+  <div id="right-pane">
+    Items with past versions<br/>
     <div id="revised_list">
       {% for item in revised %}
         <div class="item_container">
@@ -107,11 +140,7 @@
               <img src="view_image?image_id={{item[1][i].key.urlsafe()}}" class="thumbnail" />
               <br/>
               <p>Deleted = {{item[1][i].deleted}} and Outdated = {{item[1][i].outdated}}</p>
-              <form action="/discard_revision" method="post">
-                <input type="hidden" name="item_id" value="{{item[1][i].key.urlsafe()}}">
-                <input type="hidden" name="newest_id" value="{{item[0].key.urlsafe()}}">
-                <input type="submit" value="Revert To This Version">
-              </form>
+              <button onclick="showConfirm('rollback','{{item[0].key.urlsafe()}}',{{i}})">Revert To This Version</button>
               <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i-1)|string}}')"{% if i == 0 %} disabled="disabled" style="color: #bbb;"{% endif %}">Newer</button> 
               <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i+1)|string}}')"{% if i == item[2][-1] %} disabled="disabled" style="color: #bbb;" {% endif %};">Older</button>
             </div>
@@ -122,7 +151,8 @@
           </form>
         </div>
       {% endfor %}
-    </div></div>
+    </div>
+  </div>
 </body>
 
 <script type="text/javascript">
@@ -138,17 +168,31 @@
     return;
   }
 
-  function showDeleteConfirm(itemID) {
+  function showConfirm(type,itemID,i) {
       console.log(itemID);
-      var modal = document.getElementById("confirm_delete_"+itemID);
+      var modal = null;
+      if (i == -1) {
+        console.log("show delete")
+        modal = document.getElementById("confirm_"+type+"_"+itemID);
+      } else {
+        console.log("show rollback")
+        modal = document.getElementById("confirm_"+type+"_"+i+"_"+itemID);
+      }
       modal.style.display = "block";
       return;
     }
 
-  function closeDeleteConfirm(itemID) {
-    var modal = document.getElementById("confirm_delete_"+itemID);
-      modal.style.display = "none";
-      return;
+  function closeConfirm(type,itemID,i) {
+    var modal = null;
+      if (i == -1) {
+        console.log("hide delete")
+        modal = document.getElementById("confirm_"+type+"_"+itemID);
+      } else {
+        console.log("hide rollback")
+        modal = document.getElementById("confirm_"+type+"_"+i+"_"+itemID);
+      }
+    modal.style.display = "none";
+    return;
   }
 
 </script>
