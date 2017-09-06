@@ -138,6 +138,10 @@ class MainPage(webapp2.RequestHandler):
             self.response.write(template.render({'items': items, 'item_name_filter': item_name_filter}))
 
 class AddItem(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('templates/add_item.html')
+        self.response.write(template.render({}))
     #TODO: Find out why this ends up loading the review edits page.
     @auth.login_required
     def post(self):
