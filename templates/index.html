@@ -12,10 +12,10 @@
     </script>
     <script type="text/javascript">
     function displayFilterCostumeForm(x) {
-        document.getElementById("costume_specific_forms").style.visibility = 'visible'
+        document.getElementById("costume_specific_forms").style.display = 'block'
     }
     function hideFilterCostumeForm(x) {
-        document.getElementById("costume_specific_forms").style.visibility = 'hidden'
+        document.getElementById("costume_specific_forms").style.display = 'none'
     }
     </script>
 
@@ -141,7 +141,7 @@
                     <input type="radio" name="filter_by_item_type" value="Costume" onclick="displayFilterCostumeForm(this);"> Costume<br>
                     <input type="radio" name="filter_by_item_type" value="Prop" onclick="hideFilterCostumeForm(this);"> Prop<br>
                     <!-- Alternatively, disabled="disabled" for hiding this section? -->
-                    <div style="visibility:hidden" id="costume_specific_forms">
+                    <div id="costume_specific_forms">
                         <h4> Article </h4>
                         <input type="checkbox" name="filter_by_article" value="Top" checked="checked" multiple="true"> Tops<br>
                         <input type="checkbox" name="filter_by_article" value="Bottom" checked="checked" multiple="true"> Bottoms<br>
