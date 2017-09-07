@@ -396,14 +396,14 @@ class ReviewEdits(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/review_edits.html')
         items = Item.query().order(-Item.updated).fetch()
-        deleted = []
+        # deleted = []
         hasOldVersion = []
         newAndOld = []
         for item in items:
-            if item.deleted and item.child == None:
-                deleted.append(item)
-            elif item.key.parent():
-                hasOldVersion.append(item)
+        #     if item.deleted and item.child == None:
+        #         deleted.append(item)
+             if item.key.parent():
+                 hasOldVersion.append(item)
         for newest in hasOldVersion:
             # logging.info(newest)
             if newest.outdated is False and newest.deleted is False and newest.approved is False:
@@ -415,8 +415,8 @@ class ReviewEdits(webapp2.RequestHandler):
                 count = range(len(history))
                 # logging.info(history)
                 newAndOld.append([newest, history, count])
-        self.response.write(template.render({'deleted':deleted,'revised':newAndOld}))
-
+        # self.response.write(template.render({'deleted':deleted,'revised':newAndOld}))
+        self.response.write(template.render({'revised':newAndOld}))
 #Keeps the latest revision. Flags the revision as "approved" in the database.
 class KeepRevision(webapp2.RequestHandler):
     @auth.login_required
@@ -435,6 +435,7 @@ class DiscardRevision(webapp2.RequestHandler):
         si = selected_item.get()
         si.approved = True
         si.outdated = False
+        si.child = None
         si.put()
         discarded_item = ndb.Key(urlsafe=self.request.get('newest_id'))
         while discarded_item != selected_item: 
@@ -497,6 +498,21 @@ class ViewItemDetails(webapp2.RequestHandler):
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
         self.response.write(template.render({'item':item}))
 
+#To admin-approve items that have been created or edited by lesser users.
+class ReviewDeletions(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        logging.info("Manage Deletions")
+        template = JINJA_ENVIRONMENT.get_template('templates/review_deletions.html')
+        items = Item.query().order(-Item.updated).fetch()
+        logging.info(items)
+        deleted = []
+        for item in items:
+            if item.deleted and item.child == None:
+                deleted.append(item)
+        logging.info(len(deleted))
+        self.response.write(template.render({'deleted':deleted}))
+
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -522,5 +538,6 @@ app = webapp2.WSGIApplication([
     ('/view_group', ViewGroup),
     ('/view_users_in_group', ViewUsersInGroup),
     ('/item_details', ViewItemDetails),
+    ('/review_deletions', ReviewDeletions),
     ('/.*', MainPage),
 ], debug=True)

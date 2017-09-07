@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+  <link rel="import" href="/static/common.html">
+
+  <script>
+    $(document).ready(function(){
+      SetUpNavBar(SetUpFirebase);
+    });
+  </script>
+
+  <script type="text/javascript">
+    function showConfirm(type,itemID,i) {
+        console.log(itemID);
+        var modal = null;
+        if (i == -1) {
+          console.log("show delete")
+          modal = document.getElementById("confirm_"+type+"_"+itemID);
+        } else {
+          console.log("show rollback")
+          modal = document.getElementById("confirm_"+type+"_"+i+"_"+itemID);
+        }
+        modal.style.display = "block";
+        return;
+      }
+
+    function closeConfirm(type,itemID,i) {
+      var modal = null;
+        if (i == -1) {
+          console.log("hide delete")
+          modal = document.getElementById("confirm_"+type+"_"+itemID);
+        } else {
+          console.log("hide rollback")
+          modal = document.getElementById("confirm_"+type+"_"+i+"_"+itemID);
+        }
+      modal.style.display = "none";
+      return;
+    }
+  </script>
+
+  <style type="text/css">
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0,0,0);
+      background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+  </style>
+
+  <title>Prop Box</title>
+</head>
+
+<body>
+  <div id="navbar_holder"></div>
+  <!-- New content here -->
+
+  {% for item in deleted %}
+  <div id="confirm_delete_{{item.key.urlsafe()}}" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeConfirm('delete','{{item.key.urlsafe()}}',-1)">&times;</span>
+      <center><p>Do you really want to delete <strong>{{item.name}}</strong>?</p>
+      <p>This cannot be undone.</p>
+      <button id="cancel" onclick="closeConfirm('delete','{{item.key.urlsafe()}}',-1)">No.</button>
+      <form action="/delete_item_forever" method="post" style="display: inline-block;">
+        <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+        <input type="submit" value="Yes, Delete Forever">
+      </form></center>
+    </div>
+  </div>
+  {% endfor %}
+
+  <br/>
+  <form action="/" method="get">
+    <input type="submit" value="Home">
+  </form>
+  This is the page for approving the deletion of items.
+
+  <div id="left-pane">
+    Deleted List<br/>
+    <div id="deleted_list">
+      {% for item in deleted %}
+        <div class="item_container">
+          <h2>{{item.name}}</h2>
+          <h4>created by : {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+          <p>{{item.description}}</p>
+          <img src="view_image?image_id={{item.key.urlsafe()}}" class="thumbnail" />
+          <p>{{item.key}}</p>
+          <br/>
+        <button onclick="showConfirm('delete','{{item.key.urlsafe()}}',-1)">Delete Forever</button>
+
+        <form action="/undelete_item" method="post">
+            <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+            <input type="submit" value="Restore Item">
+          </form>
+        </div>
+      {% endfor %}</div>
+   </div>
+</body>
+</html>
