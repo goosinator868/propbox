@@ -485,9 +485,18 @@ class ViewGroup(webapp2.RequestHandler):
 class ViewUsersInGroup(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
-        logging.info("View Users In Group:get")
+        logging.info("View Users In Group")
         template = JINJA_ENVIRONMENT.get_template('templates/users_in_group.html')
         self.response.write(template.render({}))
+
+class ViewItemDetails(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        logging.info("View Item Details")
+        template = JINJA_ENVIRONMENT.get_template('templates/item_details.html')
+        item = ndb.Key(urlsafe=self.request.get('item_id')).get()
+        self.response.write(template.render({'item':item}))
+
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -512,5 +521,6 @@ app = webapp2.WSGIApplication([
     ('/group_list', GroupList),
     ('/view_group', ViewGroup),
     ('/view_users_in_group', ViewUsersInGroup),
+    ('/item_details', ViewItemDetails),
     ('/.*', MainPage),
 ], debug=True)
