@@ -471,9 +471,24 @@ class CreateGroup(webapp2.RequestHandler):
 class GroupList(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
-        logging.info("Group List:post")
+        logging.info("Group List:get")
         template = JINJA_ENVIRONMENT.get_template('templates/group_list.html')
         self.response.write(template.render({}))
+
+class ViewGroup(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        logging.info("View Group:get")
+        template = JINJA_ENVIRONMENT.get_template('templates/group.html')
+        self.response.write(template.render({}))
+
+class ViewUsersInGroup(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        logging.info("View Users In Group:get")
+        template = JINJA_ENVIRONMENT.get_template('templates/users_in_group.html')
+        self.response.write(template.render({}))
+
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -495,5 +510,7 @@ app = webapp2.WSGIApplication([
     ('/revert_item', RevertItem),
     ('/create_group', CreateGroup),
     ('/group_list', GroupList),
+    ('/view_group', ViewGroup),
+    ('/view_users_in_group', ViewUsersInGroup),
     ('/.*', MainPage),
 ], debug=True)
