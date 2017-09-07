@@ -104,6 +104,8 @@ def CommitEdit(old_key, new_item, was_orphan=False):
 
 
 ## Handlers
+
+# Loads the main page.
 class MainPage(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
@@ -137,12 +139,13 @@ class MainPage(webapp2.RequestHandler):
             items = query.fetch()
             self.response.write(template.render({'items': items, 'item_name_filter': item_name_filter}))
 
+#Loads add item page and adds item to database
 class AddItem(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/add_item.html')
         self.response.write(template.render({}))
-    #TODO: Find out why this ends up loading the review edits page.
+    
     @auth.login_required
     def post(self):
         img = self.request.get('image', default_value='')
@@ -226,7 +229,7 @@ class ResolveEdits(webapp2.RequestHandler):
              # TODO: Panic should never reach this, it should be caught by the other exceptions.
              logging.critical('transaction failed without reason being determined')
 
-
+#Handler for editing an item.
 class EditItem(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
@@ -385,9 +388,11 @@ def ParseTags(tags_string):
 
 class ReviewEdits(webapp2.RequestHandler):
     # Loads the edit page.
-    # TODO: FIGURE OUT WHY THIS PAGE LOADS WHEN ADDING A SECOND ITEM.
+    @auth.login_required
     def post(self):
         self.get()
+
+    @auth.login_required
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/review_edits.html')
         items = Item.query().order(-Item.updated).fetch()
@@ -414,6 +419,7 @@ class ReviewEdits(webapp2.RequestHandler):
 
 #Keeps the latest revision. Flags the revision as "approved" in the database.
 class KeepRevision(webapp2.RequestHandler):
+    @auth.login_required
     def post(self):
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
         item.approved = True
@@ -423,6 +429,7 @@ class KeepRevision(webapp2.RequestHandler):
 
 #Discards a revision.
 class DiscardRevision(webapp2.RequestHandler):
+    @auth.login_required
     def post(self):
         selected_item = ndb.Key(urlsafe=self.request.get('item_id'))
         si = selected_item.get()
@@ -441,6 +448,7 @@ class DiscardRevision(webapp2.RequestHandler):
 
 #Allows for undoing an item approval
 class RevertItem(webapp2.RequestHandler):
+    @auth.login_required
     def post(self):
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
         item.approved = False
@@ -449,14 +457,23 @@ class RevertItem(webapp2.RequestHandler):
         self.redirect('/review_edits')
 
 class CreateGroup(webapp2.RequestHandler):
+    @auth.login_required
     def get(self):
         logging.info("Create Group:get")
         template = JINJA_ENVIRONMENT.get_template('templates/create_group.html')
         self.response.write(template.render({}))
     
+    @auth.login_required
     def post(self):
         logging.info("Create Group:post")
         self.redirect('/')
+
+class GroupList(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        logging.info("Group List:post")
+        template = JINJA_ENVIRONMENT.get_template('templates/group_list.html')
+        self.response.write(template.render({}))
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -477,5 +494,6 @@ app = webapp2.WSGIApplication([
     ('/keep_revision',KeepRevision),
     ('/revert_item', RevertItem),
     ('/create_group', CreateGroup),
+    ('/group_list', GroupList),
     ('/.*', MainPage),
 ], debug=True)
