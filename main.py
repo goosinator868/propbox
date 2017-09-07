@@ -384,8 +384,8 @@ def ParseTags(tags_string):
     return tags_list
 
 class ReviewEdits(webapp2.RequestHandler):
-# Loads the edit page.
-# TODO: FIGURE OUT WHY THIS PAGE LOADS WHEN ADDING A SECOND ITEM.
+    # Loads the edit page.
+    # TODO: FIGURE OUT WHY THIS PAGE LOADS WHEN ADDING A SECOND ITEM.
     def post(self):
         self.get()
     def get(self):
@@ -448,6 +448,15 @@ class RevertItem(webapp2.RequestHandler):
         sleep(0.1)
         self.redirect('/review_edits')
 
+class CreateGroup(webapp2.RequestHandler):
+    def get(self):
+        logging.info("Create Group:get")
+        template = JINJA_ENVIRONMENT.get_template('templates/create_group.html')
+        self.response.write(template.render({}))
+    
+    def post(self):
+        logging.info("Create Group:post")
+        self.redirect('/')
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -467,5 +476,6 @@ app = webapp2.WSGIApplication([
     ('/discard_revision',DiscardRevision),
     ('/keep_revision',KeepRevision),
     ('/revert_item', RevertItem),
+    ('/create_group', CreateGroup),
     ('/.*', MainPage),
 ], debug=True)
