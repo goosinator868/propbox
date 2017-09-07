@@ -111,34 +111,7 @@ class MainPage(webapp2.RequestHandler):
     def get(self):
         # Load html template
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
-        try:
-            # Filter search items
-            item_name_filter = self.request.get('filter_by_name')
-            item_type_filter = self.request.get('filter_by_item_type')
-            item_condition_filter = self.request.get_all('filter_by_condition')
-            item_article_filter = self.request.get_all('filter_by_article')
-            costume_size_string_filter = self.request.get_all('filter_by_costume_size_string')
-            costume_size_number_filter = self.request.get_all('filter_by_costume_size_number')
-            tags_filter = self.request.get('filter_by_tags')
-            tags_grouping_filter = self.request.get('filter_by_tag_grouping')
-            query = FilterItems(
-                item_name_filter,
-                item_type_filter,
-                item_condition_filter,
-                item_article_filter,
-                costume_size_string_filter,
-                costume_size_number_filter,
-                tags_filter, tags_grouping_filter)
-
-            items = query.fetch()
-            # send to display
-            self.response.write(template.render({'items': items, 'item_name_filter': item_name_filter}))
-        except:
-            # first time opening or item has been added
-            query = Item.query()
-            items = query.fetch()
-            self.response.write(template.render({'items': items, 'item_name_filter': item_name_filter}))
-
+        self.response.write(template.render({}))
 #Loads add item page and adds item to database
 class AddItem(webapp2.RequestHandler):
     @auth.login_required
@@ -513,6 +486,39 @@ class ReviewDeletions(webapp2.RequestHandler):
         logging.info(len(deleted))
         self.response.write(template.render({'deleted':deleted}))
 
+#Loads the search and browsing page.
+class SearchAndBrowse(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('templates/search_and_browse_items.html')
+        try:
+            # Filter search items
+            item_name_filter = self.request.get('filter_by_name')
+            item_type_filter = self.request.get('filter_by_item_type')
+            item_condition_filter = self.request.get_all('filter_by_condition')
+            item_article_filter = self.request.get_all('filter_by_article')
+            costume_size_string_filter = self.request.get_all('filter_by_costume_size_string')
+            costume_size_number_filter = self.request.get_all('filter_by_costume_size_number')
+            tags_filter = self.request.get('filter_by_tags')
+            tags_grouping_filter = self.request.get('filter_by_tag_grouping')
+            query = FilterItems(
+                item_name_filter,
+                item_type_filter,
+                item_condition_filter,
+                item_article_filter,
+                costume_size_string_filter,
+                costume_size_number_filter,
+                tags_filter, tags_grouping_filter)
+
+            items = query.fetch()
+            # send to display
+            self.response.write(template.render({'items': items, 'item_name_filter': item_name_filter}))
+        except:
+            # first time opening or item has been added
+            query = Item.query()
+            items = query.fetch()
+            self.response.write(template.render({'items': items, 'item_name_filter': item_name_filter}))
+
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -539,5 +545,6 @@ app = webapp2.WSGIApplication([
     ('/view_users_in_group', ViewUsersInGroup),
     ('/item_details', ViewItemDetails),
     ('/review_deletions', ReviewDeletions),
+    ('/search_and_browse',SearchAndBrowse),
     ('/.*', MainPage),
 ], debug=True)

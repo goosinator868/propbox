@@ -31,9 +31,11 @@
       <input type="submit" value="Review Deletions">
   </form></div>
   <br/>
-    <div id="left-pane">
-        <!-- View current items -->
-        <div>
+  <form action="search_and_browse" method="get">
+    <input type="submit" value="Search and Browse for Items">
+  </form><br/>
+<!--     <div id="left-pane">
+         <div>
             {% for item in items %}
             {% if item_name_filter|lower in item.name|lower and item.deleted==False and item.outdated==False and item.orphan==False %}
             <div class="item_container">
@@ -58,12 +60,12 @@
         </div>
     </div>
 
-    <div id="right-pane">
+     <div id="right-pane">
         <form style="display: block;" action="/add_item" method="get">
             <input type="submit" value="Add Item">
         </form>
         
-        <br/>
+        <br/> -->
 
         <form style="display: block;" action="/create_group" method="get">
             <input type="submit" value="Create Group">
@@ -72,8 +74,7 @@
             <input type="submit" value="View Group List">
         </form>
 
-        <div id="right-pane">
-            <!-- Search form -->
+ <!--        <div id="right-pane">
             <div class="form">
                 <h1> Filter items </h1>
                 <form action="/" method="get">
@@ -82,7 +83,6 @@
                     <input type="radio" name="filter_by_item_type" value="All" checked="checked" onclick="hideFilterCostumeForm(this);"> All<br>
                     <input type="radio" name="filter_by_item_type" value="Costume" onclick="displayFilterCostumeForm(this);"> Costume<br>
                     <input type="radio" name="filter_by_item_type" value="Prop" onclick="hideFilterCostumeForm(this);"> Prop<br>
-                    <!-- Alternatively, disabled="disabled" for hiding this section? -->
                     <div id="costume_specific_forms">
                         <h4> Article </h4>
                         <input type="checkbox" name="filter_by_article" value="Top" checked="checked" multiple="true"> Tops<br>
@@ -136,6 +136,6 @@
 
             </div>
         </div>
-  </div>
+  </div> -->
 </body>
 </html>

@@ -8,13 +8,113 @@
       SetUpNavBar(SetUpFirebase);
     });
   </script>
-
+  <link rel="stylesheet" type="text/css" href="/stylesheets/search_and_browse_items.css">
   <title>Prop Box</title>
 </head>
 
 <body>
   <div id="navbar_holder"></div>
   <!-- New content here -->
+  <br/>
+  <form action="/" method="get">
+    <input type="submit" value="Home">
+  </form>
   This is a page for searching and browsing for items.
+      <div id="left-pane">
+        <!-- View current items -->
+        <div>
+            {% for item in items %}
+            {% if item_name_filter|lower in item.name|lower and item.deleted==False and item.outdated==False and item.orphan==False %}
+            <div class="item_container">
+                <h2>{{item.name}}</h2>
+                <a href="view_image?image_id={{item.key.urlsafe()}}">
+                <img src="view_image?image_id={{item.key.urlsafe()}}" class="thumbnail" />
+                </a>
+                <h3>{{item.item_type}}</h3>
+                <h4>Created by {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+                <h5><b>Condition</b>: {{item.condition}}</h5>
+                <p>{{item.description}}</p>
+                <p>Article:{{item.clothing_article_type}}</p>
+                <p>Tags:{% for tag in item.tags %} {{tag}},{% endfor %}<p>
+                <p>(Deleted = {{item.deleted}}, Outdated = {{item.outdated}}, approved = {{item.approved}}.)</p>
+                <form action="/item_details" method="get">
+                  <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+                  <input type="submit" value="Item Details">
+                </form>
+            </div>
+        {% endif %}
+        {% endfor %}
+        </div>
+    </div>
+
+    <div id="right-pane">
+        <form style="display: block;" action="/add_item" method="get">
+            <input type="submit" value="Add Item">
+        </form>
+        <div><!-- <div id="right-pane"> -->
+            <!-- Search form -->
+            <div class="form">
+                <h1> Filter items </h1>
+                <form action="/" method="get">
+                    <input name="filter_by_name" type="text" placeholder="name"><br>
+                    <h4> Type </h4><br>
+                    <input type="radio" name="filter_by_item_type" value="All" checked="checked" onclick="hideFilterCostumeForm(this);"> All<br>
+                    <input type="radio" name="filter_by_item_type" value="Costume" onclick="displayFilterCostumeForm(this);"> Costume<br>
+                    <input type="radio" name="filter_by_item_type" value="Prop" onclick="hideFilterCostumeForm(this);"> Prop<br>
+                    <!-- Alternatively, disabled="disabled" for hiding this section? -->
+                    <div id="costume_specific_forms">
+                        <h4> Article </h4>
+                        <input type="checkbox" name="filter_by_article" value="Top" checked="checked" multiple="true"> Tops<br>
+                        <input type="checkbox" name="filter_by_article" value="Bottom" checked="checked" multiple="true"> Bottoms<br>
+                        <input type="checkbox" name="filter_by_article" value="Dress" checked="checked" multiple="true"> Dresses<br>
+                        <input type="checkbox" name="filter_by_article" value="Shoes" checked="checked" multiple="true"> Shoes<br>
+                        <input type="checkbox" name="filter_by_article" value="Hat" checked="checked" multiple="true"> Hats<br>
+                        <input type="checkbox" name="filter_by_article" value="Coat/Jacket" checked="checked" multiple="true"> Coats/Jackets<br>
+                        <input type="checkbox" name="filter_by_article" value="Other" checked="checked" multiple="true"> Other<br>
+                        <h4> Size </h4>
+                        <input type="checkbox" name="filter_by_costume_size_string" value="XS" checked="checked" multiple="true"> XS<br>
+                        <input type="checkbox" name="filter_by_costume_size_string" value="S" checked="checked" multiple="true"> S<br>
+                        <input type="checkbox" name="filter_by_costume_size_string" value="M" checked="checked" multiple="true"> M<br>
+                        <input type="checkbox" name="filter_by_costume_size_string" value="L" checked="checked" multiple="true"> L<br>
+                        <input type="checkbox" name="filter_by_costume_size_string" value="XL" checked="checked" multiple="true"> XL<br>
+                        <br>
+                        <input type="checkbox" name="filter_by_costume_size_number" value="0" checked="checked" multiple="true"> 0
+                        <input type="checkbox" name="filter_by_costume_size_number" value="1" checked="checked" multiple="true"> 1
+                        <input type="checkbox" name="filter_by_costume_size_number" value="2" checked="checked" multiple="true"> 2
+                        <input type="checkbox" name="filter_by_costume_size_number" value="3" checked="checked" multiple="true"> 3
+                        <input type="checkbox" name="filter_by_costume_size_number" value="4" checked="checked" multiple="true"> 4<br>
+                        <input type="checkbox" name="filter_by_costume_size_number" value="5" checked="checked" multiple="true"> 5
+                        <input type="checkbox" name="filter_by_costume_size_number" value="6" checked="checked" multiple="true"> 6
+                        <input type="checkbox" name="filter_by_costume_size_number" value="7" checked="checked" multiple="true"> 7
+                        <input type="checkbox" name="filter_by_costume_size_number" value="8" checked="checked" multiple="true"> 8
+                        <input type="checkbox" name="filter_by_costume_size_number" value="9" checked="checked" multiple="true"> 9<br>
+                        <input type="checkbox" name="filter_by_costume_size_number" value="10" checked="checked" multiple="true"> 10
+                        <input type="checkbox" name="filter_by_costume_size_number" value="11" checked="checked" multiple="true"> 11
+                        <input type="checkbox" name="filter_by_costume_size_number" value="12" checked="checked" multiple="true"> 12
+                        <input type="checkbox" name="filter_by_costume_size_number" value="13" checked="checked" multiple="true"> 13
+                        <input type="checkbox" name="filter_by_costume_size_number" value="14" checked="checked" multiple="true"> 14<br>
+                        <input type="checkbox" name="filter_by_costume_size_number" value="15" checked="checked" multiple="true"> 15
+                        <input type="checkbox" name="filter_by_costume_size_number" value="16" checked="checked" multiple="true"> 16
+                        <input type="checkbox" name="filter_by_costume_size_number" value="17" checked="checked" multiple="true"> 17
+                        <input type="checkbox" name="filter_by_costume_size_number" value="18" checked="checked" multiple="true"> 18
+                        <input type="checkbox" name="filter_by_costume_size_number" value="19" checked="checked" multiple="true"> 19<br>
+                        <input type="checkbox" name="filter_by_costume_size_number" value="20" checked="checked" multiple="true"> 20<br>
+                    </div>
+                    <h4> Condition </h4><br>
+                    <input type="checkbox" name="filter_by_condition" value="Good" checked="checked" multiple="true"> Good<br>
+                    <input type="checkbox" name="filter_by_condition" value="Fair" checked="checked" multiple="true"> Fair<br>
+                    <input type="checkbox" name="filter_by_condition" value="Poor" checked="checked" multiple="true"> Poor<br>
+                    <input type="checkbox" name="filter_by_condition" value="Being Repaired" checked="checked" multiple="true"> Being Repaired<br>
+
+                    <h4> Tags </h4><br>
+                    <input type="radio" name="filter_by_tag_grouping" value="inclusive" checked="checked"> Has One of Listed
+                    <input type="radio" name="filter_by_tag_grouping" value="exclusive"> Has All of Listed<br>
+                    <textarea name="filter_by_tags" placeholder="separate tags with enter key"></textarea><br>
+                    <input type="submit" value="Search" class="submitButton">
+                </form>
+
+            </div>
+        </div>
+  </div>
 </body>
 </html>
