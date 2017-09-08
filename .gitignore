@@ -1,3 +1,4 @@
 *.pyc
 lib/
 .DS_Store
+index.yaml

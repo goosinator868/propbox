@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+  <link rel="import" href="/static/common.html">
+
+  <script>
+    $(document).ready(function(){
+      SetUpNavBar(SetUpFirebase);
+    });
+  </script>
+
+  <title>Prop Box</title>
+</head>
+
+<body>
+  <div id="navbar_holder"></div>
+  <!-- New content here -->
+  <br/>
+  <form action="/" method="get">
+    <input type="submit" value="Home">
+  </form>
+  <center>This is the page for creating a new item.
+  <div class="form">
+      <h1> Create new item </h1>
+      <form action="/add_item" enctype="multipart/form-data" method="post">
+          <input name="name" type="text" placeholder="name"><br>
+          <input name="image" type="file" accept=".png, .gif, .jpg, .jpeg"><br>
+          <textarea name="description" placeholder="description"></textarea><br>
+          <select name="item_type" class="addItemDropdown">
+              <option>Costume</option>
+              <option>Prop</option>
+          </select><br>
+          <select name="condition" class="addItemDropdown">
+              <option>Good</option>
+              <option>Fair</option>
+              <option>Poor</option>
+              <option>Being Repaired</option>
+          </select><br>
+          <h4>Clothing Article</h4>
+          <select name="article" class="addItemDropdown">
+              <option>N/A</option>
+              <option>Top</option>
+              <option>Bottom</option>
+              <option>Dress</option>
+              <option>Shoes</option>
+              <option>Hat</option>
+              <option>Coat/Jacket</option>
+              <option>Other</option>
+          </select><br>
+          <h4>Size</h4>
+          <select name="clothing_size_number" class="addItemDropdown">
+              <option>N/A</option>
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+              <option>13</option>
+              <option>14</option>
+              <option>15</option>
+              <option>16</option>
+              <option>17</option>
+              <option>18</option>
+              <option>19</option>
+              <option>20</option>
+          </select>
+          <select name="clothing_size_string" class="addItemDropdown">
+              <option>N/A</option>
+              <option>XS</option>
+              <option>S</option>
+              <option>M</option>
+              <option>L</option>
+              <option>XL</option>
+          </select><br>
+          <h4>Tags</h4>
+          <textarea name="tags" placeholder="separate tags with enter key"></textarea><br>
+          <input type="submit" value="Create" class="submitButton">
+      </form>
+  </div></center>
+</body>
+</html>
