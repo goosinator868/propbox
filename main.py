@@ -104,41 +104,21 @@ def CommitEdit(old_key, new_item, was_orphan=False):
 
 
 ## Handlers
+
+# Loads the main page.
 class MainPage(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         # Load html template
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
-        try:
-            # Filter search items
-            item_name_filter = self.request.get('filter_by_name')
-            item_type_filter = self.request.get('filter_by_item_type')
-            item_condition_filter = self.request.get_all('filter_by_condition')
-            item_article_filter = self.request.get_all('filter_by_article')
-            costume_size_string_filter = self.request.get_all('filter_by_costume_size_string')
-            costume_size_number_filter = self.request.get_all('filter_by_costume_size_number')
-            tags_filter = self.request.get('filter_by_tags')
-            tags_grouping_filter = self.request.get('filter_by_tag_grouping')
-            query = FilterItems(
-                item_name_filter,
-                item_type_filter,
-                item_condition_filter,
-                item_article_filter,
-                costume_size_string_filter,
-                costume_size_number_filter,
-                tags_filter, tags_grouping_filter)
-
-            items = query.fetch()
-            # send to display
-            self.response.write(template.render({'items': items, 'item_name_filter': item_name_filter}))
-        except:
-            # first time opening or item has been added
-            query = Item.query()
-            items = query.fetch()
-            self.response.write(template.render({'items': items, 'item_name_filter': item_name_filter}))
-
+        self.response.write(template.render({}))
+#Loads add item page and adds item to database
 class AddItem(webapp2.RequestHandler):
-    #TODO: Find out why this ends up loading the review edits page.
+    @auth.login_required
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('templates/add_item.html')
+        self.response.write(template.render({}))
+    
     @auth.login_required
     def post(self):
         img = self.request.get('image', default_value='')
@@ -222,7 +202,7 @@ class ResolveEdits(webapp2.RequestHandler):
              # TODO: Panic should never reach this, it should be caught by the other exceptions.
              logging.critical('transaction failed without reason being determined')
 
-
+#Handler for editing an item.
 class EditItem(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
@@ -380,21 +360,23 @@ def ParseTags(tags_string):
     return tags_list
 
 class ReviewEdits(webapp2.RequestHandler):
-# Loads the edit page.
-# TODO: FIGURE OUT WHY THIS PAGE LOADS WHEN ADDING A SECOND ITEM.
+    # Loads the edit page.
+    @auth.login_required
     def post(self):
         self.get()
+
+    @auth.login_required
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/review_edits.html')
         items = Item.query().order(-Item.updated).fetch()
-        deleted = []
+        # deleted = []
         hasOldVersion = []
         newAndOld = []
         for item in items:
-            if item.deleted and item.child == None:
-                deleted.append(item)
-            elif item.key.parent():
-                hasOldVersion.append(item)
+        #     if item.deleted and item.child == None:
+        #         deleted.append(item)
+             if item.key.parent():
+                 hasOldVersion.append(item)
         for newest in hasOldVersion:
             # logging.info(newest)
             if newest.outdated is False and newest.deleted is False and newest.approved is False:
@@ -406,10 +388,11 @@ class ReviewEdits(webapp2.RequestHandler):
                 count = range(len(history))
                 # logging.info(history)
                 newAndOld.append([newest, history, count])
-        self.response.write(template.render({'deleted':deleted,'revised':newAndOld}))
-
+        # self.response.write(template.render({'deleted':deleted,'revised':newAndOld}))
+        self.response.write(template.render({'revised':newAndOld}))
 #Keeps the latest revision. Flags the revision as "approved" in the database.
 class KeepRevision(webapp2.RequestHandler):
+    @auth.login_required
     def post(self):
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
         item.approved = True
@@ -419,11 +402,13 @@ class KeepRevision(webapp2.RequestHandler):
 
 #Discards a revision.
 class DiscardRevision(webapp2.RequestHandler):
+    @auth.login_required
     def post(self):
         selected_item = ndb.Key(urlsafe=self.request.get('item_id'))
         si = selected_item.get()
         si.approved = True
         si.outdated = False
+        si.child = None
         si.put()
         discarded_item = ndb.Key(urlsafe=self.request.get('newest_id'))
         while discarded_item != selected_item: 
@@ -437,12 +422,103 @@ class DiscardRevision(webapp2.RequestHandler):
 
 #Allows for undoing an item approval
 class RevertItem(webapp2.RequestHandler):
+    @auth.login_required
     def post(self):
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
         item.approved = False
         item.put()
         sleep(0.1)
         self.redirect('/review_edits')
+
+class CreateGroup(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        logging.info("Create Group:get")
+        template = JINJA_ENVIRONMENT.get_template('templates/create_group.html')
+        self.response.write(template.render({}))
+    
+    @auth.login_required
+    def post(self):
+        logging.info("Create Group:post")
+        self.redirect('/')
+
+class GroupList(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        logging.info("Group List:get")
+        template = JINJA_ENVIRONMENT.get_template('templates/group_list.html')
+        self.response.write(template.render({}))
+
+class ViewGroup(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        logging.info("View Group:get")
+        template = JINJA_ENVIRONMENT.get_template('templates/group.html')
+        self.response.write(template.render({}))
+
+class ViewUsersInGroup(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        logging.info("View Users In Group")
+        template = JINJA_ENVIRONMENT.get_template('templates/users_in_group.html')
+        self.response.write(template.render({}))
+
+class ViewItemDetails(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        logging.info("View Item Details")
+        template = JINJA_ENVIRONMENT.get_template('templates/item_details.html')
+        item = ndb.Key(urlsafe=self.request.get('item_id')).get()
+        self.response.write(template.render({'item':item}))
+
+#To admin-approve items that have been created or edited by lesser users.
+class ReviewDeletions(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        logging.info("Manage Deletions")
+        template = JINJA_ENVIRONMENT.get_template('templates/review_deletions.html')
+        items = Item.query().order(-Item.updated).fetch()
+        logging.info(items)
+        deleted = []
+        for item in items:
+            if item.deleted and item.child == None:
+                deleted.append(item)
+        logging.info(len(deleted))
+        self.response.write(template.render({'deleted':deleted}))
+
+#Loads the search and browsing page.
+class SearchAndBrowse(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('templates/search_and_browse_items.html')
+        try:
+            # Filter search items
+            item_name_filter = self.request.get('filter_by_name')
+            item_type_filter = self.request.get('filter_by_item_type')
+            item_condition_filter = self.request.get_all('filter_by_condition')
+            item_article_filter = self.request.get_all('filter_by_article')
+            costume_size_string_filter = self.request.get_all('filter_by_costume_size_string')
+            costume_size_number_filter = self.request.get_all('filter_by_costume_size_number')
+            tags_filter = self.request.get('filter_by_tags')
+            tags_grouping_filter = self.request.get('filter_by_tag_grouping')
+            query = FilterItems(
+                item_name_filter,
+                item_type_filter,
+                item_condition_filter,
+                item_article_filter,
+                costume_size_string_filter,
+                costume_size_number_filter,
+                tags_filter, tags_grouping_filter)
+
+            items = query.fetch()
+            # send to display
+            self.response.write(template.render({'items': items, 'item_name_filter': item_name_filter}))
+        except:
+            # first time opening or item has been added
+            query = Item.query()
+            items = query.fetch()
+            self.response.write(template.render({'items': items, 'item_name_filter': item_name_filter}))
+
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -463,5 +539,12 @@ app = webapp2.WSGIApplication([
     ('/discard_revision',DiscardRevision),
     ('/keep_revision',KeepRevision),
     ('/revert_item', RevertItem),
+    ('/create_group', CreateGroup),
+    ('/group_list', GroupList),
+    ('/view_group', ViewGroup),
+    ('/view_users_in_group', ViewUsersInGroup),
+    ('/item_details', ViewItemDetails),
+    ('/review_deletions', ReviewDeletions),
+    ('/search_and_browse',SearchAndBrowse),
     ('/.*', MainPage),
 ], debug=True)
