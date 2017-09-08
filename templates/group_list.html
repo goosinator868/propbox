@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <link rel="import" href="/static/common.html">
+
+  <script>
+    $(document).ready(function(){
+      SetUpNavBar(SetUpFirebase);
+    });
+  </script>
+
+  <title>Prop Box</title>
+</head>
+
+<body>
+  <div id="navbar_holder"></div>
+  <!-- New content here -->
+  <br/>
+  <form action="/" method="get">
+    <input type="submit" value="Home">
+  </form>
+  This page holds a list of groups.
+  <form action="/create_group" method="get">
+    <input type="submit" value="Create A New Group">
+  </form>
+  <form action="/view_group" method="get">
+    <input type="submit" value="View A Group">
+  </form>
+</body>
+</html>
