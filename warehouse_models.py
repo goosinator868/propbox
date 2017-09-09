@@ -14,6 +14,9 @@ class Item(ndb.Model):
     clothing_size_num = ndb.StringProperty(required=False)
     clothing_article_type = ndb.StringProperty(required=False)
     tags = ndb.StringProperty(repeated=True)
+    checked_out = ndb.BooleanProperty(default=False)
+    checked_out_reason = ndb.StringProperty(default="")
+    checked_out_by = ndb.StringProperty(default="")
     #Newer Versions are children. Use Item.key.parent() to get older version.
     child = ndb.KeyProperty(required=False)
     #deleted is True if an item was deleted by a user but has not yet been purged from the system.
@@ -37,4 +40,7 @@ def cloneItem(oldItem, parentKey=None):
         clothing_size_string=oldItem.clothing_size_string,
         clothing_size_num=oldItem.clothing_size_num,
         clothing_article_type=oldItem.clothing_article_type,
-        tags=oldItem.tags)
+        tags=oldItem.tags,
+        checked_out = oldItem.checked_out,
+        checked_out_reason = oldItem.checked_out_reason,
+        checked_out_by = oldItem.checked_out_by)

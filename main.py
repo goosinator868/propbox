@@ -239,6 +239,15 @@ class EditItem(webapp2.RequestHandler):
         new_item.creator_id = auth.get_user_id(self.request)
         new_item.name=self.request.get('name')
         new_item.description=self.request.get('description', default_value='')
+        # check-out logic below
+        if self.request.get('check_out_bool') == "checked":
+            new_item.checked_out = True
+            new_item.checked_out_reason = self.request.get('check_out_reason')
+            new_item.checked_out_by = new_item.creator_id
+        else:
+            new_item.checked_out = False
+            new_item.checked_out_reason = ""
+            new_item.checked_out_by = ""
 
         try:
             CommitEdit(old_item_key, new_item)
@@ -426,7 +435,7 @@ class DiscardRevision(webapp2.RequestHandler):
         si.outdated = False
         si.put()
         discarded_item = ndb.Key(urlsafe=self.request.get('newest_id'))
-        while discarded_item != selected_item: 
+        while discarded_item != selected_item:
             logging.info(discarded_item.get().description)
             next_item = discarded_item.parent()
             discarded_item.delete()
