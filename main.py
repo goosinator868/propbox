@@ -433,6 +433,7 @@ class DiscardRevision(webapp2.RequestHandler):
         si = selected_item.get()
         si.approved = True
         si.outdated = False
+        si.child = None
         si.put()
         discarded_item = ndb.Key(urlsafe=self.request.get('newest_id'))
         while discarded_item != selected_item:
