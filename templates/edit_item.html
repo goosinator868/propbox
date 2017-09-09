@@ -26,6 +26,8 @@
     <form action="/edit_item" method="post">
       Name: <input name="name" type="text" value="{{item.name}}"><br>
       Description: <textarea name="description">{{item.description}}</textarea><br>
+      Check-out Status: <input type="checkbox" name="check_out_bool" value="checked" {% if item.checked_out %} checked {% endif %}> Checked out?<br>
+      Reason for Check-out: <input name="check_out_reason" type="text" value="{{item.checked_out_reason}}"><br>
       <input type="hidden" name="old_item_key" value="{{item.key.urlsafe()}}">
       <input type="submit" value="save">
     </form>
