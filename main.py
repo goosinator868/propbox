@@ -11,7 +11,7 @@ from google.appengine.ext import ndb
 from google.appengine.ext.db import TransactionFailedError
 
 # First party imports
-from warehouse_models import Item, cloneItem
+from warehouse_models import Item, cloneItem, User, possible_permissions
 import auth
 
 # Finds the most recent version of an item.
@@ -39,6 +39,9 @@ class ItemPurgedException(Exception):
     '''Raised when trying to submit an edit to an item that has been permanently deleted.'''
     def __init__(self,*args,**kwargs):
         Exception.__init__(self,*args,**kwargs)
+
+def GetCurrentUser(request):
+    return ndb.Key(User, auth.get_user_id(request)).get()
 
 # Transaction helpers.
 @ndb.transactional(xg=True, retries=1)
@@ -167,6 +170,7 @@ class AddItem(webapp2.RequestHandler):
             # Create Item and add to the list
             newItem = Item(
                 creator_id=auth.get_user_id(self.request),
+                creator_name=auth.get_user_name(self.request),
                 name=self.request.get('name'),
                 image=img,
                 item_type=costume_or_prop,
@@ -234,9 +238,11 @@ class EditItem(webapp2.RequestHandler):
 
     @auth.login_required
     def post(self):
+        user = GetCurrentUser(self.request)
         old_item_key = ndb.Key(urlsafe=self.request.get('old_item_key'))
         new_item = cloneItem(old_item_key.get(), old_item_key)
-        new_item.creator_id = auth.get_user_id(self.request)
+        new_item.creator_id = user.key.string_id()
+        new_item.creator_name = user.name
         new_item.name=self.request.get('name')
         new_item.description=self.request.get('description', default_value='')
         # check-out logic below
@@ -455,6 +461,37 @@ class RevertItem(webapp2.RequestHandler):
         self.redirect('/review_edits')
 
 
+class ManageUsers(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('templates/manage_users.html')
+        users = User.query().fetch()
+        self.response.write(template.render({'users': users, 'permission_levels': list(possible_permissions)}))
+    
+    @auth.login_required
+    def post(self):
+        user_key = ndb.Key(urlsafe=self.request.get('user_key'))
+        user = user_key.get()
+        user.permissions = self.request.get('permission_level')
+        user.put()
+        self.redirect('/manage_users')
+
+class PostAuth(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        user = GetCurrentUser(self.request)
+        if user is None:
+            user = User(name=auth.get_user_name(self.request), id=auth.get_user_id(self.request), permissions="STANDARD_USER")
+            user.put()
+        else:
+            firebase_name = auth.get_user_name(self.request)
+            # Rare case that someone changed their name.
+            if user.name != firebase_name:
+                user.name = firebase_name
+                # TODO: search all edits by this user and change the names there.
+                user.put()
+        self.redirect('/')
+
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
@@ -473,5 +510,7 @@ app = webapp2.WSGIApplication([
     ('/discard_revision',DiscardRevision),
     ('/keep_revision',KeepRevision),
     ('/revert_item', RevertItem),
+    ('/manage_users', ManageUsers),
+    ('/post_auth', PostAuth),
     ('/.*', MainPage),
 ], debug=True)
