@@ -45,6 +45,7 @@
                 </a>
                 <h3>{{item.item_type}}</h3>
                 <h4>Created by {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+                <h5>{% if item.checked_out %}Checked out for: {{item.checked_out_reason}}{% else %}Not checked out{% endif %}</h5>
                 <h5><b>Condition</b>: {{item.condition}}</h5>
                 <p>{{item.description}}</p>
                 <p>Article:{{item.clothing_article_type}}</p>
