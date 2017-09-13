@@ -159,7 +159,7 @@ class AddItem(webapp2.RequestHandler):
                 tags=tags_list)
             newItem.put()
             sleep(0.1)
-            self.redirect("/")
+            self.redirect("/search_and_browse")
         except:
             # Should never be here unless the token has expired,
             # meaning that we forgot to refresh their token.
