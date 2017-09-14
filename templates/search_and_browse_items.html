@@ -10,11 +10,43 @@
   </script>
 
   <script type="text/javascript">
-  function displayFilterCostumeForm(x) {
-      document.getElementById("costume_specific_forms").style.display = 'block'
+  function displayFilterCostumeForm() {
+    document.getElementById("costume_specific_forms").style.display = 'block'
   }
-  function hideFilterCostumeForm(x) {
-      document.getElementById("costume_specific_forms").style.display = 'none'
+
+  function hideFilterCostumeForm() {
+    document.getElementById("costume_specific_forms").style.display = 'none'
+  }
+
+  function setCheckboxValues(x) {
+    if (typeof(Storage) !== "undefined") {
+        var conditionArray = new Array();
+        var conditionList = x.filter_by_condition;
+
+        for (var i = 0; i < conditionList.length; i++) {
+            if (conditionList[i].checked) {
+                conditionArray.push(conditionList[i].id);
+            }
+        }
+
+        localStorage.setItem("ConditionFilter", JSON.stringify(conditionArray));
+    }
+  }
+
+  function getCheckboxValues() {
+    if (typeof(Storage) !== "undefined") {
+        var conditionArray = JSON.parse(localStorage.getItem("ConditionFilter"));
+
+        if (conditionArray == null) {
+            conditionArray = [];
+        }
+
+        document.getElementById("result").innerHTML = conditionArray;
+        for (var i = 0; i < conditionArray.length; i++) {
+            document.getElementById(conditionArray[i]).checked = true;
+        }
+
+    }
   }
   </script>
 
@@ -65,7 +97,8 @@
             <!-- Search form -->
             <div class="form">
                 <h1> Filter items </h1>
-                <form action="/search_and_browse" method="get">
+                <form action="/search_and_browse" method="get" onsubmit="setCheckboxValues(this);">
+                    <div id="result"></div>
                     <input name="filter_by_name" type="text" placeholder="name"><br>
                     <h4> Type </h4><br>
                     <input type="radio" name="filter_by_item_type" value="All" checked="checked" onclick="hideFilterCostumeForm(this);"> All<br>
@@ -119,10 +152,10 @@
                         <input type="checkbox" name="filter_by_costume_size_number" value="25" multiple="true"> 25<br>
                     </div>
                     <h4> Condition </h4><br>
-                    <input type="checkbox" name="filter_by_condition" value="Good" multiple="true"> Good<br>
-                    <input type="checkbox" name="filter_by_condition" value="Fair" multiple="true"> Fair<br>
-                    <input type="checkbox" name="filter_by_condition" value="Poor" multiple="true"> Poor<br>
-                    <input type="checkbox" name="filter_by_condition" value="Being Repaired" multiple="true"> Being Repaired<br>
+                    <input type="checkbox" id="conditionGood" name="filter_by_condition" value="Good" multiple="true"> Good<br>
+                    <input type="checkbox" id="conditionFair" name="filter_by_condition" value="Fair" multiple="true"> Fair<br>
+                    <input type="checkbox" id="conditionPoor" name="filter_by_condition" value="Poor" multiple="true"> Poor<br>
+                    <input type="checkbox" id="conditionRepair" name="filter_by_condition" value="Being Repaired" multiple="true"> Being Repaired<br>
 
                     <h4> Tags </h4><br>
                     <textarea name="filter_by_tags" placeholder="separate tags with enter key"></textarea><br>
@@ -134,5 +167,8 @@
             </div>
         </div>
   </div>
+  <script>
+    getCheckboxValues();
+  </script>
 </body>
 </html>
