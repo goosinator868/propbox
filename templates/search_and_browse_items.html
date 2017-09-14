@@ -12,6 +12,7 @@
   <script type="text/javascript">
   function displayFilterCostumeForm() {
     document.getElementById("costume_specific_forms").style.display = 'block'
+    getCheckboxValues();
   }
 
   function hideFilterCostumeForm() {
@@ -21,7 +22,9 @@
   function setCheckboxValues(x) {
     if (typeof(Storage) !== "undefined") {
         var conditionArray = new Array();
+        var articleArray = new Array();
         var conditionList = x.filter_by_condition;
+        var articleList = x.filter_by_article;
 
         for (var i = 0; i < conditionList.length; i++) {
             if (conditionList[i].checked) {
@@ -29,21 +32,34 @@
             }
         }
 
+        for (var i = 0; i < articleList.length; i++) {
+            if (articleList[i].checked) {
+                articleArray.push(articleList[i].id);
+            }
+        }
+
         localStorage.setItem("ConditionFilter", JSON.stringify(conditionArray));
+        localStorage.setItem("ArticleFilter", JSON.stringify(articleArray));
     }
   }
 
   function getCheckboxValues() {
     if (typeof(Storage) !== "undefined") {
         var conditionArray = JSON.parse(localStorage.getItem("ConditionFilter"));
-
+        var articleArray = JSON.parse(localStorage.getItem("ArticleFilter"));
         if (conditionArray == null) {
             conditionArray = [];
         }
+        if (articleArray == null) {
+            articleArray = [];
+        }
 
-        document.getElementById("result").innerHTML = conditionArray;
         for (var i = 0; i < conditionArray.length; i++) {
             document.getElementById(conditionArray[i]).checked = true;
+        }
+
+        for (var i = 0; i < articleArray.length; i++) {
+            document.getElementById(articleArray[i]).checked = true;
         }
 
     }
@@ -107,13 +123,13 @@
                     <!-- Alternatively, disabled="disabled" for hiding this section? -->
                     <div id="costume_specific_forms">
                         <h4> Article </h4>
-                        <input type="checkbox" name="filter_by_article" value="Top" multiple="true"> Tops<br>
-                        <input type="checkbox" name="filter_by_article" value="Bottom" multiple="true"> Bottoms<br>
-                        <input type="checkbox" name="filter_by_article" value="Dress" multiple="true"> Dresses<br>
-                        <input type="checkbox" name="filter_by_article" value="Shoes" multiple="true"> Shoes<br>
-                        <input type="checkbox" name="filter_by_article" value="Hat" multiple="true"> Hats<br>
-                        <input type="checkbox" name="filter_by_article" value="Coat/Jacket" multiple="true"> Coats/Jackets<br>
-                        <input type="checkbox" name="filter_by_article" value="Other" multiple="true"> Other<br>
+                        <input type="checkbox" id="articleTop" name="filter_by_article" value="Top" multiple="true"> Tops<br>
+                        <input type="checkbox" id="articleBottom" name="filter_by_article" value="Bottom" multiple="true"> Bottoms<br>
+                        <input type="checkbox" id="articleDress" name="filter_by_article" value="Dress" multiple="true"> Dresses<br>
+                        <input type="checkbox" id="articleShoes" name="filter_by_article" value="Shoes" multiple="true"> Shoes<br>
+                        <input type="checkbox" id="articleHat" name="filter_by_article" value="Hat" multiple="true"> Hats<br>
+                        <input type="checkbox" id="articleCoat" name="filter_by_article" value="Coat/Jacket" multiple="true"> Coats/Jackets<br>
+                        <input type="checkbox" id="articleOther" name="filter_by_article" value="Other" multiple="true"> Other<br>
                         <h4> Size </h4>
                         <input type="checkbox" name="filter_by_costume_size_string" value="XXS" multiple="true"> XXS<br>
                         <input type="checkbox" name="filter_by_costume_size_string" value="XS" multiple="true"> XS<br>
