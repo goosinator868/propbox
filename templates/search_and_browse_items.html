@@ -23,8 +23,10 @@
     if (typeof(Storage) !== "undefined") {
         var conditionArray = new Array();
         var articleArray = new Array();
+        var costumeSizeStringArray = new Array();
         var conditionList = x.filter_by_condition;
         var articleList = x.filter_by_article;
+        var costumeSizeStringList = x.filter_by_costume_size_string;
 
         for (var i = 0; i < conditionList.length; i++) {
             if (conditionList[i].checked) {
@@ -38,8 +40,15 @@
             }
         }
 
+        for (var i = 0; i < costumeSizeStringList.length; i++) {
+            if (costumeSizeStringList[i].checked) {
+                costumeSizeStringArray.push(costumeSizeStringList[i].id);
+            }
+        }
+
         localStorage.setItem("ConditionFilter", JSON.stringify(conditionArray));
         localStorage.setItem("ArticleFilter", JSON.stringify(articleArray));
+        localStorage.setItem("CostumeSizeStringFilter", JSON.stringify(costumeSizeStringArray));
     }
   }
 
@@ -47,11 +56,15 @@
     if (typeof(Storage) !== "undefined") {
         var conditionArray = JSON.parse(localStorage.getItem("ConditionFilter"));
         var articleArray = JSON.parse(localStorage.getItem("ArticleFilter"));
+        var costumeSizeStringArray = JSON.parse(localStorage.getItem("CostumeSizeStringFilter"));
         if (conditionArray == null) {
             conditionArray = [];
         }
         if (articleArray == null) {
             articleArray = [];
+        }
+        if (costumeSizeStringArray == null) {
+            costumeSizeStringArray = [];
         }
 
         for (var i = 0; i < conditionArray.length; i++) {
@@ -60,6 +73,10 @@
 
         for (var i = 0; i < articleArray.length; i++) {
             document.getElementById(articleArray[i]).checked = true;
+        }
+
+        for (var i = 0; i < costumeSizeStringArray.length; i++) {
+            document.getElementById(costumeSizeStringArray[i]).checked = true;
         }
 
     }
@@ -131,14 +148,14 @@
                         <input type="checkbox" id="articleCoat" name="filter_by_article" value="Coat/Jacket" multiple="true"> Coats/Jackets<br>
                         <input type="checkbox" id="articleOther" name="filter_by_article" value="Other" multiple="true"> Other<br>
                         <h4> Size </h4>
-                        <input type="checkbox" name="filter_by_costume_size_string" value="XXS" multiple="true"> XXS<br>
-                        <input type="checkbox" name="filter_by_costume_size_string" value="XS" multiple="true"> XS<br>
-                        <input type="checkbox" name="filter_by_costume_size_string" value="S" multiple="true"> S<br>
-                        <input type="checkbox" name="filter_by_costume_size_string" value="M" multiple="true"> M<br>
-                        <input type="checkbox" name="filter_by_costume_size_string" value="L" multiple="true"> L<br>
-                        <input type="checkbox" name="filter_by_costume_size_string" value="XL" multiple="true"> XL<br>
-                        <input type="checkbox" name="filter_by_costume_size_string" value="XXL" multiple="true"> XXL<br>
-                        <input type="checkbox" name="filter_by_costume_size_string" value="XXXL" multiple="true"> XXXL<br>
+                        <input type="checkbox" id="sizeStringXXS" name="filter_by_costume_size_string" value="XXS" multiple="true"> XXS<br>
+                        <input type="checkbox" id="sizeStringXS" name="filter_by_costume_size_string" value="XS" multiple="true"> XS<br>
+                        <input type="checkbox" id="sizeStringS" name="filter_by_costume_size_string" value="S" multiple="true"> S<br>
+                        <input type="checkbox" id="sizeStringM" name="filter_by_costume_size_string" value="M" multiple="true"> M<br>
+                        <input type="checkbox" id="sizeStringL" name="filter_by_costume_size_string" value="L" multiple="true"> L<br>
+                        <input type="checkbox" id="sizeStringXL" name="filter_by_costume_size_string" value="XL" multiple="true"> XL<br>
+                        <input type="checkbox" id="sizeStringXXL" name="filter_by_costume_size_string" value="XXL" multiple="true"> XXL<br>
+                        <input type="checkbox" id="sizeStringXXXL" name="filter_by_costume_size_string" value="XXXL" multiple="true"> XXXL<br>
                         <br>
                         <input type="checkbox" name="filter_by_costume_size_number" value="0" multiple="true"> 0
                         <input type="checkbox" name="filter_by_costume_size_number" value="1" multiple="true"> 1
