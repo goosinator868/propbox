@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+  <link rel="import" href="/static/common.html">
+
+  <script>
+    $(document).ready(function(){
+      SetUpNavBar(SetUpFirebase);
+    });
+  </script>
+
+  <style type="text/css">
+    .item_details {
+      padding: 14px;
+      margin:10px;
+    }
+  </style>
+  
+  <title>Prop Box</title>
+</head>
+
+<body>
+  <div id="navbar_holder"></div>
+  <!-- New content here -->
+  <br/>
+  <form action="/" method="get" style="display: inline-block;">
+    <input type="submit" value="Home">
+  </form>
+  <form action="/search_and_browse" method="get" style="display: inline-block;">
+    <input type="submit" value="Search & Browse">
+  </form>
+ <br/>
+  This is the page for viewing an item's details.
+  <div class="item_details">
+      <h2>{{item.name}}</h2>
+      <a href="view_image?image_id={{item.key.urlsafe()}}">
+      <img src="view_image?image_id={{item.key.urlsafe()}}" class="thumbnail" />
+      </a>
+      <h3>{{item.item_type}}</h3>
+      <h4>Created by {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+      <h5><b>Condition</b>: {{item.condition}}</h5>
+      <p>{{item.description}}</p>
+      <p>Article:{{item.clothing_article_type}}</p>
+      <p>Size: {{item.clothing_size_string}}, {{item.clothing_size_num}}
+      <p>Tags:{% for tag in item.tags %} {{tag}},{% endfor %}<p>
+      <p>QR Code: {{item.qr_code}}</p>
+      <p>For development only: Deleted = {{item.deleted}}, Outdated = {{item.outdated}}, approved = {{item.approved}}.</p>
+      <br/>
+      <form action="/edit_item" method="get" style="display: inline-block;">
+        <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+        <input type="submit" value="Edit">
+      </form>
+      <form action="/revert_item" method="post" style="display: inline-block;">
+        <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+        <input type="submit" value="Revert To Earlier Version">
+      </form>
+      <br/><br/>
+      <form action="/delete_item" method="post">
+        <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+        <input type="submit" value="Delete">
+      </form>
+      <br/><br/><br/>
+  </div>
+</body>
+</html>

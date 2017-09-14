@@ -1,0 +1,77 @@
+.item_container {
+  background-color: #e9e9e9;
+  padding: 8px;
+  display: inline-block;
+  border-radius: 5px;
+  margin: 5px;
+  position: relative;
+}
+
+.sub_item_container {
+  background-color: #EEE;
+  padding: 7px;
+  display: inline-block;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.form {
+  padding: 5px;
+  display: inline-block;
+}
+
+/* Not working for certain people */
+/*.addItemDropdown {
+    font-size: 16px;
+    margin: 5px;
+    height: 30px;
+    border-radius: 8px 8px 8px 8px;
+    border: 0px;
+    background-color: #DDD;
+}*/
+
+.submitButton {
+    padding: 5px 10px 5px 10px;
+    border-radius: 8px 8px 8px 8px;
+    border: 0px;
+    background-color: #DDD;
+}
+
+.submitButton:hover {
+    padding: 5px 10px 5px 10px;
+    border-radius: 8px 8px 8px 8px;
+    border: 0px;
+    background-color: #a5a5a5;
+}
+
+.item_container h2, h3, h4, p {
+  margin: 6px 0;
+  width: 60%;
+}
+
+.thumbnail {
+  background-color: #e9e9e9;
+  border: 0;
+  position: absolute;
+  float: right;
+  height: 160px;
+  top: 0;
+  right: 0;
+  padding: 8px;
+}
+
+#costume_specific_forms {
+    display: none;
+}
+
+#left-pane {
+    padding: 5px;
+    width: 50%;
+    float: left;
+}
+
+#right-pane {
+    padding: 5px;
+    width: 50%;
+    float: right;
+}
