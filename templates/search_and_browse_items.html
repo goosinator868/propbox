@@ -36,6 +36,8 @@
         var costumeSizeNumArray = new Array();
         var tagGrouping = "groupingInclusive";
         var itemType = "All";
+        var nameText = document.getElementById("nameBox").value;
+        var tagText = document.getElementById("tagBox").value;
         var conditionList = x.filter_by_condition;
         var articleList = x.filter_by_article;
         var costumeSizeStringList = x.filter_by_costume_size_string;
@@ -82,6 +84,8 @@
         localStorage.setItem("CostumeSizeNumFilter", JSON.stringify(costumeSizeNumArray));
         localStorage.setItem("GroupingFilter", tagGrouping);
         localStorage.setItem("ItemTypeFilter", itemType);
+        localStorage.setItem("nameFilter", nameText);
+        localStorage.setItem("tagFilter", tagText);
     }
   }
 
@@ -93,6 +97,8 @@
         var costumeSizeNumArray = JSON.parse(localStorage.getItem("CostumeSizeNumFilter"));
         var tagGrouping = localStorage.getItem("GroupingFilter");
         var itemType = localStorage.getItem("ItemTypeFilter");
+        var nameText = localStorage.getItem("nameFilter");
+        var tagText = localStorage.getItem("tagFilter");
 
         if (conditionArray == null) {
             conditionArray = [];
@@ -125,9 +131,11 @@
         for (var i = 0; i < costumeSizeNumArray.length; i++) {
             document.getElementById(costumeSizeNumArray[i]).checked = true;
         }
-        document.getElementById("result").innerHTML = tagGrouping;
+        //document.getElementById("result").innerHTML = tagGrouping; // for debugging
         document.getElementById(tagGrouping).checked = true;
         document.getElementById(itemType).checked = true;
+        document.getElementById("nameBox").value = nameText;
+        document.getElementById("tagBox").value = tagText;
 
         if (itemType == "typeCostume") {
             displayFilterCostumeForm();
@@ -185,7 +193,7 @@
                 <h1> Filter items </h1>
                 <form action="/search_and_browse" method="get" onsubmit="setCheckboxValues(this);">
                     <div id="result"></div>
-                    <input name="filter_by_name" type="text" placeholder="name"><br>
+                    <input id="nameBox" name="filter_by_name" type="text" placeholder="name"><br>
                     <h4> Type </h4><br>
                     <input type="radio" id="typeAll" name="filter_by_item_type" value="All" checked="checked" onclick="hideFilterCostumeForm(this); setCheckboxValues('filter_by_item_type', 'typeAll');"> All<br>
                     <input type="radio" id="typeCostume" name="filter_by_item_type" value="Costume" onclick="displayFilterCostumeForm(this);"> Costume<br>
@@ -244,7 +252,7 @@
                     <input type="checkbox" id="conditionRepair" name="filter_by_condition" value="Being Repaired" multiple="true"> Being Repaired<br>
 
                     <h4> Tags </h4><br>
-                    <textarea name="filter_by_tags" placeholder="separate tags with enter key"></textarea><br>
+                    <textarea id="tagBox" name="filter_by_tags" placeholder="separate tags with enter key"></textarea><br>
                     <input type="radio" id="groupingInclusive" name="filter_by_tag_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, groupingInclusive);"> Has One of Listed<br>
                     <input type="radio" id="groupingExclusive" name="filter_by_tag_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, groupingExclusive);"> Has All of Listed<br>
                     <input type="submit" value="Search" class="submitButton">
