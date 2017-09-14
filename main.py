@@ -118,7 +118,7 @@ class AddItem(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/add_item.html')
         self.response.write(template.render({}))
-    
+
     @auth.login_required
     def post(self):
         img = self.request.get('image', default_value='')
@@ -445,7 +445,7 @@ class CreateGroup(webapp2.RequestHandler):
         logging.info("Create Group:get")
         template = JINJA_ENVIRONMENT.get_template('templates/create_group.html')
         self.response.write(template.render({}))
-    
+
     @auth.login_required
     def post(self):
         logging.info("Create Group:post")
@@ -554,6 +554,6 @@ app = webapp2.WSGIApplication([
     ('/view_users_in_group', ViewUsersInGroup),
     ('/item_details', ViewItemDetails),
     ('/review_deletions', ReviewDeletions),
-    ('/search_and_browse',SearchAndBrowse),
+    ('/search_and_browse', SearchAndBrowse),
     ('/.*', MainPage),
 ], debug=True)
