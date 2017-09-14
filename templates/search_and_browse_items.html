@@ -12,11 +12,20 @@
   <script type="text/javascript">
   function displayFilterCostumeForm() {
     document.getElementById("costume_specific_forms").style.display = 'block'
+    setCheckboxValues("filter_by_item_type", "typeCostume");
     getCheckboxValues();
   }
 
   function hideFilterCostumeForm() {
     document.getElementById("costume_specific_forms").style.display = 'none'
+  }
+
+  function setCheckedRadioValues(radioListName, valueChecked) {
+      var radioList = document.getElementsByName(radioListName);
+      for (var i = 0; i < radioList.length; i++) {
+            document.getElementById(radioList[i].id).checked = false;
+      }
+      document.getElementById(valueChecked).checked = true;
   }
 
   function setCheckboxValues(x) {
@@ -25,10 +34,13 @@
         var articleArray = new Array();
         var costumeSizeStringArray = new Array();
         var costumeSizeNumArray = new Array();
+        var tagGrouping = "groupingInclusive";
+        var itemType = "All";
         var conditionList = x.filter_by_condition;
         var articleList = x.filter_by_article;
         var costumeSizeStringList = x.filter_by_costume_size_string;
         var costumeSizeNumList = x.filter_by_costume_size_number;
+        var itemTypeList = document.getElementsByName("filter_by_item_type");
 
         for (var i = 0; i < conditionList.length; i++) {
             if (conditionList[i].checked) {
@@ -54,10 +66,22 @@
             }
         }
 
+        if (document.getElementById("groupingExclusive").checked) {
+            tagGrouping = "groupingExclusive";
+        }
+
+        for (var i = 0; i < itemTypeList.length; i++) {
+            if (itemTypeList[i].checked) {
+                itemType = itemTypeList[i].id;
+            }
+        }
+
         localStorage.setItem("ConditionFilter", JSON.stringify(conditionArray));
         localStorage.setItem("ArticleFilter", JSON.stringify(articleArray));
         localStorage.setItem("CostumeSizeStringFilter", JSON.stringify(costumeSizeStringArray));
         localStorage.setItem("CostumeSizeNumFilter", JSON.stringify(costumeSizeNumArray));
+        localStorage.setItem("GroupingFilter", tagGrouping);
+        localStorage.setItem("ItemTypeFilter", itemType);
     }
   }
 
@@ -67,6 +91,9 @@
         var articleArray = JSON.parse(localStorage.getItem("ArticleFilter"));
         var costumeSizeStringArray = JSON.parse(localStorage.getItem("CostumeSizeStringFilter"));
         var costumeSizeNumArray = JSON.parse(localStorage.getItem("CostumeSizeNumFilter"));
+        var tagGrouping = localStorage.getItem("GroupingFilter");
+        var itemType = localStorage.getItem("ItemTypeFilter");
+
         if (conditionArray == null) {
             conditionArray = [];
         }
@@ -78,6 +105,9 @@
         }
         if (costumeSizeNumArray == null) {
             costumeSizeNumArray = [];
+        }
+        if (tagGrouping == null) {
+            tagGrouping = "groupingInclusive";
         }
 
         for (var i = 0; i < conditionArray.length; i++) {
@@ -95,7 +125,13 @@
         for (var i = 0; i < costumeSizeNumArray.length; i++) {
             document.getElementById(costumeSizeNumArray[i]).checked = true;
         }
+        document.getElementById("result").innerHTML = tagGrouping;
+        document.getElementById(tagGrouping).checked = true;
+        document.getElementById(itemType).checked = true;
 
+        if (itemType == "typeCostume") {
+            displayFilterCostumeForm();
+        }
     }
   }
   </script>
@@ -151,9 +187,9 @@
                     <div id="result"></div>
                     <input name="filter_by_name" type="text" placeholder="name"><br>
                     <h4> Type </h4><br>
-                    <input type="radio" name="filter_by_item_type" value="All" checked="checked" onclick="hideFilterCostumeForm(this);"> All<br>
-                    <input type="radio" name="filter_by_item_type" value="Costume" onclick="displayFilterCostumeForm(this);"> Costume<br>
-                    <input type="radio" name="filter_by_item_type" value="Prop" onclick="hideFilterCostumeForm(this);"> Prop<br>
+                    <input type="radio" id="typeAll" name="filter_by_item_type" value="All" checked="checked" onclick="hideFilterCostumeForm(this); setCheckboxValues('filter_by_item_type', 'typeAll');"> All<br>
+                    <input type="radio" id="typeCostume" name="filter_by_item_type" value="Costume" onclick="displayFilterCostumeForm(this);"> Costume<br>
+                    <input type="radio" id="typeProp" name="filter_by_item_type" value="Prop" onclick="hideFilterCostumeForm(this); setCheckboxValues('filter_by_item_type', 'typeProp');"> Prop<br>
                     <!-- Alternatively, disabled="disabled" for hiding this section? -->
                     <div id="costume_specific_forms">
                         <h4> Article </h4>
@@ -209,8 +245,8 @@
 
                     <h4> Tags </h4><br>
                     <textarea name="filter_by_tags" placeholder="separate tags with enter key"></textarea><br>
-                    <input type="radio" name="filter_by_tag_grouping" value="inclusive" checked="checked"> Has One of Listed<br>
-                    <input type="radio" name="filter_by_tag_grouping" value="exclusive"> Has All of Listed<br>
+                    <input type="radio" id="groupingInclusive" name="filter_by_tag_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, groupingInclusive);"> Has One of Listed<br>
+                    <input type="radio" id="groupingExclusive" name="filter_by_tag_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, groupingExclusive);"> Has All of Listed<br>
                     <input type="submit" value="Search" class="submitButton">
                 </form>
 
