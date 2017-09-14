@@ -24,9 +24,11 @@
         var conditionArray = new Array();
         var articleArray = new Array();
         var costumeSizeStringArray = new Array();
+        var costumeSizeNumArray = new Array();
         var conditionList = x.filter_by_condition;
         var articleList = x.filter_by_article;
         var costumeSizeStringList = x.filter_by_costume_size_string;
+        var costumeSizeNumList = x.filter_by_costume_size_number;
 
         for (var i = 0; i < conditionList.length; i++) {
             if (conditionList[i].checked) {
@@ -46,9 +48,16 @@
             }
         }
 
+        for (var i = 0; i < costumeSizeNumList.length; i++) {
+            if (costumeSizeNumList[i].checked) {
+                costumeSizeNumArray.push(costumeSizeNumList[i].id);
+            }
+        }
+
         localStorage.setItem("ConditionFilter", JSON.stringify(conditionArray));
         localStorage.setItem("ArticleFilter", JSON.stringify(articleArray));
         localStorage.setItem("CostumeSizeStringFilter", JSON.stringify(costumeSizeStringArray));
+        localStorage.setItem("CostumeSizeNumFilter", JSON.stringify(costumeSizeNumArray));
     }
   }
 
@@ -57,6 +66,7 @@
         var conditionArray = JSON.parse(localStorage.getItem("ConditionFilter"));
         var articleArray = JSON.parse(localStorage.getItem("ArticleFilter"));
         var costumeSizeStringArray = JSON.parse(localStorage.getItem("CostumeSizeStringFilter"));
+        var costumeSizeNumArray = JSON.parse(localStorage.getItem("CostumeSizeNumFilter"));
         if (conditionArray == null) {
             conditionArray = [];
         }
@@ -65,6 +75,9 @@
         }
         if (costumeSizeStringArray == null) {
             costumeSizeStringArray = [];
+        }
+        if (costumeSizeNumArray == null) {
+            costumeSizeNumArray = [];
         }
 
         for (var i = 0; i < conditionArray.length; i++) {
@@ -77,6 +90,10 @@
 
         for (var i = 0; i < costumeSizeStringArray.length; i++) {
             document.getElementById(costumeSizeStringArray[i]).checked = true;
+        }
+
+        for (var i = 0; i < costumeSizeNumArray.length; i++) {
+            document.getElementById(costumeSizeNumArray[i]).checked = true;
         }
 
     }
@@ -157,32 +174,32 @@
                         <input type="checkbox" id="sizeStringXXL" name="filter_by_costume_size_string" value="XXL" multiple="true"> XXL<br>
                         <input type="checkbox" id="sizeStringXXXL" name="filter_by_costume_size_string" value="XXXL" multiple="true"> XXXL<br>
                         <br>
-                        <input type="checkbox" name="filter_by_costume_size_number" value="0" multiple="true"> 0
-                        <input type="checkbox" name="filter_by_costume_size_number" value="1" multiple="true"> 1
-                        <input type="checkbox" name="filter_by_costume_size_number" value="2" multiple="true"> 2
-                        <input type="checkbox" name="filter_by_costume_size_number" value="3" multiple="true"> 3
-                        <input type="checkbox" name="filter_by_costume_size_number" value="4" multiple="true"> 4<br>
-                        <input type="checkbox" name="filter_by_costume_size_number" value="5" multiple="true"> 5
-                        <input type="checkbox" name="filter_by_costume_size_number" value="6" multiple="true"> 6
-                        <input type="checkbox" name="filter_by_costume_size_number" value="7" multiple="true"> 7
-                        <input type="checkbox" name="filter_by_costume_size_number" value="8" multiple="true"> 8
-                        <input type="checkbox" name="filter_by_costume_size_number" value="9" multiple="true"> 9<br>
-                        <input type="checkbox" name="filter_by_costume_size_number" value="10" multiple="true"> 10
-                        <input type="checkbox" name="filter_by_costume_size_number" value="11" multiple="true"> 11
-                        <input type="checkbox" name="filter_by_costume_size_number" value="12" multiple="true"> 12
-                        <input type="checkbox" name="filter_by_costume_size_number" value="13" multiple="true"> 13
-                        <input type="checkbox" name="filter_by_costume_size_number" value="14" multiple="true"> 14<br>
-                        <input type="checkbox" name="filter_by_costume_size_number" value="15" multiple="true"> 15
-                        <input type="checkbox" name="filter_by_costume_size_number" value="16" multiple="true"> 16
-                        <input type="checkbox" name="filter_by_costume_size_number" value="17" multiple="true"> 17
-                        <input type="checkbox" name="filter_by_costume_size_number" value="18" multiple="true"> 18
-                        <input type="checkbox" name="filter_by_costume_size_number" value="19" multiple="true"> 19<br>
-                        <input type="checkbox" name="filter_by_costume_size_number" value="20" multiple="true"> 20
-                        <input type="checkbox" name="filter_by_costume_size_number" value="21" multiple="true"> 21
-                        <input type="checkbox" name="filter_by_costume_size_number" value="22" multiple="true"> 22
-                        <input type="checkbox" name="filter_by_costume_size_number" value="23" multiple="true"> 23
-                        <input type="checkbox" name="filter_by_costume_size_number" value="24" multiple="true"> 24
-                        <input type="checkbox" name="filter_by_costume_size_number" value="25" multiple="true"> 25<br>
+                        <input type="checkbox" id="sizeNum0" name="filter_by_costume_size_number" value="0" multiple="true"> 0
+                        <input type="checkbox" id="sizeNum1" name="filter_by_costume_size_number" value="1" multiple="true"> 1
+                        <input type="checkbox" id="sizeNum2" name="filter_by_costume_size_number" value="2" multiple="true"> 2
+                        <input type="checkbox" id="sizeNum3" name="filter_by_costume_size_number" value="3" multiple="true"> 3
+                        <input type="checkbox" id="sizeNum4" name="filter_by_costume_size_number" value="4" multiple="true"> 4<br>
+                        <input type="checkbox" id="sizeNum5" name="filter_by_costume_size_number" value="5" multiple="true"> 5
+                        <input type="checkbox" id="sizeNum6" name="filter_by_costume_size_number" value="6" multiple="true"> 6
+                        <input type="checkbox" id="sizeNum7" name="filter_by_costume_size_number" value="7" multiple="true"> 7
+                        <input type="checkbox" id="sizeNum8" name="filter_by_costume_size_number" value="8" multiple="true"> 8
+                        <input type="checkbox" id="sizeNum9" name="filter_by_costume_size_number" value="9" multiple="true"> 9<br>
+                        <input type="checkbox" id="sizeNum10" name="filter_by_costume_size_number" value="10" multiple="true"> 10
+                        <input type="checkbox" id="sizeNum11" name="filter_by_costume_size_number" value="11" multiple="true"> 11
+                        <input type="checkbox" id="sizeNum12" name="filter_by_costume_size_number" value="12" multiple="true"> 12
+                        <input type="checkbox" id="sizeNum13" name="filter_by_costume_size_number" value="13" multiple="true"> 13
+                        <input type="checkbox" id="sizeNum14" name="filter_by_costume_size_number" value="14" multiple="true"> 14<br>
+                        <input type="checkbox" id="sizeNum15" name="filter_by_costume_size_number" value="15" multiple="true"> 15
+                        <input type="checkbox" id="sizeNum16" name="filter_by_costume_size_number" value="16" multiple="true"> 16
+                        <input type="checkbox" id="sizeNum17" name="filter_by_costume_size_number" value="17" multiple="true"> 17
+                        <input type="checkbox" id="sizeNum18" name="filter_by_costume_size_number" value="18" multiple="true"> 18
+                        <input type="checkbox" id="sizeNum19" name="filter_by_costume_size_number" value="19" multiple="true"> 19<br>
+                        <input type="checkbox" id="sizeNum20" name="filter_by_costume_size_number" value="20" multiple="true"> 20
+                        <input type="checkbox" id="sizeNum21" name="filter_by_costume_size_number" value="21" multiple="true"> 21
+                        <input type="checkbox" id="sizeNum22" name="filter_by_costume_size_number" value="22" multiple="true"> 22
+                        <input type="checkbox" id="sizeNum23" name="filter_by_costume_size_number" value="23" multiple="true"> 23
+                        <input type="checkbox" id="sizeNum24" name="filter_by_costume_size_number" value="24" multiple="true"> 24
+                        <input type="checkbox" id="sizeNum25" name="filter_by_costume_size_number" value="25" multiple="true"> 25<br>
                     </div>
                     <h4> Condition </h4><br>
                     <input type="checkbox" id="conditionGood" name="filter_by_condition" value="Good" multiple="true"> Good<br>
