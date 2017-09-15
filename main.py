@@ -318,42 +318,39 @@ class AuthHandler(webapp2.RequestHandler):
 def FilterItems(item_name, item_type, item_condition, costume_article,
     costume_size_string, costume_size_number, tags_filter, tag_grouping):
     # Check if costume or prop is selected individually
-    if (item_type != "All" and item_type != ""):
-        if (item_type == "Costume"):
-            if (len(costume_size_string) == 9):
-                costume_size_string.append("N/A")
-            elif (len(costume_size_string) == 0):
-                costume_size_string.append("N/A")
-                costume_size_string.append("XXS")
-                costume_size_string.append("XS")
-                costume_size_string.append("S")
-                costume_size_string.append("M")
-                costume_size_string.append("L")
-                costume_size_string.append("XL")
-                costume_size_string.append("XXL")
-                costume_size_string.append("XXXL")
+    if (item_type == "Costume"):
+        if (len(costume_size_string) == 9):
+            costume_size_string.append("N/A")
+        elif (len(costume_size_string) == 0):
+            costume_size_string.append("N/A")
+            costume_size_string.append("XXS")
+            costume_size_string.append("XS")
+            costume_size_string.append("S")
+            costume_size_string.append("M")
+            costume_size_string.append("L")
+            costume_size_string.append("XL")
+            costume_size_string.append("XXL")
+            costume_size_string.append("XXXL")
 
-            if (len(item_condition) == 0):
-                item_condition.append("Good")
-                item_condition.append("Fair")
-                item_condition.append("Poor")
-                item_condition.append("Being Repaired")
+        if (len(costume_article) == 0):
+            costume_article.append("Tops")
+            costume_article.append("Bottoms")
+            costume_article.append("Dresses")
+            costume_article.append("Shoes")
+            costume_article.append("Hats")
+            costume_article.append("Coat/Jacket")
+            costume_article.append("Other")
 
-            # Query separated into an if statement to diminish search time
-            if (len(costume_size_number) == 0 or len(costume_size_number) == 26):
-                query = Item.query(ndb.AND(Item.item_type == item_type,
-                    Item.clothing_article_type.IN(costume_article),
-                    Item.clothing_size_string.IN(costume_size_string))).order(Item.name)
-            else:
-                query = Item.query(ndb.AND(Item.item_type == item_type,
-                    Item.clothing_article_type.IN(costume_article),
-                    Item.clothing_size_string.IN(costume_size_string),
-                    Item.clothing_size_num.IN(costume_size_number))).order(Item.name)
+        # Query separated into an if statement to diminish search time
+        if (len(costume_size_number) == 0 or len(costume_size_number) == 26):
+            query = Item.query(ndb.AND(Item.clothing_article_type.IN(costume_article),
+                Item.clothing_size_string.IN(costume_size_string))).order(Item.name)
         else:
-            query = Item.query(Item.item_type == item_type).order(Item.name)
+            query = Item.query(ndb.AND(Item.clothing_article_type.IN(costume_article),
+                Item.clothing_size_string.IN(costume_size_string),
+                Item.clothing_size_num.IN(costume_size_number))).order(Item.name)
     else:
         query = Item.query().order(Item.name)
-
 
     tags_list = ParseTags(tags_filter)
     if len(tags_list) != 0:
@@ -533,6 +530,7 @@ class SearchAndBrowse(webapp2.RequestHandler):
             costume_size_number_filter = self.request.get_all('filter_by_costume_size_number')
             tags_filter = self.request.get('filter_by_tags')
             tags_grouping_filter = self.request.get('filter_by_tag_grouping')
+
             query = FilterItems(
                 item_name_filter,
                 item_type_filter,
@@ -543,8 +541,16 @@ class SearchAndBrowse(webapp2.RequestHandler):
                 tags_filter, tags_grouping_filter)
 
             items = query.fetch()
+            if (len(item_condition_filter) == 0):
+                item_condition_filter.append("Good")
+                item_condition_filter.append("Fair")
+                item_condition_filter.append("Poor")
+                item_condition_filter.append("Being Repaired")
+
+            if (item_type_filter == "" or item_type_filter == None):
+                item_type_filter = "All
             # send to display
-            self.response.write(template.render({'items': items, 'item_name_filter': item_name_filter}))
+            self.response.write(template.render({'items': items, 'item_type_filter': item_type_filter, 'item_name_filter': item_name_filter, 'item_condition_filter': item_condition_filter}))
         except:
             # first time opening or item has been added
             query = Item.query()
