@@ -20,17 +20,8 @@
   display: inline-block;
 }
 
-/* Not working for certain people */
-/*.addItemDropdown {
-    font-size: 16px;
-    margin: 5px;
-    height: 30px;
-    border-radius: 8px 8px 8px 8px;
-    border: 0px;
-    background-color: #DDD;
-}*/
-
 .submitButton {
+    margin: 5px;
     padding: 5px 10px 5px 10px;
     border-radius: 8px 8px 8px 8px;
     border: 0px;

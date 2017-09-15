@@ -129,22 +129,41 @@
         }
 
         for (var i = 0; i < conditionArray.length; i++) {
-            document.getElementById(conditionArray[i]).checked = true;
+            if (document.getElementById(conditionArray[i]) != null) {
+                document.getElementById(conditionArray[i]).checked = true;
+            }
         }
 
         for (var i = 0; i < articleArray.length; i++) {
-            document.getElementById(articleArray[i]).checked = true;
+            if (document.getElementById(articleArray[i]) != null) {
+                document.getElementById(articleArray[i]).checked = true;
+            }
         }
 
         for (var i = 0; i < costumeSizeStringArray.length; i++) {
-            document.getElementById(costumeSizeStringArray[i]).checked = true;
+            if (document.getElementById(costumeSizeStringArray[i]) != null) {
+                document.getElementById(costumeSizeStringArray[i]).checked = true;
+            }
         }
 
         for (var i = 0; i < costumeSizeNumArray.length; i++) {
-            document.getElementById(costumeSizeNumArray[i]).checked = true;
+            if (document.getElementById(costumeSizeNumArray[i]) != null) {
+                document.getElementById(costumeSizeNumArray[i]).checked = true;
+            }
         }
-        document.getElementById(tagGrouping).checked = true;
-        document.getElementById(itemType).checked = true;
+
+        if (tagGrouping != null) {
+            document.getElementById(tagGrouping).checked = true;
+        } else {
+            document.getElementById("groupingInclusive").checked = true;
+        }
+
+        if (itemType != null) {
+            document.getElementById(itemType).checked = true;
+        } else {
+            document.getElementById("typeAll").checked = true;
+        }
+
         document.getElementById("nameBox").value = nameText;
         document.getElementById("tagBox").value = tagText;
 
@@ -153,6 +172,19 @@
         }
     }
   }
+
+  function clearForm() {
+      localStorage.setItem("ConditionFilter", JSON.stringify([]));
+      localStorage.setItem("ArticleFilter", JSON.stringify([]));
+      localStorage.setItem("CostumeSizeStringFilter", JSON.stringify([]));
+      localStorage.setItem("CostumeSizeNumFilter", JSON.stringify([]));
+      localStorage.setItem("GroupingFilter", "groupingInclusive");
+      localStorage.setItem("ItemTypeFilter", "typeAll");
+      localStorage.setItem("nameFilter", "");
+      localStorage.setItem("tagFilter", "");
+      getCheckboxValues();
+  }
+
   </script>
 
   <link rel="stylesheet" type="text/css" href="/stylesheets/search_and_browse_items.css">
@@ -267,6 +299,9 @@
                     <input type="radio" id="groupingInclusive" name="filter_by_tag_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, groupingInclusive);"> Has One of Listed<br>
                     <input type="radio" id="groupingExclusive" name="filter_by_tag_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, groupingExclusive);"> Has All of Listed<br>
                     <input type="submit" value="Search" class="submitButton">
+                </form>
+                <form action="/search_and_browse" method="get" onsubmit="clearForm();">
+                    <input type="submit" value="Clear Form" class="submitButton">
                 </form>
 
             </div>
