@@ -333,11 +333,11 @@ def FilterItems(item_name, item_type, item_condition, costume_article,
             costume_size_string.append("XXXL")
 
         if (len(costume_article) == 0):
-            costume_article.append("Tops")
-            costume_article.append("Bottoms")
-            costume_article.append("Dresses")
+            costume_article.append("Top")
+            costume_article.append("Bottom")
+            costume_article.append("Dress")
             costume_article.append("Shoes")
-            costume_article.append("Hats")
+            costume_article.append("Hat")
             costume_article.append("Coat/Jacket")
             costume_article.append("Other")
 
@@ -548,7 +548,7 @@ class SearchAndBrowse(webapp2.RequestHandler):
                 item_condition_filter.append("Being Repaired")
 
             if (item_type_filter == "" or item_type_filter == None):
-                item_type_filter = "All
+                item_type_filter = "All"
             # send to display
             self.response.write(template.render({'items': items, 'item_type_filter': item_type_filter, 'item_name_filter': item_name_filter, 'item_condition_filter': item_condition_filter}))
         except:
