@@ -338,7 +338,7 @@ def FilterItems(item_name, item_type, item_condition, costume_article,
                 item_condition.append("Fair")
                 item_condition.append("Poor")
                 item_condition.append("Being Repaired")
-            
+
             # Query separated into an if statement to diminish search time
             if (len(costume_size_number) == 0 or len(costume_size_number) == 26):
                 query = Item.query(ndb.AND(Item.item_type == item_type,
@@ -354,7 +354,6 @@ def FilterItems(item_name, item_type, item_condition, costume_article,
     else:
         query = Item.query().order(Item.name)
 
-    query = query.filter(Item.condition.IN(item_condition))
 
     tags_list = ParseTags(tags_filter)
     if len(tags_list) != 0:
@@ -363,6 +362,8 @@ def FilterItems(item_name, item_type, item_condition, costume_article,
         else:
             for tag in tags_list:
                 query = query.filter(Item.tags == tag)
+
+    #query = query.filter(Item.condition.IN(item_condition))
     return query
 
 # Converts text list of tags to array of tags
@@ -375,7 +376,7 @@ def ParseTags(tags_string):
     # Check newline character exists in string
     while tag_end_index != -1:
         # Add tag to list
-        tags_list.append(tags_string[:tag_end_index - 1])
+        tags_list.append(tags_string[:tag_end_index - 1].lower())
         # Shrink or delete string based on how much material is left in string
         if tag_end_index + 1 < len(tags_string):
             tags_string = tags_string[tag_end_index + 1:len(tags_string)]
@@ -386,7 +387,7 @@ def ParseTags(tags_string):
 
     # Potentially still has a tag not covered. Adds last tag to list if possible
     if len(tags_string) != 0:
-        tags_list.append(tags_string)
+        tags_list.append(tags_string.lower())
 
     return tags_list
 
@@ -558,7 +559,7 @@ class ManageUsers(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/manage_users.html')
         users = User.query().fetch()
         self.response.write(template.render({'users': users, 'permission_levels': list(possible_permissions)}))
-    
+
     @auth.login_required
     def post(self):
         user_key = ndb.Key(urlsafe=self.request.get('user_key'))

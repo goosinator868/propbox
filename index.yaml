@@ -138,6 +138,11 @@ indexes:
 
 - kind: Item
   properties:
+  - name: tags
+  - name: name
+
+- kind: Item
+  properties:
   - name: updated
     direction: desc
   - name: condition
