@@ -102,7 +102,7 @@
       {% for item in deleted %}
         <div class="item_container">
           <h2>{{item.name}}</h2>
-          <h4>created by : {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+          <h4>created by : {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
           <p>{{item.description}}</p>
           <img src="view_image?image_id={{item.key.urlsafe()}}" class="thumbnail" />
           <p>{{item.key}}</p>

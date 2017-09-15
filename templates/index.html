@@ -18,11 +18,14 @@
 <body>
   <div id="navbar_holder"></div>
   <br/>
-  <div id="temp_nav_area">&nbsp;<form action='/review_edits' method='get' style="display: inline-block;"><input type='submit' value="Review Edits"></input></form>
+  <p>{{user.name}}</p>
+  {% if user.permissions != "STANDARD_USER"%}
+  <p>You are a{% if user.permissions == "TRUSTED_USER" %} trusted user.{% else %}n admin.{% endif %}</p>
+  &nbsp;<form action='/review_edits' method='get' style="display: inline-block;"><input type='submit' value="Review Edits"></input></form>
   <form action="review_deletions" style="display: inline-block;">
       <input type="submit" value="Review Deletions">
-  </form></div>
-  <br/>
+  </form>
+  <br/>{% endif %}
   <form action="search_and_browse" method="get" style="display: inline-block;">
     <input type="submit" value="Search and Browse for Items">
   </form>

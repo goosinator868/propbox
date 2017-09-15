@@ -114,7 +114,14 @@ class MainPage(webapp2.RequestHandler):
     def get(self):
         # Load html template
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
-        self.response.write(template.render({}))
+        user = GetCurrentUser(self.request)
+        logging.info("\n\n\nRequest:")
+        logging.info(self.request)
+        logging.info("\n\n\nUser:")
+        logging.info(user)
+        self.response.write(template.render({'user':user}))
+
+
 #Loads add item page and adds item to database
 class AddItem(webapp2.RequestHandler):
     @auth.login_required
@@ -213,8 +220,9 @@ class EditItem(webapp2.RequestHandler):
         item_id = ndb.Key(urlsafe=self.request.get('item_id'))
         item = item_id.get()
         item = FindUpdatedItem(item)
+        user = GetCurrentUser(self.request)
         template = JINJA_ENVIRONMENT.get_template('templates/edit_item.html')
-        self.response.write(template.render({'item': item}))
+        self.response.write(template.render({'item': item, 'user':user}))
 
     @auth.login_required
     def post(self):
@@ -396,6 +404,10 @@ class ReviewEdits(webapp2.RequestHandler):
 
     @auth.login_required
     def get(self):
+        user = GetCurrentUser(self.request)
+        if (user.permissions == "STANDARD_USER"):
+            self.redirect('/')
+            return
         template = JINJA_ENVIRONMENT.get_template('templates/review_edits.html')
         items = Item.query().order(-Item.updated).fetch()
         # deleted = []
@@ -505,6 +517,10 @@ class ReviewDeletions(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         logging.info("Manage Deletions")
+        user = GetCurrentUser(self.request)
+        if (user.permissions == "STANDARD_USER"):
+            self.redirect('/')
+            return
         template = JINJA_ENVIRONMENT.get_template('templates/review_deletions.html')
         items = Item.query().order(-Item.updated).fetch()
         logging.info(items)

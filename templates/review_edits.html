@@ -47,27 +47,27 @@
 
   {% for item in revised %}
   {% for i in item[2] %}
-  <div id="confirm_rollback_{{i|string}}_{{item[0].key.urlsafe()}}" class="modal">
+  <div id="confirm_{{i|string}}_{{item[0].key.urlsafe()}}" class="modal">
     <div class="modal-content">
-    <span class="close" onclick="closeConfirm('rollback','{{item[0].key.urlsafe()}}',{{i}})">&times;</span>
+    <span class="close" onclick="closeConfirm('{{item[0].key.urlsafe()}}',{{i}})">&times;</span>
       <center><p>Do you really want to revert <strong>{{item[0].name}}</strong> to the earlier version of <strong>{{item[1][i].name}}</strong>?</p>
       <p>This cannot be undone.</p>
 
       <div class="sub_item_container" style="display: inline-block;">
         <strong>Current Version</strong>
         <h2>{{item[0].name}}</h2>
-        <h4>created by : {{item[0].creator_id}} at {{item[0].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+        <h4>created by : {{item[0].creator_name}} at {{item[0].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
         <p>{{item[0].description}}</p>
         </div> → 
       <div class="sub_item_container" style="display: inline-block;">
         <strong>Previous Versions</strong>
         <h2>{{item[1][i].name}}</h2>
-        <h4>created by : {{item[1][i].creator_id}} at {{item[1][i].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+        <h4>created by : {{item[1][i].creator_name}} at {{item[1][i].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
         <p>{{item[1][i].description}}</p>
       </div>
       
       <br/>
-      <button id="cancel" onclick="closeConfirm('rollback','{{item[0].key.urlsafe()}}',{{i}})">No.</button>
+      <button id="cancel" onclick="closeConfirm('{{item[0].key.urlsafe()}}',{{i}})">No.</button>
       <form action="/discard_revision" method="post" style="display: inline-block;">
         <input type="hidden" name="item_id" value="{{item[1][i].key.urlsafe()}}">
         <input type="hidden" name="newest_id" value="{{item[0].key.urlsafe()}}">
@@ -90,7 +90,7 @@
         <div class="item_container">
           <strong>Current Version</strong>
           <h2>{{item[0].name}}</h2>
-          <h4>created by : {{item[0].creator_id}} at {{item[0].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+          <h4>created by : {{item[0].creator_name}} at {{item[0].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
           <p>{{item[0].description}}</p>
           <img src="view_image?image_id={{item[0].key.urlsafe()}}" class="thumbnail" />
           <br/>
@@ -100,13 +100,13 @@
             <div class="sub_item_container" style="display: {% if i != 0 %} none{% else %} block{% endif %};" id="{{item[0].key.urlsafe()+'_'+i|string}}">
               <strong>Previous Versions</strong>
               <h2>{{item[1][i].name}}</h2>
-              <h4>created by : {{item[1][i].creator_id}} at {{item[1][i].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+              <h4>created by : {{item[1][i].creator_name}} at {{item[1][i].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
               <p>{{item[1][i].description}}</p>
               <!-- TODO: FIX image view for past versions. -->
               <img src="view_image?image_id={{item[1][i].key.urlsafe()}}" class="thumbnail" />
               <br/>
               <p>Deleted = {{item[1][i].deleted}} and Outdated = {{item[1][i].outdated}}</p>
-              <button onclick="showConfirm('rollback','{{item[0].key.urlsafe()}}',{{i}})">Revert To This Version</button>
+              <button onclick="showConfirm('{{item[0].key.urlsafe()}}',{{i}})">Revert To This Version</button>
               <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i-1)|string}}')"{% if i == 0 %} disabled="disabled" style="color: #bbb;"{% endif %}">Newer</button> 
               <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i+1)|string}}')"{% if i == item[2][-1] %} disabled="disabled" style="color: #bbb;" {% endif %};">Older</button>
             </div>
@@ -134,29 +134,17 @@
     return;
   }
 
-  function showConfirm(type,itemID,i) {
+  function showConfirm(itemID,i) {
       console.log(itemID);
       var modal = null;
-      if (i == -1) {
-        console.log("show delete")
-        modal = document.getElementById("confirm_"+type+"_"+itemID);
-      } else {
-        console.log("show rollback")
-        modal = document.getElementById("confirm_"+type+"_"+i+"_"+itemID);
-      }
+      modal = document.getElementById("confirm_"+i+"_"+itemID);
       modal.style.display = "block";
       return;
     }
 
-  function closeConfirm(type,itemID,i) {
+  function closeConfirm(itemID,i) {
     var modal = null;
-      if (i == -1) {
-        console.log("hide delete")
-        modal = document.getElementById("confirm_"+type+"_"+itemID);
-      } else {
-        console.log("hide rollback")
-        modal = document.getElementById("confirm_"+type+"_"+i+"_"+itemID);
-      }
+    modal = document.getElementById("confirm_"+i+"_"+itemID);
     modal.style.display = "none";
     return;
   }
