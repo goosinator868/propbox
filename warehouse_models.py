@@ -25,6 +25,8 @@ class Item(ndb.Model):
     #outdated is True if there is a newer version to be shown; items with outdated=True will not be displayed.
     outdated = ndb.BooleanProperty(required=True, default=False)
     approved = ndb.BooleanProperty(required=True, default=False)
+    suggested_edits = ndb.KeyProperty(required=False,repeated=True)
+    is_suggestion = ndb.BooleanProperty(required=True, default=False)
     orphan = ndb.BooleanProperty(required=True, default=False)
 
 #Returns a clone of a given item.

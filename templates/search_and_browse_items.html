@@ -203,7 +203,7 @@
         <!-- View current items -->
         <div>
             {% for item in items %}
-                {% if item_name_filter|lower in item.name|lower and item.deleted==False and item.outdated==False and item.orphan==False%}
+                {% if item_name_filter|lower in item.name|lower and not item.deleted and not item.outdated and not item.orphan and not item.is_suggestion%}
                     {% if item_type_filter!="All" %}
                         {% if item.item_type==item_type_filter %}
                             {% for item_condition in item_condition_filter%}
@@ -219,7 +219,7 @@
                                     <p>{{item.description}}</p>
                                     <p>Article:{{item.clothing_article_type}}</p>
                                     <p>Tags:{% for tag in item.tags %} {{tag}},{% endfor %}<p>
-                                    <p>(Deleted = {{item.deleted}}, Outdated = {{item.outdated}}, approved = {{item.approved}}.)</p>
+                                    <p>(Deleted = {{item.deleted}}, Outdated = {{item.outdated}}, approved = {{item.approved}}, suggested ={{item.is_suggestion}}.)</p>
                                     <form action="/item_details" method="get">
                                       <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
                                       <input type="submit" value="Item Details">
@@ -242,7 +242,7 @@
                                 <p>{{item.description}}</p>
                                 <p>Article:{{item.clothing_article_type}}</p>
                                 <p>Tags:{% for tag in item.tags %} {{tag}},{% endfor %}<p>
-                                <p>(Deleted = {{item.deleted}}, Outdated = {{item.outdated}}, approved = {{item.approved}}.)</p>
+                                <p>(Deleted = {{item.deleted}}, Outdated = {{item.outdated}}, approved = {{item.approved}}, suggested ={{item.is_suggestion}}.)</p>
                                 <form action="/item_details" method="get">
                                   <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
                                   <input type="submit" value="Item Details">

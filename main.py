@@ -70,7 +70,7 @@ def CommitPurge(item_key):
         k.delete()
 
 @ndb.transactional(xg=True, retries=1)
-def CommitEdit(old_key, new_item, was_orphan=False):
+def CommitEdit(old_key, new_item, was_orphan=False,suggestion=False):
     '''Stores the new item and ensures that the
        parent-child relationship is enforced between the
        old item and the new item.
@@ -100,9 +100,12 @@ def CommitEdit(old_key, new_item, was_orphan=False):
         copy = cloneItem(new_item, parentKey=old_key)
         new_item.key.delete()
         new_item = copy
-    old_item.outdated = True
+    old_item.outdated = not suggestion
     new_key = new_item.put()
-    old_item.child = new_key
+    if suggestion:
+        old_item.suggested_edits.append(new_key)
+    else:
+        old_item.child = new_key
     old_item.put()
 
 
@@ -115,10 +118,6 @@ class MainPage(webapp2.RequestHandler):
         # Load html template
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
         user = GetCurrentUser(self.request)
-        logging.info("\n\n\nRequest:")
-        logging.info(self.request)
-        logging.info("\n\n\nUser:")
-        logging.info(user)
         self.response.write(template.render({'user':user}))
 
 
@@ -227,10 +226,14 @@ class EditItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
         user = GetCurrentUser(self.request)
+        standard_user = user.permissions == "STANDARD_USER"
         old_item_key = ndb.Key(urlsafe=self.request.get('old_item_key'))
-        new_item = cloneItem(old_item_key.get(), old_item_key)
+        old_item = old_item_key.get()
+        new_item = cloneItem(old_item, old_item_key)
         new_item.creator_id = user.key.string_id()
         new_item.creator_name = user.name
+        new_item.approved = (not standard_user)
+        new_item.is_suggestion = (standard_user)
         new_item.name=self.request.get('name')
         new_item.description=self.request.get('description', default_value='')
         # check-out logic below
@@ -244,7 +247,7 @@ class EditItem(webapp2.RequestHandler):
             new_item.checked_out_by = ""
 
         try:
-            CommitEdit(old_item_key, new_item)
+            CommitEdit(old_item_key, new_item,suggestion=standard_user)
             sleep(0.1)
             self.redirect("/")
         except OutdatedEditException as e:
@@ -289,10 +292,7 @@ class ViewImage(webapp2.RequestHandler):
 class DeleteItemForever(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
-        #template = JINJA_ENVIRONMENT.get_template('templates/review_edits.html')
         item_key = ndb.Key(urlsafe=self.request.get('item_id'))
-        # TODO: ensure this has no children.
-        # TODO: delete all parents.
         try:
             CommitPurge(item_key)
         except TransactionFailedError as e:
@@ -306,13 +306,12 @@ class DeleteItemForever(webapp2.RequestHandler):
 class UndeleteItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
-        #template = JINJA_ENVIRONMENT.get_template('templates/review_edits.html')
         item_key = ndb.Key(urlsafe=self.request.get('item_id'))
         try:
             CommitUnDelete(item_key)
         except TransactionFailedError as e:
              # TODO: Expose this message to the user.
-            logging.info('could not un-delete the item, pelase try again')
+            logging.info('could not un-delete the item, please try again')
         sleep(0.1) #CUT FOR DEPLOYING
         self.redirect('/')
 
@@ -431,6 +430,7 @@ class ReviewEdits(webapp2.RequestHandler):
                 newAndOld.append([newest, history, count])
         # self.response.write(template.render({'deleted':deleted,'revised':newAndOld}))
         self.response.write(template.render({'revised':newAndOld}))
+
 #Keeps the latest revision. Flags the revision as "approved" in the database.
 class KeepRevision(webapp2.RequestHandler):
     @auth.login_required
@@ -453,11 +453,9 @@ class DiscardRevision(webapp2.RequestHandler):
         si.put()
         discarded_item = ndb.Key(urlsafe=self.request.get('newest_id'))
         while discarded_item != selected_item:
-            logging.info(discarded_item.get().description)
             next_item = discarded_item.parent()
             discarded_item.delete()
             discarded_item = next_item
-            logging.info(discarded_item.get().description)
         sleep(0.1)
         self.redirect('/review_edits')
 
@@ -523,12 +521,10 @@ class ReviewDeletions(webapp2.RequestHandler):
             return
         template = JINJA_ENVIRONMENT.get_template('templates/review_deletions.html')
         items = Item.query().order(-Item.updated).fetch()
-        logging.info(items)
         deleted = []
         for item in items:
             if item.deleted and item.child == None:
                 deleted.append(item)
-        logging.info(len(deleted))
         self.response.write(template.render({'deleted':deleted}))
 
 #Loads the search and browsing page.
@@ -572,8 +568,6 @@ class SearchAndBrowse(webapp2.RequestHandler):
             query = Item.query()
             items = query.fetch()
             self.response.write(template.render({'items': items, 'item_name_filter': item_name_filter}))
-
-
 
 class ManageUsers(webapp2.RequestHandler):
     @auth.login_required
