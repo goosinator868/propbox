@@ -17,7 +17,6 @@ indexes:
   - name: clothing_size_string
   - name: condition
   - name: item_type
-  - name: tags
   - name: name
 
 - kind: Item
@@ -27,6 +26,7 @@ indexes:
   - name: clothing_size_string
   - name: condition
   - name: item_type
+  - name: tags
   - name: name
 
 - kind: Item
@@ -61,6 +61,13 @@ indexes:
   properties:
   - name: condition
   - name: item_type
+  - name: name
+
+- kind: Item
+  properties:
+  - name: condition
+  - name: item_type
+  - name: tags
   - name: name
 
 - kind: Item

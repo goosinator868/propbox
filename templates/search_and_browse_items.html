@@ -12,8 +12,6 @@
   <script type="text/javascript">
   function displayFilterCostumeForm() {
     document.getElementById("costume_specific_forms").style.display = 'block'
-    setCheckboxValues("filter_by_item_type", "typeCostume");
-    getCheckboxValues();
   }
 
   function hideFilterCostumeForm() {
@@ -23,9 +21,13 @@
   function setCheckedRadioValues(radioListName, valueChecked) {
       var radioList = document.getElementsByName(radioListName);
       for (var i = 0; i < radioList.length; i++) {
-            document.getElementById(radioList[i].id).checked = false;
+            if (document.getElementById(radioList[i].id) != null) {
+                document.getElementById(radioList[i].id).checked = false;
+            }
       }
-      document.getElementById(valueChecked).checked = true;
+      if (document.getElementById(valueChecked) != null) {
+          document.getElementById(valueChecked).checked = true;
+      }
   }
 
   function setCheckboxValues(x) {
@@ -44,27 +46,35 @@
         var costumeSizeNumList = x.filter_by_costume_size_number;
         var itemTypeList = document.getElementsByName("filter_by_item_type");
 
-        for (var i = 0; i < conditionList.length; i++) {
-            if (conditionList[i].checked) {
-                conditionArray.push(conditionList[i].id);
+        if (conditionList != null) {
+            for (var i = 0; i < conditionList.length; i++) {
+                if (conditionList[i].checked) {
+                    conditionArray.push(conditionList[i].id);
+                }
             }
         }
 
-        for (var i = 0; i < articleList.length; i++) {
-            if (articleList[i].checked) {
-                articleArray.push(articleList[i].id);
+        if (articleList != null) {
+            for (var i = 0; i < articleList.length; i++) {
+                if (articleList[i].checked) {
+                    articleArray.push(articleList[i].id);
+                }
             }
         }
 
-        for (var i = 0; i < costumeSizeStringList.length; i++) {
-            if (costumeSizeStringList[i].checked) {
-                costumeSizeStringArray.push(costumeSizeStringList[i].id);
+        if (costumeSizeStringList != null) {
+            for (var i = 0; i < costumeSizeStringList.length; i++) {
+                if (costumeSizeStringList[i].checked) {
+                    costumeSizeStringArray.push(costumeSizeStringList[i].id);
+                }
             }
         }
 
-        for (var i = 0; i < costumeSizeNumList.length; i++) {
-            if (costumeSizeNumList[i].checked) {
-                costumeSizeNumArray.push(costumeSizeNumList[i].id);
+        if (costumeSizeNumList != null) {
+            for (var i = 0; i < costumeSizeNumList.length; i++) {
+                if (costumeSizeNumList[i].checked) {
+                    costumeSizeNumArray.push(costumeSizeNumList[i].id);
+                }
             }
         }
 
@@ -72,9 +82,11 @@
             tagGrouping = "groupingExclusive";
         }
 
-        for (var i = 0; i < itemTypeList.length; i++) {
-            if (itemTypeList[i].checked) {
-                itemType = itemTypeList[i].id;
+        if (itemTypeList != null) {
+            for (var i = 0; i < itemTypeList.length; i++) {
+                if (itemTypeList[i].checked) {
+                    itemType = itemTypeList[i].id;
+                }
             }
         }
 
@@ -131,7 +143,6 @@
         for (var i = 0; i < costumeSizeNumArray.length; i++) {
             document.getElementById(costumeSizeNumArray[i]).checked = true;
         }
-        //document.getElementById("result").innerHTML = tagGrouping; // for debugging
         document.getElementById(tagGrouping).checked = true;
         document.getElementById(itemType).checked = true;
         document.getElementById("nameBox").value = nameText;
