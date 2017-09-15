@@ -45,7 +45,7 @@ $(function(){
 
                 $('#user').text(welcomeName);
                 $('#logged-in').show();
-                window.location.replace("/");
+                window.location.replace("/post_auth");
 
             });
 
@@ -59,7 +59,7 @@ $(function(){
     // Firebase log-in widget
     function configureFirebaseLoginWidget() {
         var uiConfig = {
-          'signInSuccessUrl': '/',
+          'signInSuccessUrl': '/post_auth',
           'signInOptions': [
             // Leave the lines as is for the providers you want to offer your users.
             // firebase.auth.GoogleAuthProvider.PROVIDER_ID,
