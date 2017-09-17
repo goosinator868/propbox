@@ -249,7 +249,7 @@ class EditItem(webapp2.RequestHandler):
         try:
             CommitEdit(old_item_key, new_item,suggestion=standard_user)
             sleep(0.1)
-            self.redirect("/")
+            self.redirect("/item_details?" + urllib.urlencode({'item_id':(old_item_key if standard_user else new_item.key).urlsafe()}))
         except OutdatedEditException as e:
             new_item.orphan = True
             new_item_key = new_item.put()
@@ -409,16 +409,15 @@ class ReviewEdits(webapp2.RequestHandler):
             return
         template = JINJA_ENVIRONMENT.get_template('templates/review_edits.html')
         items = Item.query().order(-Item.updated).fetch()
-        # deleted = []
         hasOldVersion = []
-        newAndOld = []
+        revert_list = []
+        suggestions = []
         for item in items:
-        #     if item.deleted and item.child == None:
-        #         deleted.append(item)
-             if item.key.parent():
+             if item.is_suggestion:
+                suggestions.append(item)
+             elif item.key.parent():
                  hasOldVersion.append(item)
         for newest in hasOldVersion:
-            # logging.info(newest)
             if newest.outdated is False and newest.deleted is False and newest.approved is False:
                 history = []
                 parent = newest.key.parent()
@@ -426,16 +425,40 @@ class ReviewEdits(webapp2.RequestHandler):
                     history.append(parent.get())
                     parent = parent.parent()
                 count = range(len(history))
-                # logging.info(history)
-                newAndOld.append([newest, history, count])
-        # self.response.write(template.render({'deleted':deleted,'revised':newAndOld}))
-        self.response.write(template.render({'revised':newAndOld}))
+                revert_list.append([newest, history, count])
+        bases = set([])
+        for suggestion in suggestions:
+            bases.add(suggestion.key.parent())
+        suggestion_list = []
+        for base in bases:
+            suggest = [base.get(),[key.get() for key in base.get().suggested_edits]]
+            suggest.append(range(len(suggest[1])))
+            suggestion_list.append(suggest)
+        # logging.info("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nList")
+        # for r in revert_list:
+        #     logging.info("\n\n")
+        #     logging.info(r)
+        self.response.write(template.render({'revert':revert_list, 'suggest':suggestion_list}))
 
 #Keeps the latest revision. Flags the revision as "approved" in the database.
 class KeepRevision(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
+        if GetCurrentUser(self.request).permissions == "STANDARD_USER":
+            self.redirect('/')
+            return
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
+        if self.request.get('proposed_edit') == "True":
+            logging.info("Accepting the proposed edit.")
+            parent = ndb.Key(urlsafe=self.request.get('parent_id')).get()
+            parent.child = item.key
+            for edit in parent.suggested_edits:
+                if edit is not item.key:
+                    edit.delete()
+            parent.suggested_edits = []
+            parent.outdated=True
+            item.is_suggestion=False
+            parent.put()
         item.approved = True
         item.put()
         sleep(0.1)
@@ -445,17 +468,28 @@ class KeepRevision(webapp2.RequestHandler):
 class DiscardRevision(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
-        selected_item = ndb.Key(urlsafe=self.request.get('item_id'))
-        si = selected_item.get()
-        si.approved = True
-        si.outdated = False
-        si.child = None
-        si.put()
-        discarded_item = ndb.Key(urlsafe=self.request.get('newest_id'))
-        while discarded_item != selected_item:
-            next_item = discarded_item.parent()
-            discarded_item.delete()
-            discarded_item = next_item
+        if GetCurrentUser(self.request).permissions == "STANDARD_USER":
+            self.redirect('/')
+            return
+        if self.request.get('revert') == "True":
+            selected_item = ndb.Key(urlsafe=self.request.get('item_id'))
+            si = selected_item.get()
+            si.approved = True
+            si.outdated = False
+            si.child = None
+            si.put()
+            discarded_item = ndb.Key(urlsafe=self.request.get('newest_id'))
+            while discarded_item != selected_item:
+                next_item = discarded_item.parent()
+                discarded_item.delete()
+                discarded_item = next_item
+        else:
+            item = ndb.Key(urlsafe=self.request.get('item_id')).get()
+            for thing in item.suggested_edits:
+                thing.delete()
+            item.suggested_edits = []
+            item.approved = True
+            item.put()
         sleep(0.1)
         self.redirect('/review_edits')
 
@@ -463,6 +497,9 @@ class DiscardRevision(webapp2.RequestHandler):
 class RevertItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
+        if GetCurrentUser().permissions == "STANDARD_USER":
+            self.redirect('/')
+            return
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
         item.approved = False
         item.put()
@@ -506,9 +543,11 @@ class ViewItemDetails(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         logging.info("View Item Details")
+        user = GetCurrentUser(self.request)
         template = JINJA_ENVIRONMENT.get_template('templates/item_details.html')
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
-        self.response.write(template.render({'item':item}))
+        pending_edit = (len(item.suggested_edits) > 0)
+        self.response.write(template.render({'item':item, 'pending_edit':pending_edit, 'user':user}))
 
 #To admin-approve items that have been created or edited by lesser users.
 class ReviewDeletions(webapp2.RequestHandler):
