@@ -172,7 +172,7 @@
             <div class="sub_item_container" style="display: {% if i != 0 %} none{% else %} block{% endif %};" id="{{item[0].key.urlsafe()+'_'+i|string}}">
               <strong>Proposed edits</strong>
               <h2>{{item[1][i].name}}</h2>
-              <h4>created by : {{item[1][i].creator_name}} at {{item[1][i].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+              <p> Edit suggested by: {{item[1][i].suggested_by}}.</p>
               <p>{{item[1][i].description}}</p>
               <!-- TODO: FIX image view for past versions. -->
               <img src="view_image?image_id={{item[1][i].key.urlsafe()}}" class="thumbnail" />

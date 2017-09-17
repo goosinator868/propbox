@@ -37,7 +37,7 @@
       return;
     }
   </script>
-
+  <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
   <style type="text/css">
     .modal {
       display: none;
@@ -94,7 +94,7 @@
   <form action="/" method="get">
     <input type="submit" value="Home">
   </form>
-  This is the page for approving the deletion of items.
+  This is the page for approving the deletion of items.<br/>
 
   <div id="left-pane">
     Deleted List<br/>
@@ -103,6 +103,7 @@
         <div class="item_container">
           <h2>{{item.name}}</h2>
           <h4>created by : {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+          <p>{% if item.marked_for_deletion %}Marked for deletion by:{% else %}Deleted by:{% endif %} {{item.suggested_by}}.</p>
           <p>{{item.description}}</p>
           <img src="view_image?image_id={{item.key.urlsafe()}}" class="thumbnail" />
           <p>{{item.key}}</p>

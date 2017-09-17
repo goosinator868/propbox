@@ -45,22 +45,28 @@ def GetCurrentUser(request):
 
 # Transaction helpers.
 @ndb.transactional(xg=True, retries=1)
-def CommitDelete(item_key):
+def CommitDelete(item_key,user):
     item = item_key.get()
     if item.outdated:
         raise OutdatedEditException()
-    item.deleted = True
+    if user.permissions=="STANDARD_USER":
+        item.marked_for_deletion = True
+    else:
+        item.deleted = True
+    item.suggested_by = user.name
     item.put()
 
 @ndb.transactional(xg=True, retries=1)
 def CommitUnDelete(item_key):
     item = item_key.get()
     item.deleted = False
+    item.marked_for_deletion = False
+    item.suggested_by = ""
     item.put()
 
 @ndb.transactional(xg=True, retries=1)
 def CommitPurge(item_key):
-    toDelete = [item_key]
+    toDelete = [item_key] + [suggestion for suggestion in item_key.get().suggested_edits]
     while item_key.parent():
         item_key = item_key.parent()
         toDelete.append(item_key)
@@ -193,6 +199,7 @@ class ResolveEdits(webapp2.RequestHandler):
         new_item.name = self.request.get('name')
         new_item.description = self.request.get('description', default_value='')
         new_item.orphan = False
+        new_item.suggested_by = GetCurrentUser(self.request).name
         try:
             CommitEdit(old_item.key, new_item, was_orphan=True)
             self.redirect("/")
@@ -234,6 +241,13 @@ class EditItem(webapp2.RequestHandler):
         new_item.creator_name = user.name
         new_item.approved = (not standard_user)
         new_item.is_suggestion = (standard_user)
+        if not standard_user:
+            for key in old_item.suggested_edits:
+                key.delete()
+            old_item.suggested_edits = []
+            old_item.put()
+        else:
+            new_item.suggested_by = user.name
         new_item.name=self.request.get('name')
         new_item.description=self.request.get('description', default_value='')
         # check-out logic below
@@ -267,18 +281,22 @@ class DeleteItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
         #template = JINJA_ENVIRONMENT.get_template('templates/index.html')
-        id_string = self.request.get('item_id')
+        item_key = ndb.Key(urlsafe=self.request.get('item_id'))
+        user = GetCurrentUser(self.request)
         try:
-            CommitDelete(ndb.Key(urlsafe=id_string))
+            CommitDelete(item_key, user)
         except OutdatedEditException as e:
             # TODO: Expose this message to the user.
             logging.info('you are trying to delete an old version of this item, please reload the page and try again if you really wish to delete this item.')
         except TransactionFailedError as e:
              # TODO: Expose this message to the user.
-            logging.info('could not purge the item, pelase try again')
+            logging.info('could not purge the item, please try again')
         # Redirect back to items view.
         sleep(0.1)
-        self.redirect("/")
+        if user.permissions == "STANDARD_USER":
+            self.redirect('/item_details?'+urllib.urlencode({'item_id':item_key.urlsafe()}))
+        else:
+            self.redirect("/search_and_browse")
 
 class ViewImage(webapp2.RequestHandler):
     def get(self):
@@ -299,10 +317,9 @@ class DeleteItemForever(webapp2.RequestHandler):
              # TODO: Expose this message to the user.
             logging.info('could not purge the item, pelase try again')
         sleep(0.1)
-        self.redirect('/review_edits')
+        self.redirect('/review_deletions')
 
 # Undeletes an item, returning it to the main list. Reverses the changes made by DeleteItem.
-# TODO: Make transactional.
 class UndeleteItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
@@ -313,7 +330,7 @@ class UndeleteItem(webapp2.RequestHandler):
              # TODO: Expose this message to the user.
             logging.info('could not un-delete the item, please try again')
         sleep(0.1) #CUT FOR DEPLOYING
-        self.redirect('/')
+        self.redirect('/review_deletions')
 
 
 class AuthHandler(webapp2.RequestHandler):
@@ -562,7 +579,7 @@ class ReviewDeletions(webapp2.RequestHandler):
         items = Item.query().order(-Item.updated).fetch()
         deleted = []
         for item in items:
-            if item.deleted and item.child == None:
+            if (item.marked_for_deletion or item.deleted) and item.child == None:
                 deleted.append(item)
         self.response.write(template.render({'deleted':deleted}))
 

@@ -22,11 +22,13 @@ class Item(ndb.Model):
     child = ndb.KeyProperty(required=False)
     #deleted is True if an item was deleted by a user but has not yet been purged from the system.
     deleted = ndb.BooleanProperty(required=True, default=False)
+    marked_for_deletion = ndb.BooleanProperty(required=True, default=False)
     #outdated is True if there is a newer version to be shown; items with outdated=True will not be displayed.
     outdated = ndb.BooleanProperty(required=True, default=False)
     approved = ndb.BooleanProperty(required=True, default=False)
     suggested_edits = ndb.KeyProperty(required=False,repeated=True)
     is_suggestion = ndb.BooleanProperty(required=True, default=False)
+    suggested_by = ndb.StringProperty(required=True, default="")
     orphan = ndb.BooleanProperty(required=True, default=False)
 
 #Returns a clone of a given item.
