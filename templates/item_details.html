@@ -37,28 +37,35 @@
       <img src="view_image?image_id={{item.key.urlsafe()}}" class="thumbnail" />
       </a>
       <h3>{{item.item_type}}</h3>
-      <h4>Created by {{item.creator_id}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+      <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
       <h5><b>Condition</b>: {{item.condition}}</h5>
       <p>{{item.description}}</p>
       <p>Article:{{item.clothing_article_type}}</p>
       <p>Size: {{item.clothing_size_string}}, {{item.clothing_size_num}}
       <p>Tags:{% for tag in item.tags %} {{tag}},{% endfor %}<p>
       <p>QR Code: {{item.qr_code}}</p>
-      <p>For development only: Deleted = {{item.deleted}}, Outdated = {{item.outdated}}, approved = {{item.approved}}.</p>
+      {% if pending_edit %}<p>{% if user.permissions != "STANDARD_USER" %} <a href="/review_edits">{% endif %}<strong>[EDITS ARE PENDING APPROVAL]</strong>{% if user.permissions != "STANDARD_USER" %}</a>{% endif %}</p>{% endif %}
+
+      {% if item.marked_for_deletion %}<p><p>{% if user.permissions != "STANDARD_USER" %} <a href="/review_deletions">{% endif %}<strong>[THIS ITEM HAS BEEN MARKED FOR DELETION]</strong>{% if user.permissions != "STANDARD_USER" %}</a>{% endif %}</p>{% endif %}
+
+      {% if user.permissions == "ADMIN" %}<p>For development only: Deleted = {{item.deleted}}, Outdated = {{item.outdated}}, approved = {{item.approved}}.</p>{% endif %}
       <br/>
+      {% if not item.marked_for_deletion %}
       <form action="/edit_item" method="get" style="display: inline-block;">
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
         <input type="submit" value="Edit">
       </form>
+      {% if user.permissions != "STANDARD_USER" %}
       <form action="/revert_item" method="post" style="display: inline-block;">
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
         <input type="submit" value="Revert To Earlier Version">
-      </form>
+      </form>{% endif %}
       <br/><br/>
       <form action="/delete_item" method="post">
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
         <input type="submit" value="Delete">
       </form>
+      {% endif %}
       <br/><br/><br/>
   </div>
 </body>
