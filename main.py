@@ -118,7 +118,7 @@ class AddItem(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/add_item.html')
         self.response.write(template.render({}))
-    
+
     @auth.login_required
     def post(self):
         img = self.request.get('image', default_value='')
@@ -254,6 +254,7 @@ class DeleteItem(webapp2.RequestHandler):
         sleep(0.1)
         self.redirect("/")
 
+# Serves an image from the database.
 class ViewImage(webapp2.RequestHandler):
     def get(self):
         item_key = ndb.Key(urlsafe=self.request.get('image_id'))
@@ -411,7 +412,7 @@ class DiscardRevision(webapp2.RequestHandler):
         si.child = None
         si.put()
         discarded_item = ndb.Key(urlsafe=self.request.get('newest_id'))
-        while discarded_item != selected_item: 
+        while discarded_item != selected_item:
             logging.info(discarded_item.get().description)
             next_item = discarded_item.parent()
             discarded_item.delete()
@@ -436,7 +437,7 @@ class CreateGroup(webapp2.RequestHandler):
         logging.info("Create Group:get")
         template = JINJA_ENVIRONMENT.get_template('templates/create_group.html')
         self.response.write(template.render({}))
-    
+
     @auth.login_required
     def post(self):
         logging.info("Create Group:post")
