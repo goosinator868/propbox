@@ -63,37 +63,86 @@
     <input type="submit" value="Home">
   </form>
   <h2> Original </h2>
-  <div class="item_container">
-    <h2>{{item.name}}</h2>
-    <p>{{item.description}}</p>
-    <br/>
+  <div class="item_details">
+      <h2>{{item.name}}</h2>
+      <a href="view_image?image_id={{item.key.urlsafe()}}">
+      <img src="view_image?image_id={{item.key.urlsafe()}}" class="thumbnail" />
+      </a>
+      <h3>{{item.item_type}}</h3>
+      <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+      <h5><b>Condition</b>: {{item.condition}}</h5>
+      <p>{{item.description}}</p>
+      <p>Article:{{item.clothing_article_type}}</p>
+      <p>Size: {{item.clothing_size_string}}, {{item.clothing_size_num}}
+      <p>Tags:{% for tag in item.tags %} {{tag}},{% endfor %}<p>
+      <p>QR Code: {{item.qr_code}}</p>
+      {% if pending_edit %}<p>{% if user.permissions != "STANDARD_USER" %} <a href="/review_edits">{% endif %}<strong>[EDITS ARE PENDING APPROVAL]</strong>{% if user.permissions != "STANDARD_USER" %}</a>{% endif %}</p>{% endif %}
+
+      {% if item.marked_for_deletion %}<p><p>{% if user.permissions != "STANDARD_USER" %} <a href="/review_deletions">{% endif %}<strong>[THIS ITEM HAS BEEN MARKED FOR DELETION]</strong>{% if user.permissions != "STANDARD_USER" %}</a>{% endif %}</p>{% endif %}
+
+      {% if user.permissions == "ADMIN" %}<p>For development only: Deleted = {{item.deleted}}, Outdated = {{item.outdated}}, approved = {{item.approved}}.</p>{% endif %}
+      <br/>
+      <br/><br/><br/>
   </div>
   <div class="form">
     <h1> Edit Item </h1>
     <form action="/edit_item" method="post">
-      Name: <input name="name" type="text" value="{{item.name}}"><br>
-      Description: <textarea name="description">{{item.description}}</textarea><br>
-      Check-out Status: <input type="checkbox" name="check_out_bool" value="checked" {% if item.checked_out %} checked {% endif %}> Checked out?<br>
-      Reason for Check-out: <input name="check_out_reason" type="text" value="{{item.checked_out_reason}}"><br>
-      <input type="hidden" name="old_item_key" value="{{item.key.urlsafe()}}">
+          Name: <input name="name" type="text" value="{{item.name}}"><br>
+          <textarea name="description" placeholder="description">{{item.description}}</textarea><br>
+          <select name="item_type" class="addItemDropdown">
+              <option {% if item.item_type == "Costume" %} selected {% endif %}>Costume</option>
+              <option {% if item.item_type == "Prop" %} selected {% endif %}>Prop</option>
+          </select><br>
+          <select name="condition" class="addItemDropdown">
+            {% for option in ["Good", "Fair", "Poor", "Being Repaired"] %}
+              <option {% if item.condition == option %} selected {% endif %}> {{option}} </option>
+            {% endfor %}
+          </select><br>
+          <h4>Clothing Article</h4>
+          <select name="article" class="addItemDropdown">
+            {% for option in ["N/A", "Top", "Bottom", "Dress", "Shoes", "Hat", "Coat/Jacket", "Other"] %}
+              <option {% if item.clothing_article_type == option %} selected {% endif %}> {{option}} </option>
+            {% endfor %}
+          </select><br>
+          <h4>Size</h4>
+          <select name="clothing_size_number" class="addItemDropdown">
+            <option {% if item.clothing_size_num == "N/A" %} selected {% endif %}> N/A </option>
+            {% for option in range(21) %}
+              <option {% if item.clothing_size_num == option|string() %} selected {% endif %}> {{option}} </option>
+            {% endfor %}
+          </select>
+          <select name="clothing_size_string" class="addItemDropdown">
+            {% for option in ["N/A", "XS", "S", "M", "L", "XL", "XXL", "XXXL"] %}
+              <option {% if item.clothing_size_string == option|string() %} selected {% endif %}> {{option}} </option>
+            {% endfor %}
+          </select><br>
+          <h4>Tags</h4>
+          <!-- See http://jinja.pocoo.org/docs/2.9/templates/#whitespace-control -->
+          <textarea name="tags" placeholder="separate tags with enter key">
+{%- for tag in item.tags %}
+{{tag}}
+{%- endfor %}</textarea><br>
+        Check-out Status: <input type="checkbox" name="check_out_bool" value="checked" {% if item.checked_out %} checked {% endif %}> Checked out?<br>
+        Reason for Check-out: <input name="check_out_reason" type="text" value="{{item.checked_out_reason}}"><br>
+          <input type="hidden" name="old_item_key" value="{{item.key.urlsafe()}}">
 
-      <div id="confirm_popup" class="modal">
-        <div class="modal-content">
-        <span class="close" onclick="closeConfirm()">&times;</span><br/>
-        <center>Are you sure you want to submit
-        {% if user.permissions=="STANDARD_USER" %}
-        an edit request for <strong>{{item.name}}</strong>? Changes must be approved before they are visible to everyone.
-        <br/>
-        <input type="submit" value="Submit Edit Request">
-        {% else %}
-        an edit for <strong>{{item.name}}</strong>? Changes will take place immediately.
-        <br/>
-        <input type="submit" value="Submit Changes">
-        {% endif %}
-        <button onclick="closeConfirm()" type="button">Cancel</button>
-        </center>
+        <div id="confirm_popup" class="modal">
+          <div class="modal-content">
+          <span class="close" onclick="closeConfirm()">&times;</span><br/>
+          <center>Are you sure you want to submit
+          {% if user.permissions=="STANDARD_USER" %}
+          an edit request for <strong>{{item.name}}</strong>? Changes must be approved before they are visible to everyone.
+          <br/>
+          <input type="submit" value="Submit Edit Request">
+          {% else %}
+          an edit for <strong>{{item.name}}</strong>? Changes will take place immediately.
+          <br/>
+          <input type="submit" value="Submit Changes">
+          {% endif %}
+          <button onclick="closeConfirm()" type="button">Cancel</button>
+          </center>
+          </div>
         </div>
-      </div>
 
       <button onclick="showConfirm()" type="button">Submit Edit{% if user.permissions=="STANDARD_USER" %} Request{% endif %}</button>
     </form>
