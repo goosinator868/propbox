@@ -33,9 +33,11 @@
   This is the page for viewing an item's details.
   <div class="item_details">
       <h2>{{item.name}}</h2>
-      <a href="view_image?image_id={{item.key.urlsafe()}}">
-      <img src="view_image?image_id={{item.key.urlsafe()}}" class="thumbnail" />
-      </a>
+      {% if item.image %}
+        <a href="view_image?image_id={{item.key.urlsafe()}}">
+        <img src="view_image?image_id={{item.key.urlsafe()}}" alt="image of {{item.name}}" class="thumbnail" />
+        </a>
+      {% endif %}
       <h3>{{item.item_type}}</h3>
       <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
       <h5><b>Condition</b>: {{item.condition}}</h5>
