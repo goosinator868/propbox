@@ -1,6 +1,8 @@
 # Python built-in imports.
 import os
 import urllib
+import requests
+import json
 import logging
 import webapp2
 import jinja2
@@ -13,6 +15,23 @@ from google.appengine.ext.db import TransactionFailedError
 # First party imports
 from warehouse_models import Item, cloneItem, User, possible_permissions
 import auth
+
+# Validates an html string using the w3 validator.
+def ValidateHTML(html_string):
+    response = requests.post("https://validator.w3.org/nu/?out=json",
+        data=html_string,
+        headers={'Content-Type':'text/html; charset=utf-8'})
+    messages = response.json()['messages']
+    if messages:
+        for m in messages:
+            if m['type'] == 'error':
+                messsage_for_human = u'Invalid HTML: {issue}\n{snippet} on line:{line}'.format(issue=m['message'], snippet=m['extract'],line=m['lastLine'])
+                logging.error(messsage_for_human)
+            else:
+                messsage_for_human = u'Validator message: ' + str(m)
+                logging.warning(messsage_for_human)
+        return html_string + '<script>alert("{n} HTML errors found, check the logs for details");</script>'.format(n=len(messages))
+    return html_string
 
 # Finds the most recent version of an item.
 def FindUpdatedItem(item):
@@ -124,7 +143,8 @@ class MainPage(webapp2.RequestHandler):
         # Load html template
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
         user = GetCurrentUser(self.request)
-        self.response.write(template.render({'user':user}))
+        page = template.render({'user':user})
+        self.response.write(ValidateHTML(page))
 
 
 #Loads add item page and adds item to database
@@ -132,7 +152,7 @@ class AddItem(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/add_item.html')
-        self.response.write(template.render({}))
+        self.response.write(ValidateHTML(template.render({})))
 
     @auth.login_required
     def post(self):
@@ -188,7 +208,8 @@ class ResolveEdits(webapp2.RequestHandler):
         old_item = new_item.key.parent().get()
         old_item = FindUpdatedItem(old_item)
         template = JINJA_ENVIRONMENT.get_template('templates/resolve_edits.html')
-        self.response.write(template.render({'old_item': old_item, 'new_item': new_item}))
+        page = template.render({'old_item': old_item, 'new_item': new_item})
+        self.response.write(ValidateHTML(page))
 
     @auth.login_required
     def post(self):
@@ -228,7 +249,8 @@ class EditItem(webapp2.RequestHandler):
         item = FindUpdatedItem(item)
         user = GetCurrentUser(self.request)
         template = JINJA_ENVIRONMENT.get_template('templates/edit_item.html')
-        self.response.write(template.render({'item': item, 'user':user}))
+        page = template.render({'item': item, 'user':user})
+        self.response.write(ValidateHTML(page))
 
     @auth.login_required
     def post(self):
@@ -336,7 +358,7 @@ class UndeleteItem(webapp2.RequestHandler):
 class AuthHandler(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/auth.html')
-        self.response.write(template.render({}))
+        self.response.write(ValidateHTML(template.render({})))
 
 # Filters viewable items based on selected boxes in MainPage
 def FilterItems(item_name, item_type, item_condition, costume_article,
@@ -455,7 +477,8 @@ class ReviewEdits(webapp2.RequestHandler):
         # for r in revert_list:
         #     logging.info("\n\n")
         #     logging.info(r)
-        self.response.write(template.render({'revert':revert_list, 'suggest':suggestion_list}))
+        page = template.render({'revert':revert_list, 'suggest':suggestion_list})
+        self.response.write(ValidateHTML(page))
 
 #Keeps the latest revision. Flags the revision as "approved" in the database.
 class KeepRevision(webapp2.RequestHandler):
@@ -528,7 +551,7 @@ class CreateGroup(webapp2.RequestHandler):
     def get(self):
         logging.info("Create Group:get")
         template = JINJA_ENVIRONMENT.get_template('templates/create_group.html')
-        self.response.write(template.render({}))
+        self.response.write(ValidateHTML(template.render({})))
 
     @auth.login_required
     def post(self):
@@ -540,21 +563,21 @@ class GroupList(webapp2.RequestHandler):
     def get(self):
         logging.info("Group List:get")
         template = JINJA_ENVIRONMENT.get_template('templates/group_list.html')
-        self.response.write(template.render({}))
+        self.response.write(ValidateHTML(template.render({})))
 
 class ViewGroup(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         logging.info("View Group:get")
         template = JINJA_ENVIRONMENT.get_template('templates/group.html')
-        self.response.write(template.render({}))
+        self.response.write(ValidateHTML(template.render({})))
 
 class ViewUsersInGroup(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         logging.info("View Users In Group")
         template = JINJA_ENVIRONMENT.get_template('templates/users_in_group.html')
-        self.response.write(template.render({}))
+        self.response.write(ValidateHTML(template.render({})))
 
 class ViewItemDetails(webapp2.RequestHandler):
     @auth.login_required
@@ -564,7 +587,8 @@ class ViewItemDetails(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/item_details.html')
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
         pending_edit = (len(item.suggested_edits) > 0)
-        self.response.write(template.render({'item':item, 'pending_edit':pending_edit, 'user':user}))
+        page = template.render({'item':item, 'pending_edit':pending_edit, 'user':user})
+        self.response.write(ValidateHTML(page))
 
 #To admin-approve items that have been created or edited by lesser users.
 class ReviewDeletions(webapp2.RequestHandler):
@@ -581,7 +605,7 @@ class ReviewDeletions(webapp2.RequestHandler):
         for item in items:
             if (item.marked_for_deletion or item.deleted) and item.child == None:
                 deleted.append(item)
-        self.response.write(template.render({'deleted':deleted}))
+        self.response.write(ValidateHTML(template.render({'deleted':deleted})))
 
 #Loads the search and browsing page.
 class SearchAndBrowse(webapp2.RequestHandler):
@@ -618,19 +642,22 @@ class SearchAndBrowse(webapp2.RequestHandler):
             if (item_type_filter == "" or item_type_filter == None):
                 item_type_filter = "All"
             # send to display
-            self.response.write(template.render({'items': items, 'item_type_filter': item_type_filter, 'item_name_filter': item_name_filter, 'item_condition_filter': item_condition_filter}))
+            page = template.render({'items': items, 'item_type_filter': item_type_filter, 'item_name_filter': item_name_filter, 'item_condition_filter': item_condition_filter})
+            self.response.write(ValidateHTML(page))
         except:
             # first time opening or item has been added
             query = Item.query()
             items = query.fetch()
-            self.response.write(template.render({'items': items, 'item_name_filter': item_name_filter}))
+            page = template.render({'items': items, 'item_name_filter': item_name_filter})
+            self.response.write(ValidateHTML(page))
 
 class ManageUsers(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/manage_users.html')
         users = User.query().fetch()
-        self.response.write(template.render({'users': users, 'permission_levels': list(possible_permissions)}))
+        page = template.render({'users': users, 'permission_levels': list(possible_permissions)})
+        self.response.write(ValidateHTML(page))
 
     @auth.login_required
     def post(self):
