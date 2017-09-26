@@ -1,4 +1,4 @@
-<!doctype html>
+ <!doctype html>
 <html>
 <head>
   <link rel="import" href="/static/common.html">
@@ -40,6 +40,36 @@
       font-weight: bold;
     }
   </style>
+
+  <script type="text/javascript">
+    function switchItem(hideID, showID) {
+      hide = document.getElementById(hideID);
+      show = document.getElementById(showID);
+      if (hide != null) {
+        hide.style.display = 'none';
+      }
+      if (show != null) {
+        show.style.display = 'block';
+      }
+      return;
+    }
+
+    function showConfirm(itemID,i) {
+        console.log(itemID);
+        var modal = null;
+        modal = document.getElementById("confirm_"+i+"_"+itemID);
+        modal.style.display = "block";
+        return;
+      }
+
+    function closeConfirm(itemID,i) {
+      var modal = null;
+      modal = document.getElementById("confirm_"+i+"_"+itemID);
+      modal.style.display = "none";
+      return;
+    }
+
+  </script>
 </head>
 
 <body>
@@ -58,14 +88,14 @@
         <h2>{{item[0].name}}</h2>
         <h4>created by : {{item[0].creator_name}} at {{item[0].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
         <p>{{item[0].description}}</p>
-        </div> → 
+      </div> →
       <div class="sub_item_container" style="display: inline-block;">
         <strong>Previous Versions</strong>
         <h2>{{item[1][i].name}}</h2>
         <h4>created by : {{item[1][i].creator_name}} at {{item[1][i].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
         <p>{{item[1][i].description}}</p>
       </div>
-      
+
       <br/>
       <button id="cancel" onclick="closeConfirm('{{item[0].key.urlsafe()}}',{{i}})">No.</button>
       <form action="/discard_revision" method="post" style="display: inline-block;">
@@ -92,14 +122,14 @@
         <h2>{{item[0].name}}</h2>
         <h4>created by : {{item[0].creator_name}} at {{item[0].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
         <p>{{item[0].description}}</p>
-        </div> → 
+        </div> →
       <div class="sub_item_container" style="display: inline-block;">
         <strong>New Versions</strong>
         <h2>{{item[1][i].name}}</h2>
         <h4>created by : {{item[1][i].creator_name}} at {{item[1][i].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
         <p>{{item[1][i].description}}</p>
       </div>
-      
+
       <br/>
       <button id="cancel" onclick="closeConfirm('{{item[0].key.urlsafe()}}',{{i}})">Cancel</button>
       <form action="/keep_revision" method="post"  style="display: inline-block;">
@@ -114,12 +144,12 @@
   {% endfor %}
 
   <div id="navbar_holder"></div>
-  <br/><div><form action="/" method="get"><input type="submit" value="Home"/></form><br/>
-  
+  <br/><form action="/" method="get"><input type="submit" value="Home"/></form><br/>
+
 
   <div id="right-pane">
     &nbsp;Items with past versions<br/>
-    <div id="revised_list">
+    <div>
       {% for item in revert %}
         <div class="item_container">
           <strong>Current Version</strong>
@@ -141,7 +171,7 @@
               <br/>
               <p>Deleted = {{item[1][i].deleted}} and Outdated = {{item[1][i].outdated}}</p>
               <button onclick="showConfirm('{{item[0].key.urlsafe()}}',{{i}})">Revert To This Version</button>
-              <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i-1)|string}}')"{% if i == 0 %} disabled="disabled" style="color: #bbb;"{% endif %}">Newer</button> 
+              <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i-1)|string}}')"{% if i == 0 %} disabled="disabled" style="color: #bbb;"{% endif %}">Newer</button>
               <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i+1)|string}}')"{% if i == item[2][-1] %} disabled="disabled" style="color: #bbb;" {% endif %};">Older</button>
             </div>
             {% endfor %}
@@ -157,7 +187,7 @@
 
   <div id="left-pane">
   &nbsp;Items awaiting edit approval<br/>
-    <div id="revised_list">
+    <div>
       {% for item in suggest %}
         <div class="item_container">
           <strong>Current Version</strong>
@@ -179,7 +209,7 @@
               <br/>
               <p>Deleted = {{item[1][i].deleted}} and Outdated = {{item[1][i].outdated}}</p>
               <button onclick="showConfirm('{{item[0].key.urlsafe()}}',{{i}})">Update To This Version</button>
-              <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i-1)|string}}')"{% if i == 0 %} disabled="disabled" style="color: #bbb;"{% endif %}">Previous</button> 
+              <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i-1)|string}}')"{% if i == 0 %} disabled="disabled" style="color: #bbb;"{% endif %}">Previous</button>
               <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i+1)|string}}')"{% if i == item[2][-1] %} disabled="disabled" style="color: #bbb;" {% endif %};">Next</button>
             </div>
             {% endfor %}
@@ -193,34 +223,4 @@
     </div>
   </div>
 </body>
-
-<script type="text/javascript">
-  function switchItem(hideID, showID) {
-    hide = document.getElementById(hideID);
-    show = document.getElementById(showID);
-    if (hide != null) {
-      hide.style.display = 'none';
-    }
-    if (show != null) {
-      show.style.display = 'block';
-    }
-    return;
-  }
-
-  function showConfirm(itemID,i) {
-      console.log(itemID);
-      var modal = null;
-      modal = document.getElementById("confirm_"+i+"_"+itemID);
-      modal.style.display = "block";
-      return;
-    }
-
-  function closeConfirm(itemID,i) {
-    var modal = null;
-    modal = document.getElementById("confirm_"+i+"_"+itemID);
-    modal.style.display = "none";
-    return;
-  }
-
-</script>
 </html>
