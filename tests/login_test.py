@@ -2,11 +2,11 @@ from selenium import webdriver
 
 # Make sure you have webdriver installed selenium / webdriver
 #       pip install selenium
-# Make sure you download and install the chrome webdriver from 
+# Make sure you download and install the chrome webdriver from
 # https://sites.google.com/a/chromium.org/chromedriver/downloads
-# Just place the executable somewhere on your computer and add 
+# Just place the executable somewhere on your computer and add
 # that location to your path.
-# Example: 
+# Example:
 #     1) I placed it in C:\ProgramFiles\chromedriver
 #     2) I added C:\ProgramFiles\chromedriver to my path
 
@@ -26,7 +26,7 @@ def login(driver, email="test@fake.org", name="Automated Test", password="passwo
     next = driver.find_element_by_css_selector('.firebaseui-id-submit')
     next.click()
     # Second screen
-    # This can be one of 2 screens: 
+    # This can be one of 2 screens:
     #    1) The automated tester has not made an account.
     #    2) The automated tester has made an account and just needs to log in.
     try:
@@ -40,12 +40,15 @@ def login(driver, email="test@fake.org", name="Automated Test", password="passwo
         new_password.send_keys(password)
         name_elem = driver.find_element_by_name('name')
         name_elem.send_keys(name)
-        
+
     next = driver.find_element_by_css_selector('.firebaseui-id-submit')
     next.click()
 
-if __name__ == '__main__':
+def main():
     driver = setupTestingEnv()
     login(driver)
     print("done")
     driver.quit()
+
+if __name__ == '__main__':
+    main()
