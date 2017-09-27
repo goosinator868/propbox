@@ -55,8 +55,9 @@ def cloneItem(oldItem, parentKey=None):
 STANDARD_USER = "STANDARD_USER"
 TRUSTED_USER = "TRUSTED_USER"
 ADMIN = "ADMIN"
+PENDING_USER = "PENDING_USER" # Pending user is for users who have recently joined the site, awaiting admin approval
 
-possible_permissions = set([STANDARD_USER, TRUSTED_USER, ADMIN])
+possible_permissions = set([STANDARD_USER, TRUSTED_USER, ADMIN, PENDING_USER])
 
 class User(ndb.Model):
     name = ndb.StringProperty(required=True)

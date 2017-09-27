@@ -1,13 +1,22 @@
+# Python built-in imports.
 from functools import wraps
 
+# Third party imports.
+from google.appengine.ext import ndb
 import google.oauth2.id_token
 import requests_toolbelt.adapters.appengine
 import google.auth.transport.requests
+
+# First party imports.
+from warehouse_models import User
 
 # Use the App Engine Requests adapter. This makes sure that Requests uses
 # URLFetch.
 requests_toolbelt.adapters.appengine.monkeypatch()
 HTTP_REQUEST = google.auth.transport.requests.Request()
+
+def GetCurrentUser(request):
+    return ndb.Key(User, get_user_id(request)).get()
 
 def get_cookies(request):
     cookies = {}
@@ -20,7 +29,7 @@ def get_cookies(request):
                 cookies[k_v[0]] = k_v[1]
     return cookies
 
-def login_required(handler):
+def firebase_login_required(handler):
     def _decorator(_self, *args, **kwargs):
         cookies = get_cookies(_self.request)
         id_token = cookies.get('token')
@@ -36,6 +45,33 @@ def login_required(handler):
         else:
             handler(_self, *args, **kwargs)
     return wraps(handler)(_decorator)
+
+def login_required(handler):
+    def _decorator(_self, *args, **kwargs):
+        cookies = get_cookies(_self.request)
+        id_token = cookies.get('token')
+        claims = None
+        try:
+            if id_token is not None:
+                claims = google.oauth2.id_token.verify_firebase_token(id_token, HTTP_REQUEST)
+        except:
+            claims = None
+        if claims is None:
+            _self.redirect("/enforce_auth")
+            return
+        user = GetCurrentUser(_self.request)
+        if user is None:
+            user = User(name=get_user_name(_self.request), id=get_user_id(_self.request), permissions="PENDING_USER")
+            if len(User.query(User.permissions == "ADMIN").fetch()) == 0:
+                user.permissions = "ADMIN"
+            user.put()
+        if user.permissions == "PENDING_USER":
+            _self.redirect("/pending_approval")
+            return
+        else:
+            handler(_self, *args, **kwargs)
+    return wraps(handler)(_decorator)
+
 
 def _get_claims(request):
     cookies = get_cookies(request)
