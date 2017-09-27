@@ -18,6 +18,7 @@ import auth
 
 # Validates an html string using the w3 validator.
 def ValidateHTML(html_string):
+    # TODO disable when deployed
     response = requests.post("https://validator.w3.org/nu/?out=json",
         data=html_string,
         headers={'Content-Type':'text/html; charset=utf-8'})
