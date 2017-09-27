@@ -68,6 +68,8 @@ def login_required(handler):
         if user.permissions == "PENDING_USER":
             _self.redirect("/pending_approval")
             return
+        if user.permissions == "DEACTIVATED_USER":
+            _self.redirect("/account_deactivated")
         else:
             handler(_self, *args, **kwargs)
     return wraps(handler)(_decorator)

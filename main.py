@@ -633,7 +633,15 @@ class ManageUsers(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/manage_users.html')
         users = User.query().fetch()
         users.remove(user)
-        self.response.write(template.render({'users': users, 'permission_levels': list(possible_permissions)}))
+        active_users = [user for user in users if user.permissions != "DEACTIVATED_USER" and user.permissions != "PENDING_USER"]
+        deactivated_users = [user for user in users if user.permissions == "DEACTIVATED_USER"]
+        pending_users = [user for user in users if user.permissions == "PENDING_USER"]
+        self.response.write(template.render(
+            {'users': users,
+             'active_users': active_users,
+             'deactivated_users': deactivated_users,
+             'pending_users': pending_users,
+             'permission_levels': list(possible_permissions)}))
 
     @auth.login_required
     def post(self):
@@ -661,12 +669,19 @@ class PendingApproval(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/pending_approval.html')
         self.response.write(template.render({}))
 
+class AccountDeactivated(webapp2.RequestHandler):
+    @auth.firebase_login_required
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('templates/account_deactivated.html')
+        self.response.write(template.render({}))
+
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 
 app = webapp2.WSGIApplication([
+    ('/account_deactivated', AccountDeactivated),
     ('/delete_item', DeleteItem),
     ('/delete_item_forever', DeleteItemForever),
     ('/undelete_item', UndeleteItem),
