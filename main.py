@@ -640,16 +640,6 @@ class ManageUsers(webapp2.RequestHandler):
         user.put()
         self.redirect('/manage_users')
 
-# Ban a user from the system.
-class BanUser(webapp2.RequestHandler):
-    # TODO replace with way to set user role to "BANNED". Method does not currently work as is.
-    @auth.login_required
-    def post(self):
-        user_key = ndb.Key(urlsafe=self.request.get('user_key'))
-        user = user_key.get()
-        user.remove()
-        self.redirect('/remove_users')
-
 class PostAuth(webapp2.RequestHandler):
     @auth.login_required
     def get(self):

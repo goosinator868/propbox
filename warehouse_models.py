@@ -38,3 +38,15 @@ def cloneItem(oldItem, parentKey=None):
         clothing_size_num=oldItem.clothing_size_num,
         clothing_article_type=oldItem.clothing_article_type,
         tags=oldItem.tags)
+
+# Only these values should be stored in the User ==> permissions field.
+STANDARD_USER = "STANDARD_USER"
+TRUSTED_USER = "TRUSTED_USER"
+ADMIN = "ADMIN"
+BANNED = "BANNED"
+
+possible_permissions = set([STANDARD_USER, TRUSTED_USER, ADMIN, BANNED])
+
+class User(ndb.Model):
+    name = ndb.StringProperty(required=True)
+    permissions = ndb.StringProperty(required=True)
