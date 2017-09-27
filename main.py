@@ -514,7 +514,7 @@ class DiscardRevision(webapp2.RequestHandler):
 class RevertItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
-        if GetCurrentUser().permissions == "STANDARD_USER":
+        if GetCurrentUser(self.request).permissions == "STANDARD_USER":
             self.redirect('/')
             return
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
