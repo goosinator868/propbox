@@ -15,6 +15,7 @@ from google.appengine.ext.db import TransactionFailedError
 # First party imports
 from warehouse_models import Item, cloneItem, User, possible_permissions
 import auth
+from auth import GetCurrentUser
 
 # Validates an html string using the w3 validator.
 def ValidateHTML(html_string):
@@ -59,9 +60,6 @@ class ItemPurgedException(Exception):
     '''Raised when trying to submit an edit to an item that has been permanently deleted.'''
     def __init__(self,*args,**kwargs):
         Exception.__init__(self,*args,**kwargs)
-
-def GetCurrentUser(request):
-    return ndb.Key(User, auth.get_user_id(request)).get()
 
 # Transaction helpers.
 @ndb.transactional(xg=True, retries=1)
@@ -255,6 +253,7 @@ class EditItem(webapp2.RequestHandler):
 
     @auth.login_required
     def post(self):
+        # permissions logic
         user = GetCurrentUser(self.request)
         standard_user = user.permissions == "STANDARD_USER"
         old_item_key = ndb.Key(urlsafe=self.request.get('old_item_key'))
@@ -272,7 +271,27 @@ class EditItem(webapp2.RequestHandler):
         else:
             new_item.suggested_by = user.name
         new_item.name=self.request.get('name')
-        new_item.description=self.request.get('description', default_value='')
+        # edit item logic
+        new_item.name = self.request.get('name')
+        new_item.clothing_article_type = self.request.get('article')
+        new_item.description = self.request.get('description', default_value='')
+        new_item.item_type = self.request.get('item_type')
+        new_item.costume_size_num = self.request.get('clothing_size_number')
+        new_item.clothing_size_string = self.request.get('clothing_size_string')
+        new_item.tags = ParseTags(self.request.get('tags'))
+        new_item.condition = self.request.get('condition')
+       
+        # Override certain inputs due to costume and prop defaults
+        if new_item.item_type == "Costume" and new_item.clothing_article_type == "N/A":
+            # An article type was not selected thus is filtered as an
+            # 'Other' item by default
+            new_item.clothing_article_type = "Other"
+        elif new_item.item_type == "Prop":
+            # Props do not have sizes or article types
+            new_item.clothing_article_type = "N/A"
+            new_item.costume_size_num = "N/A"
+            new_item.costume_size_string = "N/A"
+
         # check-out logic below
         if self.request.get('check_out_bool') == "checked":
             new_item.checked_out = True
@@ -538,7 +557,7 @@ class DiscardRevision(webapp2.RequestHandler):
 class RevertItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
-        if GetCurrentUser().permissions == "STANDARD_USER":
+        if GetCurrentUser(self.request).permissions == "STANDARD_USER":
             self.redirect('/')
             return
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
@@ -655,9 +674,22 @@ class SearchAndBrowse(webapp2.RequestHandler):
 class ManageUsers(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
+        user = GetCurrentUser(self.request)
+        if (user.permissions != "ADMIN"):
+            self.redirect('/')
+            return
         template = JINJA_ENVIRONMENT.get_template('templates/manage_users.html')
         users = User.query().fetch()
-        page = template.render({'users': users, 'permission_levels': list(possible_permissions)})
+        users.remove(user)
+        active_users = [user for user in users if user.permissions != "DEACTIVATED_USER" and user.permissions != "PENDING_USER"]
+        deactivated_users = [user for user in users if user.permissions == "DEACTIVATED_USER"]
+        pending_users = [user for user in users if user.permissions == "PENDING_USER"]
+        page = template.render(
+            {'users': users,
+             'active_users': active_users,
+             'deactivated_users': deactivated_users,
+             'pending_users': pending_users,
+             'permission_levels': list(possible_permissions)})
         self.response.write(ValidateHTML(page))
 
     @auth.login_required
@@ -672,17 +704,25 @@ class PostAuth(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         user = GetCurrentUser(self.request)
-        if user is None:
-            user = User(name=auth.get_user_name(self.request), id=auth.get_user_id(self.request), permissions="STANDARD_USER")
+        firebase_name = auth.get_user_name(self.request)
+        # Rare case that someone changed their name.
+        if user.name != firebase_name:
+            user.name = firebase_name
+            # TODO: search all edits by this user and change the names there.
             user.put()
-        else:
-            firebase_name = auth.get_user_name(self.request)
-            # Rare case that someone changed their name.
-            if user.name != firebase_name:
-                user.name = firebase_name
-                # TODO: search all edits by this user and change the names there.
-                user.put()
         self.redirect('/')
+
+class PendingApproval(webapp2.RequestHandler):
+    @auth.firebase_login_required
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('templates/pending_approval.html')
+        self.response.write(template.render({}))
+
+class AccountDeactivated(webapp2.RequestHandler):
+    @auth.firebase_login_required
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('templates/account_deactivated.html')
+        self.response.write(template.render({}))
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -690,6 +730,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 app = webapp2.WSGIApplication([
+    ('/account_deactivated', AccountDeactivated),
     ('/delete_item', DeleteItem),
     ('/delete_item_forever', DeleteItemForever),
     ('/undelete_item', UndeleteItem),
@@ -704,6 +745,7 @@ app = webapp2.WSGIApplication([
     ('/revert_item', RevertItem),
     ('/manage_users', ManageUsers),
     ('/post_auth', PostAuth),
+    ('/pending_approval', PendingApproval),
     ('/create_group', CreateGroup),
     ('/group_list', GroupList),
     ('/view_group', ViewGroup),

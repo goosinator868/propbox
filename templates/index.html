@@ -19,9 +19,14 @@
   <div id="navbar_holder"></div>
   <br/>
   <p>{{user.name}}</p>
-  {% if user.permissions != "STANDARD_USER"%}
+  {% if user.permissions != "STANDARD_USER" %}
   <p>You are a{% if user.permissions == "TRUSTED_USER" %} trusted user.{% else %}n admin.{% endif %}</p>
   &nbsp;<form action='/review_edits' method='get' style="display: inline-block;"><input type='submit' value="Review Edits"></form>
+  {% if user.permissions == "ADMIN" %}
+  <form action="manage_users" style="display: inline-block;">
+      <input type="submit" value="Manage Users">
+  </form>
+  {% endif %}
   <form action="review_deletions" style="display: inline-block;">
       <input type="submit" value="Review Deletions">
   </form>
@@ -33,11 +38,5 @@
     <input type="submit" value="Add Item">
   </form>
   <br/><br/>
-  <form style="display: block;" action="/create_group" method="get">
-    <input type="submit" value="Create Group">
-  </form>
-  <form style="display: block;" action="/group_list" method="get">
-    <input type="submit" value="View Group List">
-  </form>
 </body>
 </html>
