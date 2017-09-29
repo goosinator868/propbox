@@ -21,7 +21,7 @@
   <p>{{user.name}}</p>
   {% if user.permissions != "STANDARD_USER" %}
   <p>You are a{% if user.permissions == "TRUSTED_USER" %} trusted user.{% else %}n admin.{% endif %}</p>
-  &nbsp;<form action='/review_edits' method='get' style="display: inline-block;"><input type='submit' value="Review Edits"></input></form>
+  &nbsp;<form action='/review_edits' method='get' style="display: inline-block;"><input type='submit' value="Review Edits"></form>
   {% if user.permissions == "ADMIN" %}
   <form action="manage_users" style="display: inline-block;">
       <input type="submit" value="Manage Users">

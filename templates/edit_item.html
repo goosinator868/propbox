@@ -125,23 +125,20 @@
         Check-out Status: <input type="checkbox" name="check_out_bool" value="checked" {% if item.checked_out %} checked {% endif %}> Checked out?<br>
         Reason for Check-out: <input name="check_out_reason" type="text" value="{{item.checked_out_reason}}"><br>
           <input type="hidden" name="old_item_key" value="{{item.key.urlsafe()}}">
-
-        <div id="confirm_popup" class="modal">
-          <div class="modal-content">
-          <span class="close" onclick="closeConfirm()">&times;</span><br/>
-          <center>Are you sure you want to submit
-          {% if user.permissions=="STANDARD_USER" %}
-          an edit request for <strong>{{item.name}}</strong>? Changes must be approved before they are visible to everyone.
-          <br/>
-          <input type="submit" value="Submit Edit Request">
-          {% else %}
-          an edit for <strong>{{item.name}}</strong>? Changes will take place immediately.
-          <br/>
-          <input type="submit" value="Submit Changes">
-          {% endif %}
-          <button onclick="closeConfirm()" type="button">Cancel</button>
-          </center>
-          </div>
+      <div id="confirm_popup" class="modal">
+        <div class="modal-content">
+        <span class="close" onclick="closeConfirm()">&times;</span><br/>
+        Are you sure you want to submit
+        {% if user.permissions=="STANDARD_USER" %}
+        an edit request for <strong>{{item.name}}</strong>? Changes must be approved before they are visible to everyone.
+        <br/>
+        <input type="submit" value="Submit Edit Request">
+        {% else %}
+        an edit for <strong>{{item.name}}</strong>? Changes will take place immediately.
+        <br/>
+        <input type="submit" value="Submit Changes">
+        {% endif %}
+        <button onclick="closeConfirm()" type="button">Cancel</button>
         </div>
 
       <button onclick="showConfirm()" type="button">Submit Edit{% if user.permissions=="STANDARD_USER" %} Request{% endif %}</button>
