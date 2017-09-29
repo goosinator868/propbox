@@ -30,8 +30,9 @@ An experiment with AppEngine to make a junior design project prototype.
 
 ## Code Issue Completion Standards
 A code issue is complete and can be closed when:
-  The description's results section occur
-  The result only occurs when the given section is valid
-  The result only occurs when the When section occurs in order
-  Edge cases are covered properly and within reason
-  The change is pushed to the master branch on GitHub
+ |-------------------------------------------------------------|
+ |The description's results section occur                      |
+ |The result only occurs when the given section is valid       |
+ |The result only occurs when the When section occurs in order |
+ |Edge cases are covered properly and within reason            |
+ |The change is pushed to the master branch on GitHub          |
