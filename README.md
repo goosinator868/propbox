@@ -40,8 +40,7 @@ A code issue is acceptable/complete and can be closed when:
 Cards in ZenHub apply here.
 
 ## Done Done Criteria
-Implementation is done done when:
-A code issue is officially resolved permanently when:
+An feature is officially resolved permanently when:
  |-------------------------------------------------------------|
  |Internal documentation is complete                           |
  |The code is well tested for edge cases                       |
@@ -49,3 +48,5 @@ A code issue is officially resolved permanently when:
  |Group members agree it is done done                          |
  
  in addition to acceptance criteria being met.
+ 
+ Cards in ZenHub DO NOT apply here.
