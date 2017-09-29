@@ -16,6 +16,9 @@
 <body>
   <div id="navbar_holder"></div>
   <br/>
+  <div id="logo" style="margin: auto; width: 50%; text-align: center;">
+    <img src="/image/propboxlogo_color.png" alt="Propbox" style="width: 50%;">
+  </div>
   <p>{{user.name}}</p>
   {% if user.permissions != "STANDARD_USER"%}
   <p>You are a{% if user.permissions == "TRUSTED_USER" %} trusted user.{% else %}n admin.{% endif %}</p>

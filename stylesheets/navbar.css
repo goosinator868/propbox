@@ -5,3 +5,12 @@
     background-color: #558fed;
     width: 100%;
 }
+
+#btn-group {
+	display: inline-block;
+}
+
+#home_button {
+	text-align: left;
+	float: left;
+}
