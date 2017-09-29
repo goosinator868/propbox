@@ -230,6 +230,7 @@ class EditItem(webapp2.RequestHandler):
 
     @auth.login_required
     def post(self):
+        # permissions logic
         user = GetCurrentUser(self.request)
         standard_user = user.permissions == "STANDARD_USER"
         old_item_key = ndb.Key(urlsafe=self.request.get('old_item_key'))
@@ -247,7 +248,27 @@ class EditItem(webapp2.RequestHandler):
         else:
             new_item.suggested_by = user.name
         new_item.name=self.request.get('name')
-        new_item.description=self.request.get('description', default_value='')
+        # edit item logic
+        new_item.name = self.request.get('name')
+        new_item.clothing_article_type = self.request.get('article')
+        new_item.description = self.request.get('description', default_value='')
+        new_item.item_type = self.request.get('item_type')
+        new_item.costume_size_num = self.request.get('clothing_size_number')
+        new_item.clothing_size_string = self.request.get('clothing_size_string')
+        new_item.tags = ParseTags(self.request.get('tags'))
+        new_item.condition = self.request.get('condition')
+       
+        # Override certain inputs due to costume and prop defaults
+        if new_item.item_type == "Costume" and new_item.clothing_article_type == "N/A":
+            # An article type was not selected thus is filtered as an
+            # 'Other' item by default
+            new_item.clothing_article_type = "Other"
+        elif new_item.item_type == "Prop":
+            # Props do not have sizes or article types
+            new_item.clothing_article_type = "N/A"
+            new_item.costume_size_num = "N/A"
+            new_item.costume_size_string = "N/A"
+
         # check-out logic below
         if self.request.get('check_out_bool') == "checked":
             new_item.checked_out = True
