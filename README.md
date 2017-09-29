@@ -28,11 +28,24 @@ An experiment with AppEngine to make a junior design project prototype.
 | static/        | This folder contains any static files that are not js,  |
 |                | css, or jinja templates                                 |
 
-## Code Issue Completion Standards
-A code issue is complete and can be closed when:
+## Acceptance Criteria
+A code issue is acceptable/complete and can be closed when:
  |-------------------------------------------------------------|
  |The description's results section occur                      |
  |The result only occurs when the given section is valid       |
  |The result only occurs when the When section occurs in order |
  |Edge cases are covered properly and within reason            |
  |The change is pushed to the master branch on GitHub          |
+
+Cards in ZenHub apply here.
+
+## Done Done Criteria
+Implementation is done done when:
+A code issue is officially resolved permanently when:
+ |-------------------------------------------------------------|
+ |Internal documentation is complete                           |
+ |The code is well tested for edge cases                       |
+ |UI is integrated successfully                                |
+ |Group members agree it is done done                          |
+ 
+ in addition to acceptance criteria being met.
