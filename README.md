@@ -40,7 +40,7 @@ A code issue is acceptable/complete and can be closed when:
 Cards in ZenHub apply here.
 
 ## Done Done Criteria
-An feature is officially resolved permanently when:
+A feature is officially resolved permanently when:
  |-------------------------------------------------------------|
  |Internal documentation is complete                           |
  |The code is well tested for edge cases                       |
