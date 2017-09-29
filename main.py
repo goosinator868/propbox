@@ -716,13 +716,13 @@ class PendingApproval(webapp2.RequestHandler):
     @auth.firebase_login_required
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/pending_approval.html')
-        self.response.write(template.render({}))
+        self.response.write(ValidateHTML(template.render({})))
 
 class AccountDeactivated(webapp2.RequestHandler):
     @auth.firebase_login_required
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/account_deactivated.html')
-        self.response.write(template.render({}))
+        self.response.write(ValidateHTML(template.render({})))
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
