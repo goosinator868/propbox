@@ -50,13 +50,13 @@
   <div id="confirm_delete_{{item.key.urlsafe()}}" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeConfirm('delete','{{item.key.urlsafe()}}',-1)">&times;</span>
-      <center><p>Do you really want to delete <strong>{{item.name}}</strong>?</p>
+      <p>Do you really want to delete <strong>{{item.name}}</strong>?</p>
       <p>This cannot be undone.</p>
-      <button id="cancel" onclick="closeConfirm('delete','{{item.key.urlsafe()}}',-1)">No.</button>
+      <button onclick="closeConfirm('delete','{{item.key.urlsafe()}}',-1)">No.</button>
       <form action="/delete_item_forever" method="post" style="display: inline-block;">
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
         <input type="submit" value="Yes, Delete Forever">
-      </form></center>
+      </form>
     </div>
   </div>
   {% endfor %}
@@ -76,7 +76,9 @@
           <h4>created by : {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
           <p>{% if item.marked_for_deletion %}Marked for deletion by:{% else %}Deleted by:{% endif %} {{item.suggested_by}}.</p>
           <p>{{item.description}}</p>
-          <img src="view_image?image_id={{item.key.urlsafe()}}" class="thumbnail" />
+          {% if item.image %}
+            <img src="view_image?image_id={{item.key.urlsafe()}}" alt="image of {{item.name}}" class="thumbnail" />
+          {% endif %}
           <p>{{item.key}}</p>
           <br/>
         <button onclick="showConfirm('delete','{{item.key.urlsafe()}}',-1)">Delete Forever</button>

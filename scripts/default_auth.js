@@ -51,10 +51,9 @@ function SetUpFirebase() {
         signOutBtn.click(function(event) {
             event.preventDefault();
             console.log('got click');
-
+            deleteAuthCookie();
             firebase.auth().signOut().then(function() {
                 console.log("Sign out successful");
-                deleteAuthCookie();
                 window.location.replace("/envorce_auth");
             }, function(error) {
                 console.log(error);
