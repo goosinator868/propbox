@@ -142,8 +142,7 @@ class MainPage(webapp2.RequestHandler):
         # Load html template
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
         user = GetCurrentUser(self.request)
-        page = template.render({'user':user})
-        self.response.write(ValidateHTML(page))
+        self.response.write(ValidateHTML(template.render({'user':user})))
 
 
 #Loads add item page and adds item to database
@@ -716,7 +715,7 @@ class PendingApproval(webapp2.RequestHandler):
     @auth.firebase_login_required
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/pending_approval.html')
-        self.response.write(ValidateHTML(template.render({})))
+        self.response.write(:ValidateHTML(template.render({})))
 
 class AccountDeactivated(webapp2.RequestHandler):
     @auth.firebase_login_required
