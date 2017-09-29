@@ -13,6 +13,7 @@ from google.appengine.ext.db import TransactionFailedError
 # First party imports
 from warehouse_models import Item, cloneItem, User, possible_permissions
 import auth
+from auth import GetCurrentUser
 
 # Finds the most recent version of an item.
 def FindUpdatedItem(item):
@@ -39,9 +40,6 @@ class ItemPurgedException(Exception):
     '''Raised when trying to submit an edit to an item that has been permanently deleted.'''
     def __init__(self,*args,**kwargs):
         Exception.__init__(self,*args,**kwargs)
-
-def GetCurrentUser(request):
-    return ndb.Key(User, auth.get_user_id(request)).get()
 
 # Transaction helpers.
 @ndb.transactional(xg=True, retries=1)
@@ -628,9 +626,22 @@ class SearchAndBrowse(webapp2.RequestHandler):
 class ManageUsers(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
+        user = GetCurrentUser(self.request)
+        if (user.permissions != "ADMIN"):
+            self.redirect('/')
+            return
         template = JINJA_ENVIRONMENT.get_template('templates/manage_users.html')
         users = User.query().fetch()
-        self.response.write(template.render({'users': users, 'permission_levels': list(possible_permissions)}))
+        users.remove(user)
+        active_users = [user for user in users if user.permissions != "DEACTIVATED_USER" and user.permissions != "PENDING_USER"]
+        deactivated_users = [user for user in users if user.permissions == "DEACTIVATED_USER"]
+        pending_users = [user for user in users if user.permissions == "PENDING_USER"]
+        self.response.write(template.render(
+            {'users': users,
+             'active_users': active_users,
+             'deactivated_users': deactivated_users,
+             'pending_users': pending_users,
+             'permission_levels': list(possible_permissions)}))
 
     @auth.login_required
     def post(self):
@@ -644,17 +655,25 @@ class PostAuth(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         user = GetCurrentUser(self.request)
-        if user is None:
-            user = User(name=auth.get_user_name(self.request), id=auth.get_user_id(self.request), permissions="STANDARD_USER")
+        firebase_name = auth.get_user_name(self.request)
+        # Rare case that someone changed their name.
+        if user.name != firebase_name:
+            user.name = firebase_name
+            # TODO: search all edits by this user and change the names there.
             user.put()
-        else:
-            firebase_name = auth.get_user_name(self.request)
-            # Rare case that someone changed their name.
-            if user.name != firebase_name:
-                user.name = firebase_name
-                # TODO: search all edits by this user and change the names there.
-                user.put()
         self.redirect('/')
+
+class PendingApproval(webapp2.RequestHandler):
+    @auth.firebase_login_required
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('templates/pending_approval.html')
+        self.response.write(template.render({}))
+
+class AccountDeactivated(webapp2.RequestHandler):
+    @auth.firebase_login_required
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('templates/account_deactivated.html')
+        self.response.write(template.render({}))
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -662,6 +681,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 app = webapp2.WSGIApplication([
+    ('/account_deactivated', AccountDeactivated),
     ('/delete_item', DeleteItem),
     ('/delete_item_forever', DeleteItemForever),
     ('/undelete_item', UndeleteItem),
@@ -676,6 +696,7 @@ app = webapp2.WSGIApplication([
     ('/revert_item', RevertItem),
     ('/manage_users', ManageUsers),
     ('/post_auth', PostAuth),
+    ('/pending_approval', PendingApproval),
     ('/create_group', CreateGroup),
     ('/group_list', GroupList),
     ('/view_group', ViewGroup),

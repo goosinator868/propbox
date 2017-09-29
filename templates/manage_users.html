@@ -14,7 +14,25 @@
 
 <body>
   <div id="navbar_holder"></div>
-  {% for user in users %}
+
+  <h3>Pending Users</h3>
+  {% for user in pending_users %}
+  <div>
+    <h4> {{user.name}} </h4>
+    <form action="/manage_users" method="post">
+      <select name="permission_level">
+        {% for level in permission_levels %}
+          <option value="{{level}}" {% if user.permissions == level %} selected="selected" {% endif %}>{{level}}</option>
+        {% endfor %}
+      </select>
+      <input type="hidden" name="user_key" value="{{user.key.urlsafe()}}">
+      <input type="submit" value="Update permissions">
+    </form>
+  </div>
+  {% endfor %}
+
+  <h3>Active Users</h3>
+  {% for user in active_users %}
   <div>
   	<h4> {{user.name}} </h4>
     <form action="/manage_users" method="post">
@@ -28,5 +46,22 @@
     </form>
   </div>
   {% endfor %}
+
+  <h3>Deactivated Users</h3>
+  {% for user in deactivated_users %}
+  <div>
+    <h4> {{user.name}} </h4>
+    <form action="/manage_users" method="post">
+      <select name="permission_level">
+        {% for level in permission_levels %}
+          <option value="{{level}}" {% if user.permissions == level %} selected="selected" {% endif %}>{{level}}</option>
+        {% endfor %}
+      </select>
+      <input type="hidden" name="user_key" value="{{user.key.urlsafe()}}">
+      <input type="submit" value="Update permissions">
+    </form>
+  </div>
+  {% endfor %}
+
 </body>
 </html>
