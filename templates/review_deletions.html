@@ -52,19 +52,16 @@
       <span class="close" onclick="closeConfirm('delete','{{item.key.urlsafe()}}',-1)">&times;</span>
       <p>Do you really want to delete <strong>{{item.name}}</strong>?</p>
       <p>This cannot be undone.</p>
-      <button onclick="closeConfirm('delete','{{item.key.urlsafe()}}',-1)">No.</button>
+      <button onclick="closeConfirm('delete','{{item.key.urlsafe()}}',-1)" class="submitButton">No.</button>
       <form action="/delete_item_forever" method="post" style="display: inline-block;">
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-        <input type="submit" value="Yes, Delete Forever">
+        <input type="submit" value="Yes, Delete Forever" class="submitButton">
       </form>
     </div>
   </div>
   {% endfor %}
 
   <br/>
-  <form action="/" method="get">
-    <input type="submit" value="Home">
-  </form>
   This is the page for approving the deletion of items.<br/>
 
   <div id="left-pane">
@@ -81,11 +78,11 @@
           {% endif %}
           <p>{{item.key}}</p>
           <br/>
-        <button onclick="showConfirm('delete','{{item.key.urlsafe()}}',-1)">Delete Forever</button>
+        <button onclick="showConfirm('delete','{{item.key.urlsafe()}}',-1)" class="submitButton">Delete Forever</button>
 
         <form action="/undelete_item" method="post">
             <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-            <input type="submit" value="Restore Item">
+            <input type="submit" value="Restore Item" class="submitButton">
           </form>
         </div>
       {% endfor %}</div>

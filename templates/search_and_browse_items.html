@@ -193,9 +193,6 @@
   <div id="navbar_holder"></div>
   <!-- New content here -->
   <br/>
-  <form action="/" method="get">
-    <input type="submit" value="Home">
-  </form>
   This is a page for searching and browsing for items.
       <div id="left-pane">
         <!-- View current items -->
@@ -222,7 +219,7 @@
                                     <p>(Deleted = {{item.deleted}}, Outdated = {{item.outdated}}, approved = {{item.approved}}, suggested ={{item.is_suggestion}}.)</p>
                                     <form action="/item_details" method="get">
                                       <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-                                      <input type="submit" value="Item Details">
+                                      <input type="submit" value="Item Details" class="submitButton">
                                     </form>
                                 </div>
                                 {% endif %}
@@ -247,7 +244,7 @@
                                 <p>(Deleted = {{item.deleted}}, Outdated = {{item.outdated}}, approved = {{item.approved}}, suggested ={{item.is_suggestion}}.)</p>
                                 <form action="/item_details" method="get">
                                   <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-                                  <input type="submit" value="Item Details">
+                                  <input type="submit" value="Item Details" class="submitButton">
                                 </form>
                             </div>
                             {% endif %}
@@ -260,7 +257,7 @@
 
     <div id="right-pane">
         <form style="display: block;" action="/add_item" method="get">
-            <input type="submit" value="Add Item">
+            <input type="submit" value="Add Item" class="submitButton">
         </form>
         <div><!-- <div id="right-pane"> -->
             <!-- Search form -->

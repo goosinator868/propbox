@@ -16,9 +16,6 @@
   <div id="navbar_holder"></div>
   <!-- New content here -->
   <br/>
-  <form action="/" method="get">
-    <input type="submit" value="Home">
-  </form>
   <h2> Current version </h2>
   <div class="item_container">
     <h2>{{old_item.name}}</h2>
@@ -41,7 +38,7 @@
       Description: <textarea name="description">{{new_item.description}}</textarea><br>
       <input type="hidden" name="old_item_key" value="{{old_item.key.urlsafe()}}">
       <input type="hidden" name="new_item_key" value="{{new_item.key.urlsafe()}}">
-      <input type="submit" value="save">
+      <input type="submit" value="save" class="submitButton">
     </form>
   </div>
 </body>

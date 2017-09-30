@@ -2,12 +2,14 @@
     text-align: right;
     padding: 10px;
     margin: 0px;
-    background-color: #558fed;
+    background-color: rgb(87,219,168);
     width: 100%;
 }
 
-#btn-group {
+#dropdown {
 	display: inline-block;
+	background-color:rgb(174,100,211);
+	border-color: rgb(174,100,211);
 }
 
 #home_button {

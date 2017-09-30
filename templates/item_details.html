@@ -23,11 +23,8 @@
   <div id="navbar_holder"></div>
   <!-- New content here -->
   <br/>
-  <form action="/" method="get" style="display: inline-block;">
-    <input type="submit" value="Home">
-  </form>
   <form action="/search_and_browse" method="get" style="display: inline-block;">
-    <input type="submit" value="Search & Browse">
+    <input type="submit" value="Search & Browse" class="submitButton">
   </form>
  <br/>
   This is the page for viewing an item's details.
@@ -55,17 +52,17 @@
       {% if not item.marked_for_deletion %}
       <form action="/edit_item" method="get" style="display: inline-block;">
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-        <input type="submit" value="Edit">
+        <input type="submit" value="Edit" class="submitButton">
       </form>
       {% if user.permissions != "STANDARD_USER" %}
       <form action="/revert_item" method="post" style="display: inline-block;">
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-        <input type="submit" value="Revert To Earlier Version">
+        <input type="submit" value="Revert To Earlier Version" class="submitButton">
       </form>{% endif %}
       <br/><br/>
       <form action="/delete_item" method="post">
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-        <input type="submit" value="Delete">
+        <input type="submit" value="Delete" class="submitButton">
       </form>
       {% endif %}
       <br/><br/><br/>

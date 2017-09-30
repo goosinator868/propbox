@@ -1,3 +1,7 @@
+body {
+  background-color: #aaaaaa;
+}
+
 .modal {
   display: none;
   position: fixed;
@@ -12,6 +16,7 @@
 }
 
 .modal-content {
+  text-align: center;
   background-color: #fefefe;
   margin: 15% auto;
   padding: 20px;
@@ -41,6 +46,7 @@
   display: inline-block;
   border-radius: 5px;
   margin: 5px;
+  position: relative;
 }
 
 .form {

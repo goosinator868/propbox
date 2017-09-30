@@ -37,7 +37,7 @@
   <div class="item_details">
       <h2>{{item.name}}</h2>
       <a href="view_image?image_id={{item.key.urlsafe()}}">
-      <img src="view_image?image_id={{item.key.urlsafe()}}" class="item_image" />
+      <img src="view_image?image_id={{item.key.urlsafe()}}" class="item_image" alt="Picture of {{item.name}}"/>
       </a>
       <h3>{{item.item_type}}</h3>
       <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
@@ -103,17 +103,17 @@
         {% if user.permissions=="STANDARD_USER" %}
         an edit request for <strong>{{item.name}}</strong>? Changes must be approved before they are visible to everyone.
         <br/>
-        <input type="submit" value="Submit Edit Request">
+        <input type="submit" value="Submit Edit Request" class="submitButton">
         {% else %}
         an edit for <strong>{{item.name}}</strong>? Changes will take place immediately.
         <br/>
-        <input type="submit" value="Submit Changes">
+        <input type="submit" value="Submit Changes" class="submitButton">
         {% endif %}
-        <button onclick="closeConfirm()" type="button">Cancel</button>
+        <button onclick="closeConfirm()" type="button" class="submitButton">Cancel</button>
         </div>
       </div>
 
-      <button onclick="showConfirm()" type="button">Submit Edit{% if user.permissions=="STANDARD_USER" %} Request{% endif %}</button>
+      <button onclick="showConfirm()" type="button" class="submitButton">Submit Edit{% if user.permissions=="STANDARD_USER" %} Request{% endif %}</button>
     </form>
   </div>
 </body>
