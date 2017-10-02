@@ -1,3 +1,7 @@
 /*This CSS file overwrites formatting from global.css on mobile view.
   Changes made here will only be visible in mobile view.*/
   
+
+body {
+  font-size: 2vh;
+}

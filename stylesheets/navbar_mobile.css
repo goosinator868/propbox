@@ -1,3 +1,29 @@
 /*This CSS file overwrites formatting from navbar.css on mobile view.
   Changes made here will only be visible in mobile view.*/
   
+
+#navbar {
+	height: 8.5vh;
+}
+
+.dropdown {
+	padding-top: .55vh;
+}
+
+#dropdown {
+	height: 6vh;
+	font-size: 3vh;
+}
+
+#breadcrumb_bar {
+	height: 2.6vh
+}
+
+#breadcrumbs {
+	line-height: 2.6vh;
+	font-size: 2.5vh;
+}
+
+#propbox_logo {
+	height: 7.5vh;
+}

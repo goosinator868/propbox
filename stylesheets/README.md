@@ -5,6 +5,8 @@ This folder contains CSS files.
 
 | File Name                   | Description                                           |
 |-----------------------------|-------------------------------------------------------|
-| index.css                   | Stylesheet for templates/index.html                   |
+| global.css                  | Stylesheet for all html.                              |
+| global_mobile.css           | Styleshite for all html on mobile view.               |
 | navbar.css                  | Stylesheet for static/navbar.html                     |
-| search_and_browse_items.css | Stylesheet for templates/search_and_browse_items.html |
+| navbar_mobile.css           | Stylesheet for mobile view of static/navbar.html      |
+
