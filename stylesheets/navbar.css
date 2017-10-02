@@ -28,3 +28,8 @@
 	line-height: 30px; /*Line high has to equal #breadcrumb_bar's height*/
 	color: white;
 }
+
+#propbox_logo {
+	width: 74px; 
+	height: 35px;
+}
