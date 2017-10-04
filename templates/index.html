@@ -11,33 +11,76 @@
     </script>
 
     <title>Prop Box</title>
+    <style type="text/css">
+      /* Home page-specific CSS */
+      #home-pg-container {
+        margin: 0 auto;
+        width: 80%;
+      }
+
+      #welcome-msg {
+        font-size: 2.2em;
+        text-align: center;
+        width: 100%;
+      }
+
+      form {
+        border: 0;
+        display: inline-block;
+        padding: 0 10px;
+        width: 300px;
+      }
+
+      form input[type=submit] {
+        border: 0;
+        background-color: rgb(174,100,211);
+        color: #fff;
+        font-size: 2em;
+        transition: background-color 0.1s ease;
+        -webkit-transition: background-color 0.1s ease;
+        width: 100%;
+      }
+
+        form input[type=submit]:hover {
+          background-color: rgb(203, 156, 227);
+        }
+
+      #actions {
+        margin: 40px auto;
+        text-align: center;
+      }
+    </style>
 </head>
 
 <body>
   <div id="navbar_holder"></div>
   <br/>
-  <div id="logo" style="margin: auto; width: 50%; text-align: center;">
-    <img src="/image/propboxlogo_color.png" alt="Propbox" style="width: 50%;">
-  </div>
-  <p>{{user.name}}</p>
-  {% if user.permissions != "STANDARD_USER" %}
-  <p>You are a{% if user.permissions == "TRUSTED_USER" %} trusted user.{% else %}n admin.{% endif %}</p>
-  &nbsp;<form action='/review_edits' method='get' style="display: inline-block;"><input type='submit' value="Review Edits"></form>
-  {% if user.permissions == "ADMIN" %}
-  <form action="manage_users" style="display: inline-block;">
-      <input type="submit" value="Manage Users">
-  </form>
-  {% endif %}
-  <form action="review_deletions" style="display: inline-block;">
+  <div id="home-pg-container">
+    <div id="logo" style="margin: auto; width: 50%; text-align: center;">
+      <img src="/image/propboxlogo_color.png" alt="Propbox" style="width: 50%;">
+    </div>
+    <p id="welcome-msg">{{user.name}},
+    {% if user.permissions != "STANDARD_USER" %}
+    you are currently logged in as a{% if user.permissions == "TRUSTED_USER" %} trusted user.{% else %}n admin.{% endif %}</p>
+    <div id="actions">
+  &nbsp;<form action='/review_edits' method='get'><input type='submit' value="Review Edits"></form>
+    {% if user.permissions == "ADMIN" %}
+    <form action="manage_users">
+      <input type="submit" value="Users">
+    </form>
+    {% endif %}
+    <form action="review_deletions">
       <input type="submit" value="Review Deletions">
-  </form>
-  <br/>{% endif %}
-  <form action="search_and_browse" method="get" style="display: inline-block;">
-    <input type="submit" value="Search and Browse for Items">
-  </form>
-  <form style="display: inline-block;" action="/add_item" method="get">
-    <input type="submit" value="Add Item">
-  </form>
+    </form>
+    {% endif %}
+    <form action="search_and_browse" method="get">
+      <input type="submit" value="Inventory">
+    </form>
+    <form action="/add_item" method="get">
+      <input type="submit" value="Add Item">
+    </form>
+    </div>
+  </div>
   <br/><br/>
 </body>
 </html>

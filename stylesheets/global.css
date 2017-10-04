@@ -1,5 +1,6 @@
 body {
   background-color: #ddd;
+  font-family: 'Quicksand', sans-serif;
 }
 
 .modal {
@@ -53,7 +54,7 @@ body {
   padding: 5px;
   display: inline-block;
 }
- 
+
 .submitButton {
     margin: 5px;
     padding: 5px 10px 5px 10px;

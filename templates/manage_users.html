@@ -10,6 +10,56 @@
   </script>
 
   <title>Prop Box</title>
+  <style type="text/css">
+  /* Manage Users page-specific CSS */
+  h3 {
+      font-size: 2em;
+      margin: 18px auto;
+      width: 80%;
+  }
+
+  .user-info {
+      background-color: #F9F9F9;
+      margin: 0 auto;
+      padding: 12px 20px;
+      width: 80%;
+      display: table;
+  }
+
+    .user-info h4 {
+        float: left;
+        margin: 0;
+        padding-left: 0;
+        font-size: 36px;
+    }
+
+    .user-info form {
+        font-size: 18px;
+        display: block;
+        float: right;
+    }
+
+      .user-info form select {
+          border: 0;
+          border-radius: 6px;
+          padding: 8px;
+      }
+
+      .user-info form input[type=submit] {
+          border: 0;
+          border-radius: 6px;
+          padding: 8px 14px;
+          color: #fff;
+          background-color: rgb(174,100,211);
+          margin: 0 14px;
+          transition: background-color 0.1s ease;
+          -webkit-transition: background-color 0.1s ease;
+      }
+
+        .user-info form input[type=submit]:hover {
+            background-color: #DA81F5;
+        }
+  </style>
 </head>
 
 <body>
@@ -17,7 +67,7 @@
 
   <h3>Pending Users</h3>
   {% for user in pending_users %}
-  <div>
+  <div class="user-info">
     <h4> {{user.name}} </h4>
     <form action="/manage_users" method="post">
       <select name="permission_level">
@@ -33,7 +83,7 @@
 
   <h3>Active Users</h3>
   {% for user in active_users %}
-  <div>
+  <div class="user-info">
   	<h4> {{user.name}} </h4>
     <form action="/manage_users" method="post">
     	<select name="permission_level">
@@ -49,7 +99,7 @@
 
   <h3>Deactivated Users</h3>
   {% for user in deactivated_users %}
-  <div>
+  <div class="user-info">
     <h4> {{user.name}} </h4>
     <form action="/manage_users" method="post">
       <select name="permission_level">
