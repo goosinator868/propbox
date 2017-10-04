@@ -12,9 +12,13 @@
 	border-color: rgb(174,100,211);
 }
 
-#home_button {
+#navButtons {
 	text-align: left;
 	float: left;
+}
+
+#navButtons * {
+	display: inline-block;
 }
 
 #breadcrumb_bar {

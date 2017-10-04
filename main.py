@@ -135,6 +135,7 @@ def CommitEdit(old_key, new_item, was_orphan=False,suggestion=False):
 
 ## Handlers
 
+""" Disabled for moving.
 # Loads the main page.
 class MainPage(webapp2.RequestHandler):
     @auth.login_required
@@ -143,6 +144,8 @@ class MainPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
         user = GetCurrentUser(self.request)
         self.response.write(ValidateHTML(template.render({'user':user})))
+
+"""
 
 
 #Loads add item page and adds item to database
@@ -627,10 +630,13 @@ class ReviewDeletions(webapp2.RequestHandler):
         self.response.write(ValidateHTML(template.render({'deleted':deleted})))
 
 #Loads the search and browsing page.
-class SearchAndBrowse(webapp2.RequestHandler):
+# Renamed from SearchAndBrowse
+class MainPage(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
-        template = JINJA_ENVIRONMENT.get_template('templates/search_and_browse_items.html')
+        #template = JINJA_ENVIRONMENT.get_template('templates/search_and_browse_items.html')
+        template = JINJA_ENVIRONMENT.get_template('templates/index.html')
+        user = GetCurrentUser(self.request);
         try:
             # Filter search items
             item_name_filter = self.request.get('filter_by_name')
@@ -661,7 +667,7 @@ class SearchAndBrowse(webapp2.RequestHandler):
             if (item_type_filter == "" or item_type_filter == None):
                 item_type_filter = "All"
             # send to display
-            page = template.render({'items': items, 'item_type_filter': item_type_filter, 'item_name_filter': item_name_filter, 'item_condition_filter': item_condition_filter})
+            page = template.render({'user':user,'items': items, 'item_type_filter': item_type_filter, 'item_name_filter': item_name_filter, 'item_condition_filter': item_condition_filter})
             self.response.write(ValidateHTML(page))
         except:
             # first time opening or item has been added
@@ -751,6 +757,6 @@ app = webapp2.WSGIApplication([
     ('/view_users_in_group', ViewUsersInGroup),
     ('/item_details', ViewItemDetails),
     ('/review_deletions', ReviewDeletions),
-    ('/search_and_browse', SearchAndBrowse),
+    #('/search_and_browse', SearchAndBrowse),
     ('/.*', MainPage),
 ], debug=True)
