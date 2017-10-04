@@ -61,14 +61,14 @@ def login_required(handler):
             return
         user = GetCurrentUser(_self.request)
         if user is None:
-            user = User(name=get_user_name(_self.request), id=get_user_id(_self.request), permissions="PENDING_USER")
-            if len(User.query(User.permissions == "ADMIN").fetch()) == 0:
-                user.permissions = "ADMIN"
+            user = User(name=get_user_name(_self.request), id=get_user_id(_self.request), permissions="Pending user")
+            if len(User.query(User.permissions == "Admin").fetch()) == 0:
+                user.permissions = "Admin"
             user.put()
-        if user.permissions == "PENDING_USER":
+        if user.permissions == "Pending user":
             _self.redirect("/pending_approval")
             return
-        if user.permissions == "DEACTIVATED_USER":
+        if user.permissions == "Deactivated user":
             _self.redirect("/account_deactivated")
         else:
             handler(_self, *args, **kwargs)

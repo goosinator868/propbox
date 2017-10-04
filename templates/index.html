@@ -60,11 +60,11 @@
       <img src="/image/propboxlogo_color.png" alt="Propbox" style="width: 50%;">
     </div>
     <p id="welcome-msg">{{user.name}},
-    {% if user.permissions != "STANDARD_USER" %}
-    you are currently logged in as a{% if user.permissions == "TRUSTED_USER" %} trusted user.{% else %}n admin.{% endif %}</p>
+    {% if user.permissions != "Standard user" %}
+    you are currently logged in as a{% if user.permissions == "Trusted user" %} trusted user.{% else %}n admin.{% endif %}</p>
     <div id="actions">
   &nbsp;<form action='/review_edits' method='get'><input type='submit' value="Review Edits"></form>
-    {% if user.permissions == "ADMIN" %}
+    {% if user.permissions == "Admin" %}
     <form action="manage_users">
       <input type="submit" value="Users">
     </form>
