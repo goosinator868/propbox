@@ -67,7 +67,7 @@ def CommitDelete(item_key,user):
     item = item_key.get()
     if item.outdated:
         raise OutdatedEditException()
-    if user.permissions=="STANDARD_USER":
+    if user.permissions=="Standard user":
         item.marked_for_deletion = True
     else:
         item.deleted = True
@@ -254,7 +254,7 @@ class EditItem(webapp2.RequestHandler):
     def post(self):
         # permissions logic
         user = GetCurrentUser(self.request)
-        standard_user = user.permissions == "STANDARD_USER"
+        standard_user = user.permissions == "Standard user"
         old_item_key = ndb.Key(urlsafe=self.request.get('old_item_key'))
         old_item = old_item_key.get()
         new_item = cloneItem(old_item, old_item_key)
@@ -279,7 +279,7 @@ class EditItem(webapp2.RequestHandler):
         new_item.clothing_size_string = self.request.get('clothing_size_string')
         new_item.tags = ParseTags(self.request.get('tags'))
         new_item.condition = self.request.get('condition')
-       
+
         # Override certain inputs due to costume and prop defaults
         if new_item.item_type == "Costume" and new_item.clothing_article_type == "N/A":
             # An article type was not selected thus is filtered as an
@@ -334,7 +334,7 @@ class DeleteItem(webapp2.RequestHandler):
             logging.info('could not purge the item, please try again')
         # Redirect back to items view.
         sleep(0.1)
-        if user.permissions == "STANDARD_USER":
+        if user.permissions == "Standard user":
             self.redirect('/item_details?'+urllib.urlencode({'item_id':item_key.urlsafe()}))
         else:
             self.redirect("/search_and_browse")
@@ -462,7 +462,7 @@ class ReviewEdits(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         user = GetCurrentUser(self.request)
-        if (user.permissions == "STANDARD_USER"):
+        if (user.permissions == "Standard user"):
             self.redirect('/')
             return
         template = JINJA_ENVIRONMENT.get_template('templates/review_edits.html')
@@ -503,7 +503,7 @@ class ReviewEdits(webapp2.RequestHandler):
 class KeepRevision(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
-        if GetCurrentUser(self.request).permissions == "STANDARD_USER":
+        if GetCurrentUser(self.request).permissions == "Standard user":
             self.redirect('/')
             return
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
@@ -556,7 +556,7 @@ class DiscardRevision(webapp2.RequestHandler):
 class RevertItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
-        if GetCurrentUser(self.request).permissions == "STANDARD_USER":
+        if GetCurrentUser(self.request).permissions == "Standard user":
             self.redirect('/')
             return
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
@@ -615,7 +615,7 @@ class ReviewDeletions(webapp2.RequestHandler):
     def get(self):
         logging.info("Manage Deletions")
         user = GetCurrentUser(self.request)
-        if (user.permissions == "STANDARD_USER"):
+        if (user.permissions == "Standard user"):
             self.redirect('/')
             return
         template = JINJA_ENVIRONMENT.get_template('templates/review_deletions.html')
@@ -674,15 +674,15 @@ class ManageUsers(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         user = GetCurrentUser(self.request)
-        if (user.permissions != "ADMIN"):
+        if (user.permissions != "Admin"):
             self.redirect('/')
             return
         template = JINJA_ENVIRONMENT.get_template('templates/manage_users.html')
         users = User.query().fetch()
         users.remove(user)
-        active_users = [user for user in users if user.permissions != "DEACTIVATED_USER" and user.permissions != "PENDING_USER"]
-        deactivated_users = [user for user in users if user.permissions == "DEACTIVATED_USER"]
-        pending_users = [user for user in users if user.permissions == "PENDING_USER"]
+        active_users = [user for user in users if user.permissions != "Deactivated user" and user.permissions != "Pending user"]
+        deactivated_users = [user for user in users if user.permissions == "Deactivated user"]
+        pending_users = [user for user in users if user.permissions == "Pending user"]
         page = template.render(
             {'users': users,
              'active_users': active_users,
