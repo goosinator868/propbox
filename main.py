@@ -568,6 +568,7 @@ class RevertItem(webapp2.RequestHandler):
         sleep(0.1)
         self.redirect('/review_edits')
 
+""" Disabled group access.
 class CreateGroup(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
@@ -600,6 +601,8 @@ class ViewUsersInGroup(webapp2.RequestHandler):
         logging.info("View Users In Group")
         template = JINJA_ENVIRONMENT.get_template('templates/users_in_group.html')
         self.response.write(ValidateHTML(template.render({})))
+
+"""
 
 class ViewItemDetails(webapp2.RequestHandler):
     @auth.login_required
@@ -751,12 +754,11 @@ app = webapp2.WSGIApplication([
     ('/manage_users', ManageUsers),
     ('/post_auth', PostAuth),
     ('/pending_approval', PendingApproval),
-    ('/create_group', CreateGroup),
-    ('/group_list', GroupList),
-    ('/view_group', ViewGroup),
-    ('/view_users_in_group', ViewUsersInGroup),
+    #('/create_group', CreateGroup),
+    #('/group_list', GroupList),
+    #('/view_group', ViewGroup),
+    #('/view_users_in_group', ViewUsersInGroup),
     ('/item_details', ViewItemDetails),
     ('/review_deletions', ReviewDeletions),
-    #('/search_and_browse', SearchAndBrowse),
     ('/.*', MainPage),
 ], debug=True)
