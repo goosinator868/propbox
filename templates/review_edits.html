@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <link rel="import" href="/static/common.html">
 
@@ -65,7 +65,7 @@
       </div>
 
       <br/>
-      <button class="submitButton" id="cancel" onclick="closeConfirm('{{item[0].key.urlsafe()}}',{{i}})">No.</button>
+      <button class="submitButton" onclick="closeConfirm('{{item[0].key.urlsafe()}}',{{i}})">No.</button>
       <form action="/discard_revision" method="post" style="display: inline-block;">
         <input type="hidden" name="item_id" value="{{item[1][i].key.urlsafe()}}">
         <input type="hidden" name="newest_id" value="{{item[0].key.urlsafe()}}">
@@ -99,7 +99,7 @@
       </div>
 
       <br/>
-      <button id="cancel" onclick="closeConfirm('{{item[0].key.urlsafe()}}',{{i}})" class="submitButton">Cancel</button>
+      <button onclick="closeConfirm('{{item[0].key.urlsafe()}}',{{i}})" class="submitButton">Cancel</button>
       <form action="/keep_revision" method="post"  style="display: inline-block;">
         <input type="hidden" name="item_id" value="{{item[1][i].key.urlsafe()}}">
         <input type="hidden" name="parent_id" value="{{item[0].key.urlsafe()}}">
@@ -123,7 +123,7 @@
           <h4>created by : {{item[0].creator_name}} at {{item[0].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
           <p>{{item[0].description}}</p>
           {% if item[0].image %}
-            <img src="view_image?image_id={{item[0].key.urlsafe()}}" class="thumbnail" />
+            <img src="view_image?image_id={{item[0].key.urlsafe()}}" class="thumbnail" alt="{{item[0].name}}"/>
           {% endif %}
           <br/>
           <p>Deleted = {{item[0].deleted}} and Outdated = {{item[0].outdated}}</p>
@@ -136,13 +136,13 @@
               <p>{{item[1][i].description}}</p>
               <!-- TODO: FIX image view for past versions. -->
               {% if item[1][i].image %}
-                <img src="view_image?image_id={{item[1][i].key.urlsafe()}}" class="thumbnail" />
+                <img src="view_image?image_id={{item[1][i].key.urlsafe()}}" class="thumbnail" alt="{{item[1][i].name}}"/>
               {% endif %}
               <br/>
               <p>Deleted = {{item[1][i].deleted}} and Outdated = {{item[1][i].outdated}}</p>
               <button onclick="showConfirm('{{item[0].key.urlsafe()}}',{{i}})" class="submitButton">Revert To This Version</button>
               <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i-1)|string}}')"{% if i == 0 %} disabled="disabled" {% endif %} class="submitButton">Newer</button>
-              <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i+1)|string}}')"{% if i == item[2][-1] %} disabled="disabled" {% endif %};" class="submitButton">Older</button>
+              <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i+1)|string}}')"{% if i == item[2][-1] %} disabled="disabled" {% endif %} class="submitButton">Older</button>
             </div>
             {% endfor %}
           <form action="/keep_revision" method="post">
@@ -165,7 +165,7 @@
           <h4>created by : {{item[0].creator_name}} at {{item[0].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
           <p>{{item[0].description}}</p>
           {% if item[0].image %}
-            <img src="view_image?image_id={{item[0].key.urlsafe()}}" class="thumbnail" />
+            <img src="view_image?image_id={{item[0].key.urlsafe()}}" class="thumbnail" alt="{{item[0].name}}"/>
           {% endif %}
           <br/>
           <p>Deleted = {{item[0].deleted}} and Outdated = {{item[0].outdated}}</p>
@@ -178,7 +178,7 @@
               <p>{{item[1][i].description}}</p>
               <!-- TODO: FIX image view for past versions. -->
               {% if item[1][i].image %}
-                <img src="view_image?image_id={{item[1][i].key.urlsafe()}}" class="thumbnail" />
+                <img src="view_image?image_id={{item[1][i].key.urlsafe()}}" class="thumbnail" alt="{{item[1][i].name}}"/>
               {% endif %}
               <br/>
               <p>Deleted = {{item[1][i].deleted}} and Outdated = {{item[1][i].outdated}}</p>
