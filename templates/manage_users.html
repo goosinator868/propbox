@@ -59,59 +59,82 @@
         .user-info form input[type=submit]:hover {
             background-color: #DA81F5;
         }
+
+        #page-heading {
+          background-color: #DA81F5;
+          color: #FFF;
+        }
+
+          #page-heading h1 {
+            color: #FFF;
+            margin: 0;
+            padding: 0.4em 0;
+            text-align: center;
+            font-size: 3.4em;
+          }
   </style>
 </head>
 
 <body>
   <div id="navbar_holder"></div>
 
-  <h3>Pending Users</h3>
-  {% for user in pending_users %}
-  <div class="user-info">
-    <h4> {{user.name}} </h4>
-    <form action="/manage_users" method="post">
-      <select name="permission_level">
-        {% for level in permission_levels %}
-          <option value="{{level}}" {% if user.permissions == level %} selected="selected" {% endif %}>{{level}}</option>
-        {% endfor %}
-      </select>
-      <input type="hidden" name="user_key" value="{{user.key.urlsafe()}}">
-      <input type="submit" value="Update permissions">
-    </form>
+  <div id="page-heading">
+    <h1>Manage users</h1>
   </div>
-  {% endfor %}
 
-  <h3>Active Users</h3>
-  {% for user in active_users %}
-  <div class="user-info">
-  	<h4> {{user.name}} </h4>
-    <form action="/manage_users" method="post">
-    	<select name="permission_level">
-        {% for level in permission_levels %}
-          <option value="{{level}}" {% if user.permissions == level %} selected="selected" {% endif %}>{{level}}</option>
-        {% endfor %}
-      </select>
-      <input type="hidden" name="user_key" value="{{user.key.urlsafe()}}">
-      <input type="submit" value="Update permissions">
-    </form>
-  </div>
+  {% if pending_users|length > 0 %}
+    <h3>Pending users</h3>
+    {% for user in pending_users %}
+      <div class="user-info">
+          <h4> {{user.name}} </h4>
+          <form action="/manage_users" method="post">
+            <select name="permission_level">
+              {% for level in permission_levels %}
+              <option value="{{level}}" {% if user.permissions == level %} selected="selected" {% endif %}>{{level}}</option>
+              {% endfor %}
+            </select>
+            <input type="hidden" name="user_key" value="{{user.key.urlsafe()}}">
+            <input type="submit" value="Update permissions">
+          </form>
+        </div>
   {% endfor %}
+  {% endif %}
 
-  <h3>Deactivated Users</h3>
-  {% for user in deactivated_users %}
-  <div class="user-info">
-    <h4> {{user.name}} </h4>
-    <form action="/manage_users" method="post">
-      <select name="permission_level">
-        {% for level in permission_levels %}
-          <option value="{{level}}" {% if user.permissions == level %} selected="selected" {% endif %}>{{level}}</option>
-        {% endfor %}
-      </select>
-      <input type="hidden" name="user_key" value="{{user.key.urlsafe()}}">
-      <input type="submit" value="Update permissions">
-    </form>
-  </div>
+  {% if active_users|length > 0 %}
+    <h3>Active users</h3>
+    {% for user in active_users %}
+      <div class="user-info">
+          <h4> {{user.name}} </h4>
+          <form action="/manage_users" method="post">
+            <select name="permission_level">
+              {% for level in permission_levels %}
+              <option value="{{level}}" {% if user.permissions == level %} selected="selected" {% endif %}>{{level}}</option>
+              {% endfor %}
+            </select>
+            <input type="hidden" name="user_key" value="{{user.key.urlsafe()}}">
+            <input type="submit" value="Update permissions">
+          </form>
+        </div>
   {% endfor %}
+  {% endif %}
+
+  {% if deactivated_users|length > 0 %}
+    <h3>Deactivated users</h3>
+    {% for user in deactivated_users %}
+      <div class="user-info">
+          <h4> {{user.name}} </h4>
+          <form action="/manage_users" method="post">
+            <select name="permission_level">
+              {% for level in permission_levels %}
+              <option value="{{level}}" {% if user.permissions == level %} selected="selected" {% endif %}>{{level}}</option>
+              {% endfor %}
+            </select>
+            <input type="hidden" name="user_key" value="{{user.key.urlsafe()}}">
+            <input type="submit" value="Update permissions">
+          </form>
+        </div>
+  {% endfor %}
+  {% endif %}
 
 </body>
 </html>
