@@ -7,17 +7,30 @@
 
 #dropdown {
 	display: inline-block;
+	margin-top: 5px;
 	background-color:rgb(174,100,211);
 	border-color: rgb(174,100,211);
 }
 
-#navButtons {
+#navButtons { /*Container of buttons*/
 	text-align: left;
 	float: left;
 }
 
-#navButtons * {
+#navButtons * { /*Buttons themselves*/
 	display: inline-block;
+}
+
+#navButtons>form [type=submit] {
+	background-color: rgb(55,162,121);
+	color: white;
+	border-radius: 5px 5px 5px 5px;.
+	border-width: 0px;
+	border-color: rgb(174,100,211);
+	border-style: none;
+	height: 42px; 
+	width: 89px;
+	font-size: large;
 }
 
 #breadcrumb_bar {

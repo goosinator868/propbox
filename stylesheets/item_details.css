@@ -1,0 +1,40 @@
+.item_image {
+	margin:auto;
+	display: block;
+	width: 60vw;
+	padding-top: 2vh;
+}
+
+#item_details {
+	border-style: solid;
+	width: 55%;
+	margin: auto;
+	margin-top: 10px;
+	border-width: 1px;
+	border-radius: 5px 5px 5px 5px;
+}
+
+#item_details, #buttons {
+	text-align: center;
+}
+
+#buttons>form {
+	display: inline-block;
+	margin: 0px 2px 0px 2px;
+}
+
+p {
+	width: 95%;
+	margin:auto;
+	text-align: left;
+}
+
+#description {
+	font-size: large;
+}
+
+#creator {
+	text-align: right;
+	width: 100%;
+	padding-right: 5pt;
+}
