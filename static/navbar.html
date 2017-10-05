@@ -1,20 +1,17 @@
 <!-- User bar / navigation -->
+<div id="userBar">
+  <i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;<span id="user"></span>
+  <a href="" id="sign-out">Log out</a>
+</div>
 <div id="navbar">
-  <div id="navButtons">
-    <div id="home_button">
-      <a href="/"><img id="propbox_logo" src="/image/propboxlogo_white.png" alt="Home" class="navButton"></a>
-    </div>
-    <form action="/add_item" method="get" id="nav_add_item_button" class="navButton">
-      <input type="submit" value="Add Item">
-    </form>
-  </div>
-  <div class="btn-group dropdown">
-    <button id="dropdown" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span id="user"></span>&nbsp;<span class="caret"></span></button>
-    <ul class="dropdown-menu">
-      <!-- <li><a href="">Profile</a></li> -->
-      <li><a href="" id="sign-out">Sign out</a></li>
-    </ul>
-  </div>
+  <ul id="navItems">
+    <li><a href="/"><img id="propbox_logo" src="/image/propboxlogo_white.png" alt="Home page"></a></li>
+    <li>
+      <form action="/add_item" method="get">
+        <input type="submit" value="Add item">
+      </form>
+    </li>
+  </ul>
 </div>
 <div id="breadcrumb_bar">
   <span id="breadcrumbs">Home &gt;</span>

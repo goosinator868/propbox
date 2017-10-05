@@ -1,7 +1,6 @@
 #navbar {
-    text-align: right;
-    padding: 10px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
     background-color: rgb(87,219,168);
     width: 100%;
 }
@@ -35,6 +34,63 @@
 }
 
 #propbox_logo {
-	height: 40px; 
-	
+	height: 40px;
+}
+
+#userBar {
+  background-color: #4eca9a;
+  color: #fff;
+  font-size: 1.2em;
+  text-align: right;
+}
+
+#userBar a {
+  background-color: #45ad85;
+  color: #fff;
+  display: inline-block;
+  margin: 0 0 0 20px;
+  padding: 10px 20px;
+  text-decoration: none;
+  transition: background-color 0.1s ease;
+}
+
+  #userBar a:hover {
+    background-color: rgb(87, 219, 176);
+  }
+
+#navItems {
+  display: table;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#navItems li {
+  background-color: rgb(87,219,168);
+  display: table-cell;
+  padding: 6px 2px;
+  text-align: center;
+  transition: background-color 0.1s ease;
+  width: 150px;
+}
+
+  #navItems li:hover {
+    background-color: #4eca9a;
+  }
+
+#navItems form {
+  padding: 0;
+}
+
+#navItems form input[type=submit] {
+  border: 0;
+  color: #fff;
+  font-size: 1.5em;
+  margin: 6px 0;
+  padding: 0.4em 2em;
+}
+
+#navItems li input[type=submit] {
+  background: none;
+  padding: 0;
 }

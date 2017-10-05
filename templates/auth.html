@@ -12,18 +12,35 @@
   <!-- First party imports in specific dependency ordering -->
   <script src="/scripts/cookies.js"></script>
   <script src="/scripts/auth_page_auth.js"></script>
-  <title>Prop Box</title>
+
+  <!-- Google Fonts stylesheets -->
+  <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500" rel="stylesheet">
+
+  <style type="text/css">
+  body {
+    background-color: #EAEAEA;
+    font-family: 'Quicksand', sans-serif;
+  }
+  </style>
+
+  <title>Propbox :: Log in</title>
 </head>
 <body>
   <div id="logged-out">
-    <h1>Prop Box</h1>
-    <h3>Sign in to access your warehouse</h3>
+    <div class="logo" style="margin: 1.5em auto; width: 50%; text-align: center;">
+      <img src="/image/propboxlogo_color.png" alt="Propbox" style="width: 50%;">
+    </div>
+    <br>
     <!-- Magic ID for firebase login UI -->
     <div id="firebaseui-auth-container"></div>
   </div>
 
   <div id="logged-in">
-    <h1>Redirecting, <span id="user"></span>!</h1>
+    <div class="logo" style="margin: 1.5em auto; width: 50%; text-align: center;">
+      <img src="/image/propboxlogo_color.png" alt="Propbox" style="width: 50%;">
+      <h1>Welcome, <span id="user"></span>!</h1>
+      <h3>Please wait a moment while you are logged in...</h3>
+    </div>
   </div>
 
 </body>

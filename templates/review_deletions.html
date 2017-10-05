@@ -45,6 +45,9 @@
 <body>
   <div id="navbar_holder"></div>
   <!-- New content here -->
+  <div id="page-heading">
+    <h1>Review deletions</h1>
+  </div>
 
   {% for item in deleted %}
   <div id="confirm_delete_{{item.key.urlsafe()}}" class="modal">
@@ -61,26 +64,20 @@
   </div>
   {% endfor %}
 
-  <br/>
-  This is the page for approving the deletion of items.<br/>
-
   <div id="left-pane">
-    Deleted List<br/>
     <div id="deleted_list">
       {% for item in deleted %}
         <div class="item_container">
           <h2>{{item.name}}</h2>
-          <h4>created by : {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
-          <p>{% if item.marked_for_deletion %}Marked for deletion by:{% else %}Deleted by:{% endif %} {{item.suggested_by}}.</p>
+          <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</h4>
+          <p>{% if item.marked_for_deletion %}<b>Marked for deletion by</b>:{% else %}<b>Deleted by</b>:{% endif %} {{item.suggested_by}}</p>
           <p>{{item.description}}</p>
           {% if item.image %}
             <img src="view_image?image_id={{item.key.urlsafe()}}" alt="image of {{item.name}}" class="thumbnail" />
           {% endif %}
-          <p>{{item.key}}</p>
           <br/>
-        <button onclick="showConfirm('delete','{{item.key.urlsafe()}}',-1)" class="submitButton">Delete Forever</button>
-
-        <form action="/undelete_item" method="post">
+        <form action="/undelete_item" method="post" style="text-align: right;">
+            <button onclick="showConfirm('delete','{{item.key.urlsafe()}}',-1)" class="submitButton">Delete Forever</button>
             <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
             <input type="submit" value="Restore Item" class="submitButton">
           </form>

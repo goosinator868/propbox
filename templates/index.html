@@ -194,7 +194,6 @@
       /* Home page-specific CSS */
       #home-pg-container {
         margin: 0 auto;
-        width: 80%;
       }
 
       #welcome-msg {
@@ -207,20 +206,20 @@
         border: 0;
         display: inline-block;
         padding: 0 10px;
-        width: 300px;
       }
 
-      form input[type=submit] {
+      form button {
         border: 0;
         background-color: rgb(174,100,211);
         color: #fff;
-        font-size: 2em;
+        font-size: 1.6em;
+        margin: 6px 0;
+        padding: 0.4em 2em;
         transition: background-color 0.1s ease;
         -webkit-transition: background-color 0.1s ease;
-        width: 100%;
       }
 
-        form input[type=submit]:hover {
+        form button:hover {
           background-color: rgb(203, 156, 227);
         }
 
@@ -239,21 +238,22 @@
     <div id="logo" style="margin: auto; width: 50%; text-align: center;">
       <img src="/image/propboxlogo_color.png" alt="Propbox" style="width: 50%;">
     </div>
-    <p id="welcome-msg">{{user.name}},
+    <p id="welcome-msg">
     {% if user.permissions != "Standard user" %}
+    {{user.name}}, 
     you are currently logged in as a{% if user.permissions == "Trusted user" %} trusted user.{% else %}n admin.{% endif %}</p>
     <div id="actions">
-      &nbsp;<form action='/review_edits' method='get'><input type='submit' value="Review Edits"></form>
+      &nbsp;<form action='/review_edits' method='get'><button type="submit"><i class='fa fa-pencil fa-3x' aria-hidden='true'></i><br>Review edits</button></form>
       {% if user.permissions == "Admin" %}
       <form action="manage_users">
-        <input type="submit" value="Users">
+        <button type="submit"><i class='fa fa-user fa-3x' aria-hidden='true'></i><br>Manage users</button>
       </form>
       {% endif %}
       <form action="review_deletions">
-        <input type="submit" value="Review Deletions">
+        <button type="submit"><i class='fa fa-trash fa-3x' aria-hidden='true'></i><br>Review deletions</button>
       </form>
-      {% endif %}
     </div>
+    {% endif %}
   </div>
   <br/><br/>
         <div id="left-pane">

@@ -14,11 +14,11 @@
 
 <body>
   <div id="navbar_holder"></div>
-  <!-- New content here -->
-  <br/>
-  This is the page for creating a new item.
+  <div id="page-heading">
+    <h1>Add an item</h1>
+  </div>
+
   <div class="form">
-      <h1> Create new item </h1>
       <form action="/add_item" enctype="multipart/form-data" method="post">
           <input name="name" type="text" placeholder="name"><br>
           <input name="image" type="file" accept=".png, .gif, .jpg, .jpeg"><br>

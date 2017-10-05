@@ -10,12 +10,19 @@
   </script>
 
   <title>Prop Box</title>
+  <style type="text/css">
+  /* Page-specific CSS */
+  div#navbar {display: none;}
+  div#breadcrumb_bar {display: none;}
+  </style>
 </head>
 
 <body>
   <div id="navbar_holder"></div>
   <!-- New content here -->
-  <h2>Your account is under review and must be approved by an administrator. Contact an administrator to resolve.
-  </h2>
+  <div id="error">
+    <i class="fa fa-exclamation-circle fa-5x" aria-hidden="true"></i>
+    <h2>Your account is under review and must be approved by an administrator. Contact an administrator to resolve.</h2>
+  </div>
 </body>
 </html>
