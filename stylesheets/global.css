@@ -65,6 +65,8 @@ body {
     background-color: #ae64d3;
     transition: background-color 0.1s ease, color 0.1s ease;
     -webkit-transition: background-color 0.1s ease, color 0.1s ease;
+    -moz-transition: background-color 0.1s ease, color 0.1s ease;
+    -o-transition: background-color 0.1s ease, color 0.1s ease;
 }
 
 .submitButton:hover {
@@ -103,14 +105,14 @@ body {
 }
 
 #page-heading {
-  background-color: #DA81F5;
+  background-color: #efefef;
   color: #FFF;
 }
 
   #page-heading h1 {
-    color: #FFF;
+    color: #DA81F5;
     margin: 0;
-    padding: 0.4em 0;
+    padding: 0.5em 0;
     text-align: center;
     font-size: 3.4em;
   }
