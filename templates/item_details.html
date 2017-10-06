@@ -9,7 +9,7 @@
       SetUpNavBar(SetUpFirebase);
     });
   </script>
-  
+
   <title>Prop Box</title>
 </head>
 
@@ -54,9 +54,9 @@
         <input type="submit" value="Delete" class="submitButton">
       </form>
       {% endif %}
-      <p id="creator">Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</p>
+      <p id="creator">Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</p>
     </div>
     <br/><br/><br/>
-  
+
 </body>
 </html>

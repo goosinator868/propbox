@@ -188,12 +188,16 @@
   </script>
 
 
-    <title>Prop Box</title>
+    <title>Home page :: Propbox</title>
 
     <style type="text/css">
       /* Home page-specific CSS */
       #home-pg-container {
         margin: 0 auto;
+      }
+
+      #home-pg-container button {
+        border-radius: 6px;
       }
 
       #welcome-msg {
@@ -240,7 +244,7 @@
     </div>
     <p id="welcome-msg">
     {% if user.permissions != "Standard user" %}
-    {{user.name}}, 
+    {{user.name}},
     you are currently logged in as a{% if user.permissions == "Trusted user" %} trusted user.{% else %}n admin.{% endif %}</p>
     <div id="actions">
       &nbsp;<form action='/review_edits' method='get'><button type="submit"><i class='fa fa-pencil fa-3x' aria-hidden='true'></i><br>Review edits</button></form>
@@ -273,7 +277,7 @@
                                         </a>
                                     {% endif %}
                                     <h3>{{item.item_type}}</h3>
-                                    <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+                                    <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</h4>
                                     <h5><b>Condition</b>: {{item.condition}}</h5>
                                     <p>{{item.description}}</p>
                                     <p>Article:{{item.clothing_article_type}}</p>
@@ -298,7 +302,7 @@
                                     </a>
                                 {% endif %}
                                 <h3>{{item.item_type}}</h3>
-                                <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+                                <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</h4>
                                 <h5><b>Condition</b>: {{item.condition}}</h5>
                                 <p>{{item.description}}</p>
                                 <p>Article:{{item.clothing_article_type}}</p>
