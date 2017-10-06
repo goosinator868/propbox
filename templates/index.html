@@ -278,7 +278,6 @@
                                     <p>{{item.description}}</p>
                                     <p>Article:{{item.clothing_article_type}}</p>
                                     <p>Tags:{% for tag in item.tags %} {{tag}},{% endfor %}</p>
-                                    <p>(Deleted = {{item.deleted}}, Outdated = {{item.outdated}}, approved = {{item.approved}}, suggested ={{item.is_suggestion}}.)</p>
                                     <form action="/item_details" method="get">
                                       <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
                                       <input type="submit" value="Item Details" class="submitButton">
@@ -303,7 +302,6 @@
                                 <p>{{item.description}}</p>
                                 <p>Article:{{item.clothing_article_type}}</p>
                                 <p>Tags:{% for tag in item.tags %} {{tag}},{% endfor %}</p>
-                                <p>(Deleted = {{item.deleted}}, Outdated = {{item.outdated}}, approved = {{item.approved}}, suggested ={{item.is_suggestion}}.)</p>
                                 <form action="/item_details" method="get">
                                   <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
                                   <input type="submit" value="Item Details" class="submitButton">
