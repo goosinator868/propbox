@@ -59,22 +59,25 @@
   <div id="navbar_holder"></div>
   <!-- New content here -->
   <div id="page-heading">
-    <h1>Edit {{item.name}}</h1>
+    <h1>Edit: {{item.name}}</h1>
   </div>
   <div id="left-pane">
-  <h2>Current version</h2>
+  <h2>Current version of {{item.name}}:</h2>
   <div class="item_details">
       <a href="view_image?image_id={{item.key.urlsafe()}}">
-      <img src="view_image?image_id={{item.key.urlsafe()}}" class="item_image" alt="Picture of {{item.name}}"/>
+        <img src="view_image?image_id={{item.key.urlsafe()}}" class="item_image" alt="Picture of {{item.name}}" style="width: 48vw;"/>
       </a>
-      <h3>{{item.item_type}}</h3>
-      <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+      <br/><br/>
+      <h3>{{item.description}}</h3>
+      <br/>
+      <p><b>Item Type:</b> {{item.item_type}}</p>
       <p><b>Condition</b>: {{item.condition}}</p>
       <p><b>Article</b>: {{item.clothing_article_type}}</p>
       <p><b>Size</b>: {{item.clothing_size_string}}, {{item.clothing_size_num}}
       <p><b>Tags</b>:{% for tag in item.tags %} {{tag}},{% endfor %}</p>
       <p><b>QR Code</b>: {{item.qr_code}}</p>
-      <p>{{item.description}}</p>
+      <p>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</p>
+      <br/>
       {% if pending_edit %}<p>{% if user.permissions != "STANDARD_USER" %} <a href="/review_edits">{% endif %}<strong>[EDITS ARE PENDING APPROVAL]</strong>{% if user.permissions != "STANDARD_USER" %}</a>{% endif %}</p>{% endif %}
 
       {% if item.marked_for_deletion %}<p><p>{% if user.permissions != "STANDARD_USER" %} <a href="/review_deletions">{% endif %}<strong>[THIS ITEM HAS BEEN MARKED FOR DELETION]</strong>{% if user.permissions != "STANDARD_USER" %}</a>{% endif %}</p>{% endif %}
