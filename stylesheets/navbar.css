@@ -28,7 +28,7 @@
 	border-width: 0px;
 	border-color: rgb(174,100,211);
 	border-style: none;
-	height: 42px; 
+	height: 42px;
 	width: 89px;
 	font-size: large;
 }
@@ -73,6 +73,7 @@
 
 #navItems {
   display: table;
+  height: 100%;
   list-style-type: none;
   margin: 0;
   padding: 0;

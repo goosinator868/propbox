@@ -9,7 +9,27 @@
     });
   </script>
 
-  <title>Prop Box</title>
+  <style type="text/css">
+    div.form {
+      background-color: #fafafa;
+      font-size: 1.2em;
+      padding: 8px;
+      width: 100%;
+    }
+
+    div.form form {
+      margin: 0 auto;
+      padding: 16px;
+      width: 800px;
+    }
+
+    input, select, textarea {
+      padding: 6px;
+      width: 100%;
+    }
+  </style>
+
+  <title>Propbox :: Add an item</title>
 </head>
 
 <body>
@@ -20,20 +40,25 @@
 
   <div class="form">
       <form action="/add_item" enctype="multipart/form-data" method="post">
-          <input name="name" type="text" placeholder="name"><br>
+          <label>Name</label>
+          <input name="name" type="text" placeholder="Enter the name of the item."><br><br>
+          <label>Image</label>
           <input name="image" type="file" accept=".png, .gif, .jpg, .jpeg"><br>
-          <textarea name="description" placeholder="description"></textarea><br>
+          <label>Describe the item.</label>
+          <textarea name="description" placeholder=""></textarea><br><br>
+          <label>Is this a costume or a prop?</label>
           <select name="item_type" class="addItemDropdown">
               <option>Costume</option>
               <option>Prop</option>
-          </select><br>
+          </select><br><br>
+          <label>Item condition</label>
           <select name="condition" class="addItemDropdown">
               <option>Good</option>
               <option>Fair</option>
               <option>Poor</option>
-              <option>Being Repaired</option>
-          </select><br>
-          <h4>Clothing Article</h4>
+              <option>Being repaired</option>
+          </select><br><br>
+          <label>Clothing article</label>
           <select name="article" class="addItemDropdown">
               <option>N/A</option>
               <option>Top</option>
@@ -43,9 +68,9 @@
               <option>Hat</option>
               <option>Coat/Jacket</option>
               <option>Other</option>
-          </select><br>
-          <h4>Size</h4>
-          <select name="clothing_size_number" class="addItemDropdown">
+          </select><br><br>
+          <label>Item size</label><br>
+          <select name="clothing_size_number" class="addItemDropdown" style="display: inline-block; width: 100px;">
               <option>N/A</option>
               <option>0</option>
               <option>1</option>
@@ -69,17 +94,17 @@
               <option>19</option>
               <option>20</option>
           </select>
-          <select name="clothing_size_string" class="addItemDropdown">
+          <select name="clothing_size_string" class="addItemDropdown" style="display: inline-block; width: 100px;">
               <option>N/A</option>
               <option>XS</option>
               <option>S</option>
               <option>M</option>
               <option>L</option>
               <option>XL</option>
-          </select><br>
-          <h4>Tags</h4>
-          <textarea name="tags" placeholder="separate tags with enter key"></textarea><br>
-          <input type="submit" value="Create" class="submitButton">
+          </select><br><br>
+          <label>Tags</label>
+          <textarea name="tags" placeholder="Separate tags with the enter key."></textarea><br><br>
+          <input type="submit" value="Create" class="submitButton" style="max-width: 100px;">
       </form>
   </div>
 </body>

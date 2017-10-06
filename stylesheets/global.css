@@ -61,10 +61,13 @@ body {
     border-radius: 8px 8px 8px 8px;
     border: 0px;
     background-color: #CCC;
+    transition: background-color 0.1s ease, color 0.1s ease;
+    -webkit-transition: background-color 0.1s ease, color 0.1s ease;
 }
 
 .submitButton:hover {
     background-color: #a0a0a0;
+    color: #fff;
 }
 
 .submitButton:disabled {
