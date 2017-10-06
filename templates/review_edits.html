@@ -112,9 +112,13 @@
   {% endfor %}
 
   <div id="navbar_holder"></div>
+  <div id="page-heading">
+    <h1>Review Edits</h1>
+  </div>
 
-  <div id="right-pane">
-    &nbsp;Items with past versions<br/>
+  <div id="right-pane" class="pane">
+    <h2>Items with past versions</h2>
+    <br/>
     <div>
       {% for item in revert %}
         <div class="item_container">
@@ -155,8 +159,9 @@
     </div>
   </div>
 
-  <div id="left-pane">
-  &nbsp;Items awaiting edit approval<br/>
+  <div id="left-pane" class="pane">
+    <h2>Items awaiting edit approval</h2>
+    <br/>
     <div>
       {% for item in suggest %}
         <div class="item_container">

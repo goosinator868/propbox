@@ -105,13 +105,17 @@ body {
   color: #FFF;
 }
 
-  #page-heading h1 {
-    color: #FFF;
-    margin: 0;
-    padding: 0.4em 0;
-    text-align: center;
-    font-size: 3.4em;
-  }
+#page-heading h1 {
+  color: #FFF;
+  margin: 0;
+  padding: 0.4em 0;
+  text-align: center;
+  font-size: 3.4em;
+}
+
+h2:first-child {
+  text-align: center;
+}
 
 #costume_specific_forms {
     display: none;
