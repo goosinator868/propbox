@@ -1,5 +1,5 @@
 body {
-  background-color: #EAEAEA;
+  background-color: #E9E9E9;
   font-family: 'Quicksand', sans-serif;
 }
 
@@ -33,7 +33,7 @@ body {
 }
 
 .item_container {
-  background-color: #eeeeee;
+  background-color: #f0f0f0;
   padding: 8px;
   display: inline-block;
   border-radius: 5px;
@@ -121,6 +121,10 @@ h2:first-child {
 
 #costume_specific_forms {
     display: none;
+}
+
+#pane_container {
+  display: inline-block;
 }
 
 #left-pane {
