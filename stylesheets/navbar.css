@@ -130,17 +130,22 @@ SOFTWARE.*/
 }
 
 #footer_holder {
+  padding: 8px 0;
+  background-color: #4eca9a;
   vertical-align: bottom;
   z-index: -1;
   left: 0px;
   bottom: 0px;
-  width: 100vw;
   height: 100%;
 }
 
 #footer p {
 	margin: auto;
 	width: 50%;
-	color: #888;
+	color: #fff;
 	text-align: center;
+}
+
+#footer #copyright {
+  font-size: 1.2em;
 }
