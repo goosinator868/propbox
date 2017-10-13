@@ -131,7 +131,6 @@ SOFTWARE.*/
 
 #footer_holder {
   padding: 8px 0;
-  background-color: #4eca9a;
   vertical-align: bottom;
   z-index: -1;
   left: 0px;
@@ -142,7 +141,7 @@ SOFTWARE.*/
 #footer p {
 	margin: auto;
 	width: 50%;
-	color: #fff;
+	color: #020;
 	text-align: center;
 }
 
