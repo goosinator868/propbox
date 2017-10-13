@@ -696,7 +696,7 @@ class MainPage(webapp2.RequestHandler):
             # first time opening or item has been added
             query = Item.query()
             items = query.fetch()
-            page = template.render({'items': items, 'item_name_filter': item_name_filter})
+            page = template.render({'user':user,'items': items, 'item_name_filter': item_name_filter})
             self.response.write(ValidateHTML(page))
 
 class ManageUsers(webapp2.RequestHandler):
