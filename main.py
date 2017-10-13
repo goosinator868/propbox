@@ -685,7 +685,7 @@ class MainPage(webapp2.RequestHandler):
                 item_condition_filter.append("Good")
                 item_condition_filter.append("Fair")
                 item_condition_filter.append("Poor")
-                item_condition_filter.append("Being Repaired")
+                item_condition_filter.append("Being repaired")
 
             if (item_type_filter == "" or item_type_filter == None):
                 item_type_filter = "All"
