@@ -21,8 +21,9 @@ SOFTWARE. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="import" href="/static/common.html">
-
+    <!-- <link rel="import" href="/static/common.html"> -->
+    {% include 'templates/common.html' %}
+    
     <script>
     $(document).ready(function(){
         SetUpNavBar(SetUpFirebase);
