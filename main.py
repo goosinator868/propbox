@@ -155,19 +155,6 @@ def CommitEdit(old_key, new_item, was_orphan=False,suggestion=False):
 
 ## Handlers
 
-""" Disabled for moving.
-# Loads the main page.
-class MainPage(webapp2.RequestHandler):
-    @auth.login_required
-    def get(self):
-        # Load html template
-        template = JINJA_ENVIRONMENT.get_template('templates/index.html')
-        user = GetCurrentUser(self.request)
-        self.response.write(ValidateHTML(template.render({'user':user})))
-
-"""
-
-
 #Loads add item page and adds item to database
 class AddItem(webapp2.RequestHandler):
     @auth.login_required
@@ -277,15 +264,15 @@ class EditItem(webapp2.RequestHandler):
     def post(self):
         # permissions logic
         user = GetCurrentUser(self.request)
-        standard_user = user.permissions == "Standard user"
+        Standard user = user.permissions == "Standard user"
         old_item_key = ndb.Key(urlsafe=self.request.get('old_item_key'))
         old_item = old_item_key.get()
         new_item = cloneItem(old_item, old_item_key)
         new_item.creator_id = user.key.string_id()
         new_item.creator_name = user.name
-        new_item.approved = (not standard_user)
-        new_item.is_suggestion = (standard_user)
-        if not standard_user:
+        new_item.approved = (not Standard user)
+        new_item.is_suggestion = (Standard user)
+        if not Standard user:
             for key in old_item.suggested_edits:
                 key.delete()
             old_item.suggested_edits = []
@@ -325,9 +312,9 @@ class EditItem(webapp2.RequestHandler):
             new_item.checked_out_by = ""
 
         try:
-            CommitEdit(old_item_key, new_item,suggestion=standard_user)
+            CommitEdit(old_item_key, new_item,suggestion=Standard user)
             sleep(0.1)
-            self.redirect("/item_details?" + urllib.urlencode({'item_id':(old_item_key if standard_user else new_item.key).urlsafe()}))
+            self.redirect("/item_details?" + urllib.urlencode({'item_id':(old_item_key if Standard user else new_item.key).urlsafe()}))
         except OutdatedEditException as e:
             new_item.orphan = True
             new_item_key = new_item.put()
@@ -550,7 +537,7 @@ class KeepRevision(webapp2.RequestHandler):
 class DiscardRevision(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
-        if GetCurrentUser(self.request).permissions == "STANDARD_USER":
+        if GetCurrentUser(self.request).permissions == "Standard user":
             self.redirect('/')
             return
         if self.request.get('revert') == "True":
@@ -587,42 +574,6 @@ class RevertItem(webapp2.RequestHandler):
         item.put()
         sleep(0.1)
         self.redirect('/review_edits')
-
-""" Disabled group access.
-class CreateGroup(webapp2.RequestHandler):
-    @auth.login_required
-    def get(self):
-        logging.info("Create Group:get")
-        template = JINJA_ENVIRONMENT.get_template('templates/create_group.html')
-        self.response.write(ValidateHTML(template.render({})))
-
-    @auth.login_required
-    def post(self):
-        logging.info("Create Group:post")
-        self.redirect('/')
-
-class GroupList(webapp2.RequestHandler):
-    @auth.login_required
-    def get(self):
-        logging.info("Group List:get")
-        template = JINJA_ENVIRONMENT.get_template('templates/group_list.html')
-        self.response.write(ValidateHTML(template.render({})))
-
-class ViewGroup(webapp2.RequestHandler):
-    @auth.login_required
-    def get(self):
-        logging.info("View Group:get")
-        template = JINJA_ENVIRONMENT.get_template('templates/group.html')
-        self.response.write(ValidateHTML(template.render({})))
-
-class ViewUsersInGroup(webapp2.RequestHandler):
-    @auth.login_required
-    def get(self):
-        logging.info("View Users In Group")
-        template = JINJA_ENVIRONMENT.get_template('templates/users_in_group.html')
-        self.response.write(ValidateHTML(template.render({})))
-
-"""
 
 class ViewItemDetails(webapp2.RequestHandler):
     @auth.login_required
@@ -774,10 +725,6 @@ app = webapp2.WSGIApplication([
     ('/manage_users', ManageUsers),
     ('/post_auth', PostAuth),
     ('/pending_approval', PendingApproval),
-    #('/create_group', CreateGroup),
-    #('/group_list', GroupList),
-    #('/view_group', ViewGroup),
-    #('/view_users_in_group', ViewUsersInGroup),
     ('/item_details', ViewItemDetails),
     ('/review_deletions', ReviewDeletions),
     ('/.*', MainPage),
