@@ -268,7 +268,7 @@ class EditItem(webapp2.RequestHandler):
     def post(self):
         # permissions logic
         user = GetCurrentUser(self.request)
-        Standard user = user.permissions == "Standard user"
+        standard_user = user.permissions == "Standard user"
         old_item_key = ndb.Key(urlsafe=self.request.get('old_item_key'))
         old_item = old_item_key.get()
         new_item = cloneItem(old_item, old_item_key)
@@ -741,7 +741,7 @@ app = webapp2.WSGIApplication([
     ('/revert_item', RevertItem),
     ('/manage_users', ManageUsers),
     ('/post_auth', PostAuth),
-    ('/pending_approval', PendingApproval),
+    ('/pending_approval', PendingApproval),y
     ('/item_details', ViewItemDetails),
     ('/review_deletions', ReviewDeletions),
     ('/.*', MainPage),
