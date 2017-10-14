@@ -173,7 +173,9 @@ class AddItem(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/add_item.html')
-        self.response.write(ValidateHTML(template.render({})))
+        page = template.render({})
+        page = page.encode('utf-8')
+        self.response.write(ValidateHTML(page))
 
     @auth.login_required
     def post(self):
@@ -230,6 +232,7 @@ class ResolveEdits(webapp2.RequestHandler):
         old_item = FindUpdatedItem(old_item)
         template = JINJA_ENVIRONMENT.get_template('templates/resolve_edits.html')
         page = template.render({'old_item': old_item, 'new_item': new_item})
+        page = page.encode('utf-8')
         self.response.write(ValidateHTML(page))
 
     @auth.login_required
@@ -271,6 +274,7 @@ class EditItem(webapp2.RequestHandler):
         user = GetCurrentUser(self.request)
         template = JINJA_ENVIRONMENT.get_template('templates/edit_item.html')
         page = template.render({'item': item, 'user':user})
+        page = page.encode('utf-8')
         self.response.write(ValidateHTML(page))
 
     @auth.login_required
@@ -400,7 +404,9 @@ class UndeleteItem(webapp2.RequestHandler):
 class AuthHandler(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/auth.html')
-        self.response.write(ValidateHTML(template.render({})))
+        page = template.render({})
+        page = page.encode('utf-8')
+        self.response.write(ValidateHTML(page))
 
 # Filters viewable items based on selected boxes in MainPage
 def FilterItems(item_name, item_type, item_condition, costume_article,
@@ -520,6 +526,7 @@ class ReviewEdits(webapp2.RequestHandler):
         #     logging.info("\n\n")
         #     logging.info(r)
         page = template.render({'revert':revert_list, 'suggest':suggestion_list})
+        page = page.encode('utf-8')
         self.response.write(ValidateHTML(page))
 
 #Keeps the latest revision. Flags the revision as "approved" in the database.
@@ -633,6 +640,7 @@ class ViewItemDetails(webapp2.RequestHandler):
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
         pending_edit = (len(item.suggested_edits) > 0)
         page = template.render({'item':item, 'pending_edit':pending_edit, 'user':user})
+        page = page.encode('utf-8')
         self.response.write(ValidateHTML(page))
 
 #To admin-approve items that have been created or edited by lesser users.
@@ -650,7 +658,9 @@ class ReviewDeletions(webapp2.RequestHandler):
         for item in items:
             if (item.marked_for_deletion or item.deleted) and item.child == None:
                 deleted.append(item)
-        self.response.write(ValidateHTML(template.render({'deleted':deleted})))
+        page = template.render({'deleted':deleted})
+        page = page.encode('utf-8')
+        self.response.write(ValidateHTML(page))
 
 #Loads the search and browsing page.
 # Renamed from SearchAndBrowse
@@ -685,18 +695,20 @@ class MainPage(webapp2.RequestHandler):
                 item_condition_filter.append("Good")
                 item_condition_filter.append("Fair")
                 item_condition_filter.append("Poor")
-                item_condition_filter.append("Being Repaired")
+                item_condition_filter.append("Being repaired")
 
             if (item_type_filter == "" or item_type_filter == None):
                 item_type_filter = "All"
             # send to display
             page = template.render({'user':user,'items': items, 'item_type_filter': item_type_filter, 'item_name_filter': item_name_filter, 'item_condition_filter': item_condition_filter})
+            page = page.encode('utf-8')
             self.response.write(ValidateHTML(page))
         except:
             # first time opening or item has been added
             query = Item.query()
             items = query.fetch()
-            page = template.render({'items': items, 'item_name_filter': item_name_filter})
+            page = template.render({'user':user,'items': items, 'item_name_filter': item_name_filter})
+            page = page.encode('utf-8')
             self.response.write(ValidateHTML(page))
 
 class ManageUsers(webapp2.RequestHandler):
@@ -718,6 +730,7 @@ class ManageUsers(webapp2.RequestHandler):
              'deactivated_users': deactivated_users,
              'pending_users': pending_users,
              'permission_levels': list(possible_permissions)})
+        page = page.encode('utf-8')
         self.response.write(ValidateHTML(page))
 
     @auth.login_required
@@ -744,13 +757,17 @@ class PendingApproval(webapp2.RequestHandler):
     @auth.firebase_login_required
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/pending_approval.html')
-        self.response.write(ValidateHTML(template.render({})))
+        page = template.render({})
+        page = page.encode('utf-8')
+        self.response.write(ValidateHTML(page))
 
 class AccountDeactivated(webapp2.RequestHandler):
     @auth.firebase_login_required
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/account_deactivated.html')
-        self.response.write(ValidateHTML(template.render({})))
+        page = template.render({})
+        page = page.encode('utf-8')
+        self.response.write(ValidateHTML(page))
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
