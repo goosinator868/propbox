@@ -274,9 +274,9 @@ class EditItem(webapp2.RequestHandler):
         new_item = cloneItem(old_item, old_item_key)
         new_item.creator_id = user.key.string_id()
         new_item.creator_name = user.name
-        new_item.approved = (not Standard user)
-        new_item.is_suggestion = (Standard user)
-        if not Standard user:
+        new_item.approved = (not standard_user)
+        new_item.is_suggestion = (standard_user)
+        if not standard_user:
             for key in old_item.suggested_edits:
                 key.delete()
             old_item.suggested_edits = []
@@ -316,9 +316,9 @@ class EditItem(webapp2.RequestHandler):
             new_item.checked_out_by = ""
 
         try:
-            CommitEdit(old_item_key, new_item,suggestion=Standard user)
+            CommitEdit(old_item_key, new_item,suggestion=standard_user)
             sleep(0.1)
-            self.redirect("/item_details?" + urllib.urlencode({'item_id':(old_item_key if Standard user else new_item.key).urlsafe()}))
+            self.redirect("/item_details?" + urllib.urlencode({'item_id':(old_item_key if standard_user else new_item.key).urlsafe()}))
         except OutdatedEditException as e:
             new_item.orphan = True
             new_item_key = new_item.put()
@@ -741,7 +741,7 @@ app = webapp2.WSGIApplication([
     ('/revert_item', RevertItem),
     ('/manage_users', ManageUsers),
     ('/post_auth', PostAuth),
-    ('/pending_approval', PendingApproval),y
+    ('/pending_approval', PendingApproval),
     ('/item_details', ViewItemDetails),
     ('/review_deletions', ReviewDeletions),
     ('/.*', MainPage),
