@@ -58,7 +58,21 @@ SOFTWARE. -->
     }
   </script>
   <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
-
+  <style type="text/css">
+    .item_container * {
+      text-align: center;
+    }
+    .item_container *:not(input):not(button) {
+      width: 100%;
+    }
+    .thumbnail {
+      position: static;
+      float: initial;
+      margin: auto;
+      height: auto;
+      max-width: 30%;
+    }
+  </style>
   <title>Prop Box</title>
 </head>
 
@@ -76,7 +90,7 @@ SOFTWARE. -->
       <p>Do you really want to delete <strong>{{item.name}}</strong>?</p>
       <p>This cannot be undone.</p>
       <button onclick="closeConfirm('delete','{{item.key.urlsafe()}}',-1)" class="submitButton">No.</button>
-      <form action="/delete_item_forever" method="post" style="display: inline-block;">
+      <form action="/delete_item_forever" method="post">
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
         <input type="submit" value="Yes, Delete Forever" class="submitButton">
       </form>
@@ -89,14 +103,14 @@ SOFTWARE. -->
       {% for item in deleted %}
         <div class="item_container">
           <h2>{{item.name}}</h2>
-          <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</h4>
-          <p>{% if item.marked_for_deletion %}<b>Marked for deletion by</b>:{% else %}<b>Deleted by</b>:{% endif %} {{item.suggested_by}}</p>
-          <p>{{item.description}}</p>
           {% if item.image %}
             <img src="view_image?image_id={{item.key.urlsafe()}}" alt="image of {{item.name}}" class="thumbnail" />
           {% endif %}
+          <p>{% if item.marked_for_deletion %}<b>Marked for deletion by</b>:{% else %}<b>Deleted by</b>:{% endif %} {{item.suggested_by}}</p>
+          <p>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</p>
+          <p>{{item.description}}</p>
           <br/>
-        <form action="/undelete_item" method="post" style="text-align: right;">
+        <form action="/undelete_item" method="post">
             <button onclick="showConfirm('delete','{{item.key.urlsafe()}}',-1)" class="submitButton">Delete Forever</button>
             <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
             <input type="submit" value="Restore Item" class="submitButton">
