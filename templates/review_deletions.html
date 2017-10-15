@@ -29,34 +29,7 @@ SOFTWARE. -->
     });
   </script>
 
-  <script type="text/javascript">
-    function showConfirm(type,itemID,i) {
-        console.log(itemID);
-        var modal = null;
-        if (i == -1) {
-          console.log("show delete")
-          modal = document.getElementById("confirm_"+type+"_"+itemID);
-        } else {
-          console.log("show rollback")
-          modal = document.getElementById("confirm_"+type+"_"+i+"_"+itemID);
-        }
-        modal.style.display = "block";
-        return;
-      }
-
-    function closeConfirm(type,itemID,i) {
-      var modal = null;
-        if (i == -1) {
-          console.log("hide delete")
-          modal = document.getElementById("confirm_"+type+"_"+itemID);
-        } else {
-          console.log("hide rollback")
-          modal = document.getElementById("confirm_"+type+"_"+i+"_"+itemID);
-        }
-      modal.style.display = "none";
-      return;
-    }
-  </script>
+  <script type="text/javascript" src="/scripts/popup_confirm.js"></script>
   <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
   <style type="text/css">
     .item_container * {
@@ -72,6 +45,9 @@ SOFTWARE. -->
       height: auto;
       max-width: 30%;
     }
+    button, form {
+      display: inline;
+    }
   </style>
   <title>Prop Box</title>
 </head>
@@ -84,12 +60,12 @@ SOFTWARE. -->
   </div>
 
   {% for item in deleted %}
-  <div id="confirm_delete_{{item.key.urlsafe()}}" class="modal">
+  <div id="confirm_{{item.key.urlsafe()}}" class="modal">
     <div class="modal-content">
-      <span class="close" onclick="closeConfirm('delete','{{item.key.urlsafe()}}',-1)">&times;</span>
+      <span class="close" onclick="closeConfirm('{{item.key.urlsafe()}}')">&times;</span>
       <p>Do you really want to delete <strong>{{item.name}}</strong>?</p>
       <p>This cannot be undone.</p>
-      <button onclick="closeConfirm('delete','{{item.key.urlsafe()}}',-1)" class="submitButton">No.</button>
+      <button onclick="closeConfirm('{{item.key.urlsafe()}}')" class="submitButton" type="submit">No.</button>
       <form action="/delete_item_forever" method="post">
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
         <input type="submit" value="Yes, Delete Forever" class="submitButton">
@@ -100,6 +76,7 @@ SOFTWARE. -->
 
   <div id="pane_container">
     <div id="deleted_list">
+      {% if deleted==[] %}<div style="min-width: 100vw; text-align: center;"><p style="width: 15%; margin: auto; margin-top: 4vh; border: solid; border-color: rgb(174,100,211); border-radius: 4px;">There's nothing here.</p></div>{% endif %}
       {% for item in deleted %}
         <div class="item_container">
           <h2>{{item.name}}</h2>
@@ -110,11 +87,13 @@ SOFTWARE. -->
           <p>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</p>
           <p>{{item.description}}</p>
           <br/>
-        <form action="/undelete_item" method="post">
-            <button onclick="showConfirm('delete','{{item.key.urlsafe()}}',-1)" class="submitButton">Delete Forever</button>
-            <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-            <input type="submit" value="Restore Item" class="submitButton">
-          </form>
+          <div>
+            <button onclick="showConfirm('{{item.key.urlsafe()}}')" class="submitButton">Delete Forever</button>
+            <form action="/undelete_item" method="post">
+              <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+              <input type="submit" value="Restore Item" class="submitButton">
+            </form>
+          </div>
         </div>
       {% endfor %}</div>
    </div>

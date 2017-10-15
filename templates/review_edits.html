@@ -29,7 +29,6 @@ SOFTWARE. -->
   </script>
 
   <title>Prop Box</title>
-  <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
   <script type="text/javascript">
     function switchItem(hideID, showID) {
       hide = document.getElementById(hideID);
@@ -42,23 +41,8 @@ SOFTWARE. -->
       }
       return;
     }
-
-    function showConfirm(itemID,i) {
-        console.log(itemID);
-        var modal = null;
-        modal = document.getElementById("confirm_" + i + "_" + itemID);
-        modal.style.display = "block";
-        return;
-      }
-
-    function closeConfirm(itemID,i) {
-      var modal = null;
-      modal = document.getElementById("confirm_" + i + "_" + itemID);
-      modal.style.display = "none";
-      return;
-    }
-
   </script>
+  <script type="text/javascript" src="/scripts/popup_confirm.js"></script>
 </head>
 
 <body>
@@ -66,7 +50,7 @@ SOFTWARE. -->
   {% for i in item[2] %}
   <div id="confirm_{{i|string}}_{{item[0].key.urlsafe()}}" class="modal">
     <div class="modal-content">
-    <span class="close" onclick="closeConfirm('{{item[0].key.urlsafe()}}',{{i}})">&times;</span>
+    <span class="close" onclick="iCloseConfirm('{{item[0].key.urlsafe()}}',{{i}})">&times;</span>
       <p>Do you really want to revert <strong>{{item[0].name}}</strong> to the earlier version of <strong>{{item[1][i].name}}</strong>?</p>
       <p>This cannot be undone.</p>
 
@@ -84,7 +68,7 @@ SOFTWARE. -->
       </div>
 
       <br/>
-      <button class="submitButton" onclick="closeConfirm('{{item[0].key.urlsafe()}}',{{i}})">No.</button>
+      <button class="submitButton" onclick="iCloseConfirm('{{item[0].key.urlsafe()}}',{{i}})">No.</button>
       <form action="/discard_revision" method="post" style="display: inline-block;">
         <input type="hidden" name="item_id" value="{{item[1][i].key.urlsafe()}}">
         <input type="hidden" name="newest_id" value="{{item[0].key.urlsafe()}}">
@@ -100,7 +84,7 @@ SOFTWARE. -->
   {% for i in item[2] %}
   <div id="confirm_{{i|string}}_{{item[0].key.urlsafe()}}" class="modal">
     <div class="modal-content">
-    <span class="close" onclick="closeConfirm('{{item[0].key.urlsafe()}}',{{i}})">&times;</span>
+    <span class="close" onclick="iCloseConfirm('{{item[0].key.urlsafe()}}',{{i}})">&times;</span>
       <p>Do you want to select version {{i+1}} of <strong>{{item[0].name}}</strong> to approve?</p>
       <p>This will discard other versions.</p>
 
@@ -118,7 +102,7 @@ SOFTWARE. -->
       </div>
 
       <br/>
-      <button onclick="closeConfirm('{{item[0].key.urlsafe()}}',{{i}})" class="submitButton">Cancel</button>
+      <button onclick="iCloseConfirm('{{item[0].key.urlsafe()}}',{{i}})" class="submitButton">Cancel</button>
       <form action="/keep_revision" method="post"  style="display: inline-block;">
         <input type="hidden" name="item_id" value="{{item[1][i].key.urlsafe()}}">
         <input type="hidden" name="parent_id" value="{{item[0].key.urlsafe()}}">
@@ -137,6 +121,7 @@ SOFTWARE. -->
   <div id="pane_container">
     <div id="right-pane" class="pane">
       <h2>Items with past versions</h2>
+      {% if revert==[] %}<div style="min-width: 100%; text-align: center;"><p style="width: 40%; margin: auto; margin-top: 4vh; border: solid; border-color: rgb(174,100,211); border-radius: 4px;">There's nothing to revert.</p></div>{% endif %}
       <br/>
       <div>
         {% for item in revert %}
@@ -163,7 +148,7 @@ SOFTWARE. -->
                 {% endif %}
                 <br/>
                 <p>Deleted = {{item[1][i].deleted}} and Outdated = {{item[1][i].outdated}}</p>
-                <button onclick="showConfirm('{{item[0].key.urlsafe()}}',{{i}})" class="submitButton">Revert To This Version</button>
+                <button onclick="iShowConfirm('{{item[0].key.urlsafe()}}',{{i}})" class="submitButton">Revert To This Version</button>
                 <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i-1)|string}}')"{% if i == 0 %} disabled="disabled" {% endif %} class="submitButton">Newer</button>
                 <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i+1)|string}}')"{% if i == item[2][-1] %} disabled="disabled" {% endif %} class="submitButton">Older</button>
               </div>
@@ -180,6 +165,7 @@ SOFTWARE. -->
 
     <div id="left-pane" class="pane">
       <h2>Items awaiting edit approval</h2>
+      {% if suggest==[] %}<div style="min-width: 100%; text-align: center;"><p style="width: 40%; margin: auto; margin-top: 4vh; border: solid; border-color: rgb(174,100,211); border-radius: 4px;">There's nothing approve.</p></div>{% endif %}
       <br/>
       <div>
         {% for item in suggest %}
@@ -206,7 +192,7 @@ SOFTWARE. -->
                 {% endif %}
                 <br/>
                 <p>Deleted = {{item[1][i].deleted}} and Outdated = {{item[1][i].outdated}}</p>
-                <button onclick="showConfirm('{{item[0].key.urlsafe()}}',{{i}})" class="submitButton">Update To This Version</button>
+                <button onclick="iShowConfirm('{{item[0].key.urlsafe()}}',{{i}})" class="submitButton">Update To This Version</button>
                 <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i-1)|string}}')"{% if i == 0 %} disabled="disabled" style="color: #bbb;" {% endif %} class="submitButton">Previous</button>
                 <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i+1)|string}}')"{% if i == item[2][-1] %} disabled="disabled" style="color: #bbb;" {% endif %} class="submitButton">Next</button>
               </div>

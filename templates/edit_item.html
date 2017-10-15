@@ -29,19 +29,8 @@ SOFTWARE. -->
     });
   </script>
 
-  <script type="text/javascript">
-    function showConfirm() {
-        var modal = document.getElementById("confirm_popup");
-        modal.style.display = "block";
-        return;
-      }
+  <script type="text/javascript" src="/scripts/popup_confirm.js"></script>
 
-    function closeConfirm() {
-      var modal = document.getElementById("confirm_popup");
-      modal.style.display = "none";
-      return;
-    }
-  </script>
   <style type="text/css">
     div.form {
       font-size: 1.2em;
@@ -157,7 +146,7 @@ SOFTWARE. -->
               <input type="hidden" name="old_item_key" value="{{item.key.urlsafe()}}">
           <div id="confirm_popup" class="modal">
             <div class="modal-content">
-            <span class="close" onclick="closeConfirm()">&times;</span>
+            <span class="close" onclick="closeConfirm('popup')">&times;</span>
             Are you sure you want to submit
             {% if user.permissions=="STANDARD_USER" %}
             an edit request for <strong>{{item.name}}</strong>? Changes must be approved before they are visible to everyone.
@@ -168,11 +157,11 @@ SOFTWARE. -->
             <br/>
             <input type="submit" value="Submit changes" class="submitButton" style="width: auto;">
             {% endif %}
-            <button onclick="closeConfirm()" type="button" class="submitButton" style="width: auto;">Cancel</button>
+            <button onclick="closeConfirm('popup')" type="button" class="submitButton" style="width: auto;">Cancel</button>
             </div>
           </div>
 
-          <button onclick="showConfirm()" type="button" class="submitButton">Submit Edit{% if user.permissions=="STANDARD_USER" %} Request{% endif %}</button>
+          <button onclick="showConfirm('popup')" type="button" class="submitButton">Submit Edit{% if user.permissions=="STANDARD_USER" %} Request{% endif %}</button>
         </form>
       </div>
     </div>
