@@ -31,7 +31,6 @@ SOFTWARE. -->
 
   <style type="text/css">
     div.form {
-      background-color: #ececec;
       font-size: 1.2em;
       padding: 8px;
       width: 100%;
@@ -67,7 +66,7 @@ SOFTWARE. -->
           <label>Image</label>
           <input name="image" type="file" accept=".png, .gif, .jpg, .jpeg"><br>
           <label>Describe the item.</label>
-          <textarea name="description" placeholder=""></textarea><br><br>
+          <textarea name="description" placeholder="Enter a description for the item."></textarea><br><br>
           <label>Is this a costume or a prop?</label>
           <select name="item_type" class="addItemDropdown">
               <option>Costume</option>
@@ -115,20 +114,28 @@ SOFTWARE. -->
               <option>18</option>
               <option>19</option>
               <option>20</option>
+              <option>21</option>
+              <option>22</option>
+              <option>23</option>
+              <option>24</option>
+              <option>25</option>
           </select>
           <select name="clothing_size_string" class="addItemDropdown" style="display: inline-block; width: 100px;">
               <option>N/A</option>
+              <option>XXS</option>
               <option>XS</option>
               <option>S</option>
               <option>M</option>
               <option>L</option>
               <option>XL</option>
+              <option>XXL</option>
+              <option>XXXL</option>
           </select><br><br>
           <label>Tags</label>
           <textarea name="tags" placeholder="Separate tags with the enter key."></textarea><br><br>
           <input type="submit" value="Create" class="submitButton" style="max-width: 100px;">
       </form>
   </div>
-  <div id="footer_holder"></div>
+  <footer id="footer_holder"></footer>
 </body>
 </html>

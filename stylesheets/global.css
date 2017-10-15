@@ -161,6 +161,10 @@ h2:first-child {
     float: right;
 }
 
+#pane_container {
+  width: 100vw;
+}
+
 #error {
   border: 2px solid #DF0101;
   border-radius: 4px;

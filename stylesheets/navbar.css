@@ -140,7 +140,7 @@ SOFTWARE.*/
 
 #footer p {
 	margin: auto;
-	width: 50%;
+	width: 100vw;
 	color: #020;
 	text-align: center;
 }
