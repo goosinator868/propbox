@@ -29,7 +29,6 @@ SOFTWARE. -->
   </script>
 
   <title>Prop Box</title>
-  <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
   <script type="text/javascript">
     function switchItem(hideID, showID) {
       hide = document.getElementById(hideID);
@@ -130,7 +129,11 @@ SOFTWARE. -->
   {% endfor %}
   {% endfor %}
 
-  <div id="navbar_holder"></div>
+  <div id="navbar_holder">
+    <div id="page_specific_breadcrumbs">
+      <span>Review edits</span>
+    </div>
+  </div>
   <div id="page-heading">
     <h1>Review Edits</h1>
   </div>
