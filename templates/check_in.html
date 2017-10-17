@@ -23,11 +23,42 @@ SOFTWARE. -->
 {% include 'templates/common.html' %}
   <!-- QR-CODE reader import -->
   <script type="text/javascript" src="/scripts/instascan.min.js"></script>
+  <script type="text/javascript" src="/scripts/qr_code.min.js"></script>
   <script>
     $(document).ready(function(){
       SetUpNavBar(SetUpFirebase);
-      qrcode.callback()
     });
+
+    var scanned_codes = [];
+  </script>
+
+  <!-- Code to support scanQRCode() -->
+  <script type="text/javascript">
+    function scanQRCode(callback) {
+      let scanner = new Instascan.Scanner({ video: document.getElementById('scanner_window') });
+      scanner.addListener('scan', function (content) {
+        scanner.stop();
+        callback(content);
+      });
+      Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length > 0) {
+          scanner.start(cameras[0]);
+        } else {
+          console.error('No cameras found.');
+        }
+      }).catch(function (e) {
+        console.error(e);
+      });
+    }
+
+    function scanAndAddToList(list) {
+      scanQRCode(function(content){
+        scanned_codes.push(content);
+        new_content = document.createElement('li');
+        new_content.textContent = content;
+        document.getElementById('scanned_list').appendChild(new_content);
+      });
+    }
   </script>
 
   <title>Prop Box</title>
@@ -40,22 +71,24 @@ SOFTWARE. -->
     </div>
   </div>
   <!-- New content here -->
-  <video id="preview"></video>
-    <script type="text/javascript">
-      let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-      scanner.addListener('scan', function (content) {
-        console.log(content);
-      });
-      Instascan.Camera.getCameras().then(function (cameras) {
-        if (cameras.length > 0) {
-          scanner.start(cameras[0]);
-        } else {
-          console.error('No cameras found.');
-        }
-      }).catch(function (e) {
-        console.error(e);
-      });
-    </script>
+
+  <button onclick="scanAndAddToList(scanned_codes)">Scan QR code</button>
+  <video id="scanner_window"></video>
+  <ul id="scanned_list"></ul>
+
+  <div id="qrcode"></div>
+  <script type="text/javascript">
+  var qrcode = new QRCode(document.getElementById("qrcode"), {
+    text: "did it work??",
+    width: 128,
+    height: 128,
+    colorDark : "#000000",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.H
+  });
+  </script>
+
+
   <div id="footer_holder"></div>
 </body>
 </html>
