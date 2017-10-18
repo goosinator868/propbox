@@ -68,7 +68,13 @@ SOFTWARE. -->
 </head>
 
 <body>
-  <div id="navbar_holder"></div>
+  <div id="navbar_holder">
+    <div id="page_specific_breadcrumbs">
+      <a href="/item_details?item_id={{item.key.urlsafe()}}"> {{item.name}}</a>
+      <span>Edit</span>
+      <span>Resolve edit</span>
+    </div>
+  </div>
   <!-- New content here -->
   <div id="page-heading">
     <h1>An edit conflict exists!</h1>
