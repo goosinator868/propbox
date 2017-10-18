@@ -27,7 +27,7 @@ SOFTWARE. -->
 <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.css">
 
 <!-- Google Fonts stylesheets -->
-<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Muli:400,500" rel="stylesheet">
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -55,7 +55,7 @@ SOFTWARE. -->
 <script>
     function SetUpNavBar(callback) {
         extra_crumbs = document.getElementById("page_specific_breadcrumbs");
-        $('#navbar_holder').load("/static/navbar.html", function(){   
+        $('#navbar_holder').load("/static/navbar.html", function(){
             if (extra_crumbs) {
                 breadcrumbs = document.getElementById('breadcrumbs')
                 for (var i = 0; i < extra_crumbs.children.length; i++) {

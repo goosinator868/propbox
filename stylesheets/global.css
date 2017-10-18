@@ -20,7 +20,7 @@ SOFTWARE.*/
 
 body {
   background-color: #E9E9E9;
-  font-family: 'Quicksand', sans-serif;
+  font-family: 'Muli', sans-serif;
 }
 
 .modal {
@@ -42,7 +42,7 @@ body {
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 600px;
 }
 
 .close {
@@ -102,7 +102,7 @@ body {
 }
 
 .item_container h2, h3, h4, p {
-  margin: 6px 0;
+  margin: 6px auto;
   width: 60%;
 }
 
@@ -140,7 +140,7 @@ body {
   }
 
 h2:first-child {
-  text-align: center;
+  /*text-align: center;*/
 }
 
 #costume_specific_forms {

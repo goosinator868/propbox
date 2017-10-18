@@ -49,7 +49,7 @@ SOFTWARE. -->
       display: inline;
     }
   </style>
-  <title>Prop Box</title>
+  <title>Review deletions :: Propbox</title>
 </head>
 
 <body>
@@ -67,7 +67,7 @@ SOFTWARE. -->
   <div id="confirm_{{item.key.urlsafe()}}" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeConfirm('{{item.key.urlsafe()}}')">&times;</span>
-      <p>Do you really want to delete <strong>{{item.name}}</strong>?</p>
+      <h5 class="modal-title" style="font-size: 1.3em;">Do you really want to delete <strong>{{item.name}}</strong>?</h5>
       <p>This cannot be undone.</p>
       <button onclick="closeConfirm('{{item.key.urlsafe()}}')" class="submitButton" type="submit">No.</button>
       <form action="/delete_item_forever" method="post">
@@ -80,7 +80,7 @@ SOFTWARE. -->
 
   <div id="pane_container">
     <div id="deleted_list">
-      {% if deleted==[] %}<div style="min-width: 100vw; text-align: center;"><p style="width: 15%; margin: auto; margin-top: 4vh; border: solid; border-color: rgb(174,100,211); border-radius: 4px;">There's nothing here.</p></div>{% endif %}
+      {% if deleted==[] %}<div style="min-width: 100vw; text-align: center;"><p style="width: 15%; margin: auto; margin-top: 2vh; font-size: 1.8em;">There's nothing here.</p></div>{% endif %}
       {% for item in deleted %}
         <div class="item_container">
           <h2>{{item.name}}</h2>
