@@ -31,7 +31,7 @@ SOFTWARE. -->
   </script>
   <script type="text/javascript" src="/scripts/popup_confirm.js"></script>
 
-  <title>Prop Box</title>
+  <title>{{item.name}} :: Propbox</title>
 </head>
 
 <body>
@@ -45,8 +45,8 @@ SOFTWARE. -->
   <div id="confirm_delete" class="modal">
     <div class="modal-content">
      <span class="close" onclick="closeConfirm('delete')">&times;</span>
-     <p>Do you really want to {% if user.permissions=="Standard user" %}mark <b>{{item.name}}</b> for deletion?{% else %} delete <b>{{item.name}}</b>?{% endif %}</p>
-     <p>{% if user.permissions=="Standard user" %}This will mark <b>{{item.name}}</b> for permanent deletion by a Trusted user, and while it will still be visible, nobody will be able to edit it.{% else %}This will immediately remove <b>{{item.name}}</b> from everyone's view, although it can still be restored again from the <a href="/review_deletions">Review Deletions page.</a>{% endif %}</p>
+     <h5 class="modal-title" style="font-size: 1.3em;">Do you really want to {% if user.permissions=="Standard user" %}mark <b>{{item.name}}</b> for deletion?{% else %} delete <b>{{item.name}}</b>?{% endif %}</h5>
+     <p style="text-align: center; margin: 4px 0;">{% if user.permissions=="Standard user" %}This will mark <b>{{item.name}}</b> for permanent deletion by a Trusted user, and while it will still be visible, nobody will be able to edit it.{% else %}This will immediately remove <b>{{item.name}}</b> from everyone's view, although it can still be restored again from the <a href="/review_deletions">Review Deletions page.</a>{% endif %}</p>
      <div>
       <button onclick="closeConfirm('delete')" class="submitButton" type="submit">No.</button>
       <form action="/delete_item" method="post">

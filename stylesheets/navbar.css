@@ -134,7 +134,7 @@ SOFTWARE.*/
 }
 
 #footer_holder {
-  padding: 8px 0;
+  padding: 1em 0;
   vertical-align: bottom;
   z-index: -1;
   left: 0px;
@@ -144,9 +144,15 @@ SOFTWARE.*/
 
 #footer p {
 	margin: auto;
-	width: 100vw;
+	width: 100%;
 	color: #020;
 	text-align: center;
+}
+
+#footer hr {
+  border-top: 1px solid #ccc;
+  margin: 1em auto;
+  width: 80%;
 }
 
 #footer #copyright {

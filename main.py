@@ -582,6 +582,13 @@ class RevertItem(webapp2.RequestHandler):
         sleep(0.1)
         self.redirect('/review_edits')
 
+class CheckIn(webapp2.RequestHandler):
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('templates/check_in.html')
+        page = template.render({})
+        page = page.encode('utf-8')
+        self.response.write(ValidateHTML(page))
+
 class ViewItemDetails(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
@@ -742,6 +749,7 @@ app = webapp2.WSGIApplication([
     ('/manage_users', ManageUsers),
     ('/post_auth', PostAuth),
     ('/pending_approval', PendingApproval),
+    ('/check_in', CheckIn),
     ('/item_details', ViewItemDetails),
     ('/review_deletions', ReviewDeletions),
     ('/.*', MainPage),
