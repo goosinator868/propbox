@@ -1,7 +1,27 @@
+<!-- Copyright (c) 2017 Future Gadget Laboratories.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. -->
 <!doctype html>
 <html>
 <head>
-  <link rel="import" href="/static/common.html">
+  <!-- <link rel="import" href="/static/common.html"> -->
+{% include 'templates/common.html' %}
 
   <script>
     $(document).ready(function(){
@@ -38,35 +58,6 @@
     }
   </script>
   <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
-  <style type="text/css">
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgb(0,0,0);
-      background-color: rgba(0,0,0,0.4);
-    }
-
-    .modal-content {
-      background-color: #fefefe;
-      margin: 15% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-    }
-
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
-  </style>
 
   <title>Prop Box</title>
 </head>
@@ -74,6 +65,9 @@
 <body>
   <div id="navbar_holder"></div>
   <!-- New content here -->
+  <div id="page-heading">
+    <h1>Review Deletions</h1>
+  </div>
 
   {% for item in deleted %}
   <div id="confirm_delete_{{item.key.urlsafe()}}" class="modal">
@@ -81,43 +75,35 @@
       <span class="close" onclick="closeConfirm('delete','{{item.key.urlsafe()}}',-1)">&times;</span>
       <p>Do you really want to delete <strong>{{item.name}}</strong>?</p>
       <p>This cannot be undone.</p>
-      <button onclick="closeConfirm('delete','{{item.key.urlsafe()}}',-1)">No.</button>
+      <button onclick="closeConfirm('delete','{{item.key.urlsafe()}}',-1)" class="submitButton">No.</button>
       <form action="/delete_item_forever" method="post" style="display: inline-block;">
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-        <input type="submit" value="Yes, Delete Forever">
+        <input type="submit" value="Yes, Delete Forever" class="submitButton">
       </form>
     </div>
   </div>
   {% endfor %}
 
-  <br/>
-  <form action="/" method="get">
-    <input type="submit" value="Home">
-  </form>
-  This is the page for approving the deletion of items.<br/>
-
   <div id="left-pane">
-    Deleted List<br/>
     <div id="deleted_list">
       {% for item in deleted %}
         <div class="item_container">
           <h2>{{item.name}}</h2>
-          <h4>created by : {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
-          <p>{% if item.marked_for_deletion %}Marked for deletion by:{% else %}Deleted by:{% endif %} {{item.suggested_by}}.</p>
+          <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</h4>
+          <p>{% if item.marked_for_deletion %}<b>Marked for deletion by</b>:{% else %}<b>Deleted by</b>:{% endif %} {{item.suggested_by}}</p>
           <p>{{item.description}}</p>
           {% if item.image %}
             <img src="view_image?image_id={{item.key.urlsafe()}}" alt="image of {{item.name}}" class="thumbnail" />
           {% endif %}
-          <p>{{item.key}}</p>
           <br/>
-        <button onclick="showConfirm('delete','{{item.key.urlsafe()}}',-1)">Delete Forever</button>
-
-        <form action="/undelete_item" method="post">
+        <form action="/undelete_item" method="post" style="text-align: right;">
+            <button onclick="showConfirm('delete','{{item.key.urlsafe()}}',-1)" class="submitButton">Delete Forever</button>
             <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-            <input type="submit" value="Restore Item">
+            <input type="submit" value="Restore Item" class="submitButton">
           </form>
         </div>
       {% endfor %}</div>
    </div>
+  <div id="footer_holder"></div>
 </body>
 </html>

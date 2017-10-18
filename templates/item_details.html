@@ -1,7 +1,28 @@
+<!-- Copyright (c) 2017 Future Gadget Laboratories.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. -->
 <!doctype html>
 <html>
 <head>
-  <link rel="import" href="/static/common.html">
+  <!-- <link rel="import" href="/static/common.html"> -->
+  {% include 'templates/common.html' %}
+  <link rel="stylesheet" href="/stylesheets/item_details.css">
 
   <script>
     $(document).ready(function(){
@@ -9,66 +30,53 @@
     });
   </script>
 
-  <style type="text/css">
-    .item_details {
-      padding: 14px;
-      margin:10px;
-    }
-  </style>
-  
   <title>Prop Box</title>
 </head>
 
 <body>
   <div id="navbar_holder"></div>
   <!-- New content here -->
-  <br/>
-  <form action="/" method="get" style="display: inline-block;">
-    <input type="submit" value="Home">
-  </form>
-  <form action="/search_and_browse" method="get" style="display: inline-block;">
-    <input type="submit" value="Search & Browse">
-  </form>
- <br/>
-  This is the page for viewing an item's details.
-  <div class="item_details">
-      <h2>{{item.name}}</h2>
-      {% if item.image %}
-        <a href="view_image?image_id={{item.key.urlsafe()}}">
-        <img src="view_image?image_id={{item.key.urlsafe()}}" alt="image of {{item.name}}" class="thumbnail" />
-        </a>
-      {% endif %}
-      <h3>{{item.item_type}}</h3>
-      <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
-      <h5><b>Condition</b>: {{item.condition}}</h5>
-      <p>{{item.description}}</p>
-      <p>Article:{{item.clothing_article_type}}</p>
-      <p>Size: {{item.clothing_size_string}}, {{item.clothing_size_num}}
-      <p>Tags:{% for tag in item.tags %} {{tag}},{% endfor %}<p>
-      <p>QR Code: {{item.qr_code}}</p>
-      {% if pending_edit %}<p>{% if user.permissions != "STANDARD_USER" %} <a href="/review_edits">{% endif %}<strong>[EDITS ARE PENDING APPROVAL]</strong>{% if user.permissions != "STANDARD_USER" %}</a>{% endif %}</p>{% endif %}
-
-      {% if item.marked_for_deletion %}<p><p>{% if user.permissions != "STANDARD_USER" %} <a href="/review_deletions">{% endif %}<strong>[THIS ITEM HAS BEEN MARKED FOR DELETION]</strong>{% if user.permissions != "STANDARD_USER" %}</a>{% endif %}</p>{% endif %}
-
-      {% if user.permissions == "ADMIN" %}<p>For development only: Deleted = {{item.deleted}}, Outdated = {{item.outdated}}, approved = {{item.approved}}.</p>{% endif %}
+  {% if item.image %}
+    <a href="view_image?image_id={{item.key.urlsafe()}}">
+    <img src="view_image?image_id={{item.key.urlsafe()}}" alt="image of {{item.name}}" class="item_image" />
+    </a>
+  {% endif %}
+  <div id="item_details">
+      <h1>{{item.name}}</h1>
+      <p id="description">{{item.description}}</p>
       <br/>
+      <p id="item_type"><b>Item Type:</b> {{item.item_type}}</p>
+      <p id="condition"><b>Condition</b>: {{item.condition}}</p>
+      <p id="article_type"><b>Article:</b> {{item.clothing_article_type}}</p>
+      {% if item.clothing_size_string != "N/A" or item.clothing_size_num != "N/A" %}
+      <p id="size"><b>Size:</b> {{item.clothing_size_string}}, {{item.clothing_size_num}}</p>
+      {% endif %}
+      <p id="tags"><b>Tags:</b> {% for tag in item.tags %} {{tag}},{% endfor %}</p>
+      <p id="qr_code"><b>QR Code:</b> {{item.qr_code}}</p>
+
+      {% if pending_edit %}<p id="pending_edit">{% if user.permissions != "Standard user" %} <a href="/review_edits">{% endif %}<strong>[EDITS ARE PENDING APPROVAL]</strong>{% if user.permissions != "Standard user" %}</a>{% endif %}</p>{% endif %}
+      {% if item.marked_for_deletion %}<p id="marked_for_deletion">{% if user.permissions != "Standard user" %} <a href="/review_deletions">{% endif %}<strong>[THIS ITEM HAS BEEN MARKED FOR DELETION]</strong>{% if user.permissions != "Standard user" %}</a>{% endif %}</p>{% endif %}
+      <br/>
+    </div>
+    <div id="buttons">
       {% if not item.marked_for_deletion %}
-      <form action="/edit_item" method="get" style="display: inline-block;">
+      <form action="/edit_item" method="get">
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-        <input type="submit" value="Edit">
+        <input type="submit" value="Edit" class="submitButton">
       </form>
-      {% if user.permissions != "STANDARD_USER" %}
-      <form action="/revert_item" method="post" style="display: inline-block;">
+      {% if user.permissions != "Standard user" %}
+      <form action="/revert_item" method="post">
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-        <input type="submit" value="Revert To Earlier Version">
+        <input type="submit" value="Revert To Earlier Version" class="submitButton">
       </form>{% endif %}
-      <br/><br/>
       <form action="/delete_item" method="post">
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-        <input type="submit" value="Delete">
+        <input type="submit" value="Delete" class="submitButton">
       </form>
       {% endif %}
-      <br/><br/><br/>
-  </div>
+      <p id="creator">Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</p>
+    </div>
+    <br/><br/><br/>
+  <div id="footer_holder"></div>
 </body>
 </html>

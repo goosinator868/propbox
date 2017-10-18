@@ -1,5 +1,4 @@
-"""
-Copyright (c) 2017 Future Gadget Laboratories.
+/*Copyright (c) 2017 Future Gadget Laboratories.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -17,11 +16,34 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
+SOFTWARE.*/
 
-# Magic file that is automatically run on server startup.
-from google.appengine.ext import vendor
+/*This CSS file overwrites formatting from navbar.css on mobile view.
+  Changes made here will only be visible in mobile view.*/
+  
 
-# Add any libraries installed in the "lib" folder.
-vendor.add('lib')
+#navbar {
+	height: 8.5vh;
+}
+
+.dropdown {
+	padding-top: .55vh;
+}
+
+#dropdown {
+	height: 6vh;
+	font-size: 3vh;
+}
+
+#breadcrumb_bar {
+	height: 2.6vh
+}
+
+#breadcrumbs {
+	line-height: 2.6vh;
+	font-size: 2.5vh;
+}
+
+#propbox_logo {
+	height: 7.5vh;
+}

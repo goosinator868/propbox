@@ -1,3 +1,22 @@
+<!-- Copyright (c) 2017 Future Gadget Laboratories.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. -->
 <!doctype html>
 <html>
 <head>
@@ -12,18 +31,35 @@
   <!-- First party imports in specific dependency ordering -->
   <script src="/scripts/cookies.js"></script>
   <script src="/scripts/auth_page_auth.js"></script>
-  <title>Prop Box</title>
+
+  <!-- Google Fonts stylesheets -->
+  <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500" rel="stylesheet">
+
+  <style type="text/css">
+  body {
+    background-color: #EAEAEA;
+    font-family: 'Quicksand', sans-serif;
+  }
+  </style>
+
+  <title>Propbox :: Log in</title>
 </head>
 <body>
   <div id="logged-out">
-    <h1>Prop Box</h1>
-    <h3>Sign in to access your warehouse</h3>
+    <div class="logo" style="margin: 1.5em auto; width: 50%; text-align: center;">
+      <img src="/image/propboxlogo_color.png" alt="Propbox" style="width: 50%;">
+    </div>
+    <br>
     <!-- Magic ID for firebase login UI -->
     <div id="firebaseui-auth-container"></div>
   </div>
 
   <div id="logged-in">
-    <h1>Redirecting, <span id="user"></span>!</h1>
+    <div class="logo" style="margin: 1.5em auto; width: 50%; text-align: center;">
+      <img src="/image/propboxlogo_color.png" alt="Propbox" style="width: 50%;">
+      <h1>Welcome, <span id="user"></span>!</h1>
+      <h3>Please wait a moment while you are logged in...</h3>
+    </div>
   </div>
 
 </body>

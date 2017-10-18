@@ -1,0 +1,80 @@
+
+
+
+
+
+
+
+<!-- USE templates/common.html! -->
+<!-- USE templates/common.html! -->
+<!-- USE templates/common.html! -->
+<!-- USE templates/common.html! -->
+<!-- USE templates/common.html! -->
+<!-- USE templates/common.html! -->
+<!-- USE templates/common.html! -->
+<!-- USE templates/common.html! -->
+<!-- USE templates/common.html! -->
+<!-- USE templates/common.html! -->
+
+
+
+
+
+<!-- Copyright (c) 2017 Future Gadget Laboratories.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. -->
+
+<!-- Firebase requirements (used by later imports) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.js"></script>
+<link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.css">
+
+<!-- Google Fonts stylesheets -->
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500" rel="stylesheet">
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!-- Font Awesome CDN embed code -->
+<script src="https://use.fontawesome.com/3970cf9baf.js"></script>
+
+<!-- Navbar style -->
+<link rel="stylesheet" href="/stylesheets/navbar.css"/>
+<link rel="stylesheet" href="/stylesheets/navbar_mobile.css" media="only screen and (max-device-width: 480px)"/>
+
+<!-- First party imports in specific dependency ordering -->
+<script src="/scripts/cookies.js"></script>
+<script src="/scripts/default_auth.js"></script>
+
+<link rel="stylesheet" href="/stylesheets/global.css">
+<link rel="stylesheet" href="/stylesheets/global_mobile.css" media="only screen and (max-device-width: 480px)"/>
+
+<!-- Load the navbar -->
+<script>
+    function SetUpNavBar(callback) {
+        $('#navbar_holder').load("/static/navbar.html", callback);
+        $('#footer_holder').load("/static/footer.html");
+    }
+</script>

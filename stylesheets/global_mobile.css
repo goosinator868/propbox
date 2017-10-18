@@ -1,5 +1,4 @@
-"""
-Copyright (c) 2017 Future Gadget Laboratories.
+/*Copyright (c) 2017 Future Gadget Laboratories.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -17,11 +16,32 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
+SOFTWARE.*/
 
-# Magic file that is automatically run on server startup.
-from google.appengine.ext import vendor
+/*This CSS file overwrites formatting from global.css on mobile view.
+  Changes made here will only be visible in mobile view.*/
 
-# Add any libraries installed in the "lib" folder.
-vendor.add('lib')
+
+body {
+  font-size: 2vh;
+}
+
+#left-pane {
+    padding: 5px;
+    width: 100%;
+    float: left;
+}
+
+#right-pane {
+    padding: 5px;
+    width: 100%;
+    float: right;
+}
+
+#page-heading h1 {
+  color: #DA81F5;
+  margin: 0;
+  padding: 0.4em 0;
+  text-align: center;
+  font-size: 2.4em;
+}
