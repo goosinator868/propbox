@@ -149,6 +149,7 @@ h2:first-child {
 
 #pane_container {
   display: inline-block;
+  width: 100%;
 }
 
 #left-pane {
@@ -161,10 +162,6 @@ h2:first-child {
     padding: 5px;
     width: 50%;
     float: right;
-}
-
-#pane_container {
-  width: 100vw;
 }
 
 #error {
