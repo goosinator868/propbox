@@ -66,6 +66,10 @@ SOFTWARE.*/
 	font-size: 22px;
 }
 
+#breadcrumbs a {
+  color: white;
+}
+
 #propbox_logo {
 	height: 40px;
 }

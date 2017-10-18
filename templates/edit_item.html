@@ -65,7 +65,12 @@ SOFTWARE. -->
 </head>
 
 <body>
-  <div id="navbar_holder"></div>
+  <div id="navbar_holder">
+    <div id="page_specific_breadcrumbs">
+      <a href="/item_details?item_id={{item.key.urlsafe()}}"> {{item.name}}</a>
+      <span>edit</span>
+    </div>
+  </div>
   <!-- New content here -->
   <div id="page-heading">
     <h1>Edit: {{item.name}}</h1>
