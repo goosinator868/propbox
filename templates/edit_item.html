@@ -29,19 +29,8 @@ SOFTWARE. -->
     });
   </script>
 
-  <script type="text/javascript">
-    function showConfirm() {
-        var modal = document.getElementById("confirm_popup");
-        modal.style.display = "block";
-        return;
-      }
+  <script type="text/javascript" src="/scripts/popup_confirm.js"></script>
 
-    function closeConfirm() {
-      var modal = document.getElementById("confirm_popup");
-      modal.style.display = "none";
-      return;
-    }
-  </script>
   <style type="text/css">
     div.form {
       font-size: 1.2em;
@@ -86,100 +75,102 @@ SOFTWARE. -->
   <div id="page-heading">
     <h1>Edit: {{item.name}}</h1>
   </div>
-  <div id="left-pane">
-  <h2>Current version of {{item.name}}:</h2>
-  <div class="item_details">
-      <a href="view_image?image_id={{item.key.urlsafe()}}">
-        <img src="view_image?image_id={{item.key.urlsafe()}}" class="item_image" alt="Picture of {{item.name}}" style="width: 48vw;"/>
-      </a>
-      <br/><br/>
-      <h3>{{item.description}}</h3>
-      <br/>
-      <p><b>Item Type:</b> {{item.item_type}}</p>
-      <p><b>Condition</b>: {{item.condition}}</p>
-      <p><b>Article</b>: {{item.clothing_article_type}}</p>
-      <p><b>Size</b>: {{item.clothing_size_string}}, {{item.clothing_size_num}}
-      <p><b>Tags</b>:{% for tag in item.tags %} {{tag}},{% endfor %}</p>
-      <p><b>QR Code</b>: {{item.qr_code}}</p>
-      <p>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</p>
-      <br/>
-      {% if pending_edit %}<p>{% if user.permissions != "STANDARD_USER" %} <a href="/review_edits">{% endif %}<strong>[EDITS ARE PENDING APPROVAL]</strong>{% if user.permissions != "STANDARD_USER" %}</a>{% endif %}</p>{% endif %}
+  <div id="pane_container" style="width: 100vw;">
+    <div id="left-pane">
+      <h2>Current version of {{item.name}}:</h2>
+      <div class="item_details">
+          <a href="view_image?image_id={{item.key.urlsafe()}}">
+            <img src="view_image?image_id={{item.key.urlsafe()}}" class="item_image" alt="Picture of {{item.name}}" style="width: 48vw;"/>
+          </a>
+          <br/><br/>
+          <h3>{{item.description}}</h3>
+          <br/>
+          <p><b>Item Type:</b> {{item.item_type}}</p>
+          <p><b>Condition</b>: {{item.condition}}</p>
+          <p><b>Article</b>: {{item.clothing_article_type}}</p>
+          <p><b>Size</b>: {{item.clothing_size_string}}, {{item.clothing_size_num}}</p>
+          <p><b>Tags</b>:{% for tag in item.tags %} {{tag}},{% endfor %}</p>
+          <p><b>QR Code</b>: {{item.qr_code}}</p>
+          <p>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</p>
+          <br/>
+          {% if pending_edit %}<p>{% if user.permissions != "STANDARD_USER" %} <a href="/review_edits">{% endif %}<strong>[EDITS ARE PENDING APPROVAL]</strong>{% if user.permissions != "STANDARD_USER" %}</a>{% endif %}</p>{% endif %}
 
-      {% if item.marked_for_deletion %}<p><p>{% if user.permissions != "STANDARD_USER" %} <a href="/review_deletions">{% endif %}<strong>[THIS ITEM HAS BEEN MARKED FOR DELETION]</strong>{% if user.permissions != "STANDARD_USER" %}</a>{% endif %}</p>{% endif %}
+          {% if item.marked_for_deletion %}<p>{% if user.permissions != "STANDARD_USER" %} <a href="/review_deletions">{% endif %}<strong>[THIS ITEM HAS BEEN MARKED FOR DELETION]</strong>{% if user.permissions != "STANDARD_USER" %}</a>{% endif %}</p>{% endif %}
 
-      {% if user.permissions == "ADMIN" %}<p>For development only: Deleted = {{item.deleted}}, Outdated = {{item.outdated}}, approved = {{item.approved}}.</p>{% endif %}
-      <br/>
-      <br/><br/><br/>
-  </div>
-  </div>
-  <div id="right-pane">
-  <div class="form">
-    <h1> Edit Item </h1>
-    <form action="/edit_item" method="post" style="width: 100%;">
-          <label>Name</label><br>
-          <input name="name" type="text" value="{{item.name}}"><br><br>
-          <label>Describe the item.</label><br>
-          <textarea name="description">{{item.description}}</textarea><br><br>
-          <label>Is this item a costume or prop?</label><br>
-          <select name="item_type" class="addItemDropdown">
-              <option {% if item.item_type == "Costume" %} selected {% endif %}>Costume</option>
-              <option {% if item.item_type == "Prop" %} selected {% endif %}>Prop</option>
-          </select><br><br>
-          <label>Item condition</label><br>
-          <select name="condition" class="addItemDropdown">
-            {% for option in ["Good", "Fair", "Poor", "Being Repaired"] %}
-              <option {% if item.condition == option %} selected {% endif %}> {{option}} </option>
-            {% endfor %}
-          </select><br><br>
-          <label>Clothing article</label><br>
-          <select name="article" class="addItemDropdown">
-            {% for option in ["N/A", "Top", "Bottom", "Dress", "Shoes", "Hat", "Coat/Jacket", "Other"] %}
-              <option {% if item.clothing_article_type == option %} selected {% endif %}> {{option}} </option>
-            {% endfor %}
-          </select><br><br>
-          <label>Size</label><br>
-          <select name="clothing_size_number" class="addItemDropdown" style="display: inline-block; width: auto;">
-            <option {% if item.clothing_size_num == "N/A" %} selected {% endif %}> N/A </option>
-            {% for option in range(21) %}
-              <option {% if item.clothing_size_num == option|string() %} selected {% endif %}> {{option}} </option>
-            {% endfor %}
-          </select>
-          <select name="clothing_size_string" class="addItemDropdown" style="display: inline-block; width: auto;">
-            {% for option in ["N/A", "XS", "S", "M", "L", "XL", "XXL", "XXXL"] %}
-              <option {% if item.clothing_size_string == option|string() %} selected {% endif %}> {{option}} </option>
-            {% endfor %}
-          </select><br><br>
-          <label>Tags</label><br>
-          <!-- See http://jinja.pocoo.org/docs/2.9/templates/#whitespace-control -->
-          <textarea name="tags" placeholder="Separate tags with the enter key.">
-{%- for tag in item.tags %}
-{{tag}}
-{%- endfor %}</textarea><br><br>
-        <label>Is this item checked out?</label><input type="checkbox" name="check_out_bool" value="checked" {% if item.checked_out %} checked {% endif %} style="width: auto; margin-left: 10px;">
-        <br><br>
-        <label>Reason for checkout</label><br><input name="check_out_reason" type="text" value="{{item.checked_out_reason}}"><br><br>
-          <input type="hidden" name="old_item_key" value="{{item.key.urlsafe()}}">
-      <div id="confirm_popup" class="modal">
-        <div class="modal-content">
-        <span class="close" onclick="closeConfirm()">&times;</span>
-        Are you sure you want to submit
-        {% if user.permissions=="STANDARD_USER" %}
-        an edit request for <strong>{{item.name}}</strong>? Changes must be approved before they are visible to everyone.
-        <br/>
-        <input type="submit" value="Submit edit request" class="submitButton" style="width: auto;">
-        {% else %}
-        an edit for <strong>{{item.name}}</strong>? Changes will take place immediately.
-        <br/>
-        <input type="submit" value="Submit changes" class="submitButton" style="width: auto;">
-        {% endif %}
-        <button onclick="closeConfirm()" type="button" class="submitButton" style="width: auto;">Cancel</button>
-        </div>
+          {% if user.permissions == "ADMIN" %}<p>For development only: Deleted = {{item.deleted}}, Outdated = {{item.outdated}}, approved = {{item.approved}}.</p>{% endif %}
+          <br/>
+          <br/><br/><br/>
       </div>
+    </div>
+    <div id="right-pane">
+      <div class="form">
+        <h1> Edit Item </h1>
+        <form action="/edit_item" method="post" style="width: 100%;">
+              <label>Name</label><br>
+              <input name="name" type="text" value="{{item.name}}"><br><br>
+              <label>Describe the item.</label><br>
+              <textarea name="description">{{item.description}}</textarea><br><br>
+              <label>Is this item a costume or prop?</label><br>
+              <select name="item_type" class="addItemDropdown">
+                  <option {% if item.item_type == "Costume" %} selected {% endif %}>Costume</option>
+                  <option {% if item.item_type == "Prop" %} selected {% endif %}>Prop</option>
+              </select><br><br>
+              <label>Item condition</label><br>
+              <select name="condition" class="addItemDropdown">
+                {% for option in ["Good", "Fair", "Poor", "Being Repaired"] %}
+                  <option {% if item.condition == option %} selected {% endif %}> {{option}} </option>
+                {% endfor %}
+              </select><br><br>
+              <label>Clothing article</label><br>
+              <select name="article" class="addItemDropdown">
+                {% for option in ["N/A", "Top", "Bottom", "Dress", "Shoes", "Hat", "Coat/Jacket", "Other"] %}
+                  <option {% if item.clothing_article_type == option %} selected {% endif %}> {{option}} </option>
+                {% endfor %}
+              </select><br><br>
+              <label>Size</label><br>
+              <select name="clothing_size_number" class="addItemDropdown" style="display: inline-block; width: auto;">
+                <option {% if item.clothing_size_num == "N/A" %} selected {% endif %}> N/A </option>
+                {% for option in range(26) %}
+                  <option {% if item.clothing_size_num == option|string() %} selected {% endif %}> {{option}} </option>
+                {% endfor %}
+              </select>
+              <select name="clothing_size_string" class="addItemDropdown" style="display: inline-block; width: auto;">
+                {% for option in ["N/A", "XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"] %}
+                  <option {% if item.clothing_size_string == option|string() %} selected {% endif %}> {{option}} </option>
+                {% endfor %}
+              </select><br><br>
+              <label>Tags</label><br>
+              <!-- See http://jinja.pocoo.org/docs/2.9/templates/#whitespace-control -->
+              <textarea name="tags" placeholder="Separate tags with the enter key.">
+            {%- for tag in item.tags %}
+            {{tag}}
+            {%- endfor %}</textarea><br><br>
+            <label>Is this item checked out?</label><input type="checkbox" name="check_out_bool" value="checked" {% if item.checked_out %} checked {% endif %} style="width: auto; margin-left: 10px;">
+            <br><br>
+            <label>Reason for checkout</label><br><input name="check_out_reason" type="text" value="{{item.checked_out_reason}}"><br><br>
+              <input type="hidden" name="old_item_key" value="{{item.key.urlsafe()}}">
+          <div id="confirm_popup" class="modal">
+            <div class="modal-content">
+            <span class="close" onclick="closeConfirm('popup')">&times;</span>
+            Are you sure you want to submit
+            {% if user.permissions=="STANDARD_USER" %}
+            an edit request for <strong>{{item.name}}</strong>? Changes must be approved before they are visible to everyone.
+            <br/>
+            <input type="submit" value="Submit edit request" class="submitButton" style="width: auto;">
+            {% else %}
+            an edit for <strong>{{item.name}}</strong>? Changes will take place immediately.
+            <br/>
+            <input type="submit" value="Submit changes" class="submitButton" style="width: auto;">
+            {% endif %}
+            <button onclick="closeConfirm('popup')" type="button" class="submitButton" style="width: auto;">Cancel</button>
+            </div>
+          </div>
 
-      <button onclick="showConfirm()" type="button" class="submitButton">Submit Edit{% if user.permissions=="STANDARD_USER" %} Request{% endif %}</button>
-    </form>
+          <button onclick="showConfirm('popup')" type="button" class="submitButton">Submit Edit{% if user.permissions=="STANDARD_USER" %} Request{% endif %}</button>
+        </form>
+      </div>
+    </div>
   </div>
-</div>
-  <div id="footer_holder"></div>
+  <footer id="footer_holder"></footer>
 </body>
 </html>

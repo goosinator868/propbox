@@ -58,7 +58,9 @@ body {
   display: inline-block;
   border-radius: 5px;
   margin: 5px;
+  margin-left: 5%;
   position: relative;
+  width: 90%;
 }
 
 .sub_item_container {
@@ -159,6 +161,10 @@ h2:first-child {
     padding: 5px;
     width: 50%;
     float: right;
+}
+
+#pane_container {
+  width: 100vw;
 }
 
 #error {
