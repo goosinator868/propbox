@@ -34,7 +34,11 @@ SOFTWARE. -->
 </head>
 
 <body>
-  <div id="navbar_holder"></div>
+  <div id="navbar_holder">
+    <div id="page_specific_breadcrumbs">
+      <span> {{item.name}}</span>
+    </div>
+  </div>
   <!-- New content here -->
   {% if item.image %}
     <a href="view_image?image_id={{item.key.urlsafe()}}">
