@@ -60,10 +60,10 @@ SOFTWARE.*/
 }
 
 #breadcrumbs {
-	margin: 9px;
+	margin: 12px 8px;
 	line-height: 30px; /*Line high has to equal #breadcrumb_bar's height*/
 	color: white;
-	font-size: 22px;
+	font-size: 18px;
 }
 
 #breadcrumbs a {
