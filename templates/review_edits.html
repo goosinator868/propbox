@@ -43,6 +43,11 @@ SOFTWARE. -->
     }
   </script>
   <script type="text/javascript" src="/scripts/popup_confirm.js"></script>
+  <style type="text/css">
+    h2 {
+      margin-left: 1em;
+    }
+  </style>
 </head>
 
 <body>
@@ -51,7 +56,7 @@ SOFTWARE. -->
   <div id="confirm_{{i|string}}_{{item[0].key.urlsafe()}}" class="modal">
     <div class="modal-content">
     <span class="close" onclick="iCloseConfirm('{{item[0].key.urlsafe()}}',{{i}})">&times;</span>
-      <p>Do you really want to revert <strong>{{item[0].name}}</strong> to the earlier version of <strong>{{item[1][i].name}}</strong>?</p>
+      <h5 class="modal-title" style="font-size: 1.3em;">Do you really want to revert <strong>{{item[0].name}}</strong> to the earlier version of <strong>{{item[1][i].name}}</strong>?</h5>
       <p>This cannot be undone.</p>
 
       <div class="sub_item_container" style="display: inline-block;">
@@ -85,7 +90,7 @@ SOFTWARE. -->
   <div id="confirm_{{i|string}}_{{item[0].key.urlsafe()}}" class="modal">
     <div class="modal-content">
     <span class="close" onclick="iCloseConfirm('{{item[0].key.urlsafe()}}',{{i}})">&times;</span>
-      <p>Do you want to select version {{i+1}} of <strong>{{item[0].name}}</strong> to approve?</p>
+      <h5 class="modal-title" style="font-size: 1.3em;">Do you want to select version {{i+1}} of <strong>{{item[0].name}}</strong> to approve?</h5>
       <p>This will discard other versions.</p>
 
       <div class="sub_item_container" style="display: inline-block;">
@@ -125,7 +130,7 @@ SOFTWARE. -->
   <div id="pane_container">
     <div id="right-pane" class="pane">
       <h2>Items with past versions</h2>
-      {% if revert==[] %}<div style="min-width: 100%; text-align: center;"><p style="width: 40%; margin: auto; margin-top: 4vh; border: solid; border-color: rgb(174,100,211); border-radius: 4px;">There's nothing to revert.</p></div>{% endif %}
+      {% if revert==[] %}<div style="min-width: 100%; text-align: center;"><p style="width: auto; margin: auto; margin-top: 2vh; font-size: 1.8em;">There's nothing to revert.</p></div>{% endif %}
       <br/>
       <div>
         {% for item in revert %}
@@ -169,7 +174,7 @@ SOFTWARE. -->
 
     <div id="left-pane" class="pane">
       <h2>Items awaiting edit approval</h2>
-      {% if suggest==[] %}<div style="min-width: 100%; text-align: center;"><p style="width: 40%; margin: auto; margin-top: 4vh; border: solid; border-color: rgb(174,100,211); border-radius: 4px;">There's nothing approve.</p></div>{% endif %}
+      {% if suggest==[] %}<div style="min-width: 100%; text-align: center;"><p style="width: auto; margin: auto; margin-top: 2vh; font-size: 1.8em;">There's nothing to approve.</p></div>{% endif %}
       <br/>
       <div>
         {% for item in suggest %}
