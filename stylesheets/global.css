@@ -42,7 +42,7 @@ body {
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 600px;
 }
 
 .close {
@@ -58,7 +58,9 @@ body {
   display: inline-block;
   border-radius: 5px;
   margin: 5px;
+  margin-left: 5%;
   position: relative;
+  width: 90%;
 }
 
 .sub_item_container {
@@ -100,7 +102,7 @@ body {
 }
 
 .item_container h2, h3, h4, p {
-  margin: 6px 0;
+  margin: 6px auto;
   width: 60%;
 }
 
@@ -138,7 +140,7 @@ body {
   }
 
 h2:first-child {
-  text-align: center;
+  /*text-align: center;*/
 }
 
 #costume_specific_forms {
@@ -147,6 +149,7 @@ h2:first-child {
 
 #pane_container {
   display: inline-block;
+  width: 100%;
 }
 
 #left-pane {

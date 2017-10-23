@@ -8,3 +8,4 @@ This folder contains scripts for use in various places.
 | auth_page_auth.js | Firebase authentication script for auth page. |
 | cookies.js        | Script for managing cookies.                  |
 | default_auth.js   | Firebasse authentication for most other pages.|
+| popup_confirm.js  | Script for managing popups on the site.       |

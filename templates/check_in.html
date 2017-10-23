@@ -1,0 +1,139 @@
+<!-- Copyright (c) 2017 Future Gadget Laboratories.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. -->
+<!doctype html>
+<html>
+<head>
+{% include 'templates/common.html' %}
+  <!-- QR-CODE reader import -->
+  <script type="text/javascript" src="/scripts/instascan.min.js"></script>
+  <script type="text/javascript" src="/scripts/qr_code.min.js"></script>
+  <script>
+    $(document).ready(function(){
+      $("#scanner_container").hide();
+      SetUpNavBar(SetUpFirebase);
+    });
+
+    var scanned_codes = [];
+  </script>
+
+  <style>
+    #qrcode {
+      margin: 50px;
+    }
+
+    #scanner_window {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      z-index: 100;
+      width: 100vw;
+      height: 100vh;
+      background-color: #E9E9E9;
+    }
+
+    #scanner_tooltip {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      z-index: 101;
+      width: 100vw;
+      height: 10vh;
+      background-color:rgb(174,100,211);
+      font-size: 20pt;
+    }
+  </style>
+
+  <!-- Code to support scanQRCode() -->
+  <script type="text/javascript">
+    function scanQRCode(callback) {
+      let scanner = new Instascan.Scanner({ video: document.getElementById('scanner_window'), mirror: false, backgroundScan: false });
+      scanner.addListener('scan', function (content) {
+        scanner.stop();
+        $("#scanner_container").hide();
+        callback(content);
+      });
+      // Close the scanner if someone clicks out of it.
+      $("#scanner_container").click(function(){
+        scanner.stop();
+        $("#scanner_container").hide();
+      });
+      Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length == 0) {
+          // desktop
+          scanner.start(cameras[0]);
+        } else if (cameras.length > 0) {
+          // mobile
+          scanner.start(cameras[cameras.length - 1]);
+        } else {
+          console.error('No cameras found.');
+          alert("No cameras found.");
+        }
+      }).catch(function (e) {
+        console.error(e);
+      });
+    }
+
+    function scanAndAddToList(list) {
+      $("#scanner_container").show();
+      scanQRCode(function(content){
+        scanned_codes.push(content);
+        new_content = document.createElement('li');
+        new_content.textContent = content;
+        document.getElementById('scanned_list').appendChild(new_content);
+      });
+    }
+  </script>
+
+  <title>Prop Box</title>
+</head>
+
+<body>
+  <div id="navbar_holder">
+    <div id="page_specific_breadcrumbs">
+      <span> Check in items </span>
+    </div>
+  </div>
+  <!-- New content here -->
+
+  <button onclick="scanAndAddToList(scanned_codes)">Scan QR code</button>
+  <div id="scanner_container">
+    <div id="scanner_tooltip">
+      Click anywhere to exit
+    </div>
+    <video id="scanner_window"></video>
+  </div>
+  <ul id="scanned_list"></ul>
+
+  <div id="qrcode"></div>
+  <script type="text/javascript">
+  var qrcode = new QRCode(document.getElementById("qrcode"), {
+    text: "did it work??",
+    width: 128,
+    height: 128,
+    colorDark : "#000000",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.H
+  });
+  </script>
+
+
+  <div id="footer_holder"></div>
+</body>
+</html>

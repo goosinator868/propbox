@@ -155,19 +155,6 @@ def CommitEdit(old_key, new_item, was_orphan=False,suggestion=False):
 
 ## Handlers
 
-""" Disabled for moving.
-# Loads the main page.
-class MainPage(webapp2.RequestHandler):
-    @auth.login_required
-    def get(self):
-        # Load html template
-        template = JINJA_ENVIRONMENT.get_template('templates/index.html')
-        user = GetCurrentUser(self.request)
-        self.response.write(ValidateHTML(template.render({'user':user})))
-
-"""
-
-
 #Loads add item page and adds item to database
 class AddItem(webapp2.RequestHandler):
     @auth.login_required
@@ -557,7 +544,7 @@ class KeepRevision(webapp2.RequestHandler):
 class DiscardRevision(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
-        if GetCurrentUser(self.request).permissions == "STANDARD_USER":
+        if GetCurrentUser(self.request).permissions == "Standard user":
             self.redirect('/')
             return
         if self.request.get('revert') == "True":
@@ -595,41 +582,12 @@ class RevertItem(webapp2.RequestHandler):
         sleep(0.1)
         self.redirect('/review_edits')
 
-""" Disabled group access.
-class CreateGroup(webapp2.RequestHandler):
-    @auth.login_required
+class CheckIn(webapp2.RequestHandler):
     def get(self):
-        logging.info("Create Group:get")
-        template = JINJA_ENVIRONMENT.get_template('templates/create_group.html')
-        self.response.write(ValidateHTML(template.render({})))
-
-    @auth.login_required
-    def post(self):
-        logging.info("Create Group:post")
-        self.redirect('/')
-
-class GroupList(webapp2.RequestHandler):
-    @auth.login_required
-    def get(self):
-        logging.info("Group List:get")
-        template = JINJA_ENVIRONMENT.get_template('templates/group_list.html')
-        self.response.write(ValidateHTML(template.render({})))
-
-class ViewGroup(webapp2.RequestHandler):
-    @auth.login_required
-    def get(self):
-        logging.info("View Group:get")
-        template = JINJA_ENVIRONMENT.get_template('templates/group.html')
-        self.response.write(ValidateHTML(template.render({})))
-
-class ViewUsersInGroup(webapp2.RequestHandler):
-    @auth.login_required
-    def get(self):
-        logging.info("View Users In Group")
-        template = JINJA_ENVIRONMENT.get_template('templates/users_in_group.html')
-        self.response.write(ValidateHTML(template.render({})))
-
-"""
+        template = JINJA_ENVIRONMENT.get_template('templates/check_in.html')
+        page = template.render({})
+        page = page.encode('utf-8')
+        self.response.write(ValidateHTML(page))
 
 class ViewItemDetails(webapp2.RequestHandler):
     @auth.login_required
@@ -791,10 +749,7 @@ app = webapp2.WSGIApplication([
     ('/manage_users', ManageUsers),
     ('/post_auth', PostAuth),
     ('/pending_approval', PendingApproval),
-    #('/create_group', CreateGroup),
-    #('/group_list', GroupList),
-    #('/view_group', ViewGroup),
-    #('/view_users_in_group', ViewUsersInGroup),
+    ('/check_in', CheckIn),
     ('/item_details', ViewItemDetails),
     ('/review_deletions', ReviewDeletions),
     ('/.*', MainPage),

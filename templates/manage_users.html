@@ -31,35 +31,35 @@ SOFTWARE. -->
 
   <title>Propbox :: Manage users</title>
   <style type="text/css">
-  /* Manage Users page-specific CSS */
-  h3 {
-      font-size: 2em;
-      margin: 18px auto;
-      width: 1000px;
-  }
-
-  .user-info {
-      background-color: #F9F9F9;
-      border-radius: 6px;
-      margin: 18pt auto;
-      padding: 12px 20px;
-      width: 1000px;
-      display: table;
-  }
-
-    .user-info h4 {
-        float: left;
-        margin: 0;
-        padding-left: 0;
-        font-size: 36px;
-        width: 50%;
+    /* Manage Users page-specific CSS */
+    h3 {
+        font-size: 2em;
+        margin: 18px auto;
+        width: 75%;
     }
 
-    .user-info form {
-        font-size: 18px;
-        display: block;
-        float: right;
+    .user-info {
+        background-color: #F9F9F9;
+        border-radius: 6px;
+        margin: 18pt auto;
+        padding: 12px 20px;
+        width: 75%;
+        display: table;
     }
+
+      .user-info h4 {
+          float: left;
+          margin: 0;
+          padding-left: 0;
+          font-size: 36px;
+          width: 45%;
+      }
+
+      .user-info form {
+          font-size: 18px;
+          display: block;
+          float: right;
+      }
 
       .user-info form select {
           border: 0;
@@ -78,16 +78,16 @@ SOFTWARE. -->
           -webkit-transition: background-color 0.1s ease;
       }
 
-        .user-info form input[type=submit]:hover {
-            background-color: #DA81F5;
-        }
+      .user-info form input[type=submit]:hover {
+          background-color: #DA81F5;
+      }
   </style>
 </head>
 
 <body>
   <div id="navbar_holder">
     <div id="page_specific_breadcrumbs">
-      <span>manage users</span>
+      <span>Manage users</span>
     </div>
   </div>
 
@@ -148,6 +148,6 @@ SOFTWARE. -->
         </div>
   {% endfor %}
   {% endif %}
-  <div id="footer_holder"></div>
+  <footer id="footer_holder"></footer>
 </body>
 </html>

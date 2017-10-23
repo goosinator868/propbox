@@ -23,7 +23,7 @@ SOFTWARE. -->
 <head>
     <!-- <link rel="import" href="/static/common.html"> -->
     {% include 'templates/common.html' %}
-    
+
     <script>
     $(document).ready(function(){
         SetUpNavBar(SetUpFirebase);
@@ -222,6 +222,10 @@ SOFTWARE. -->
         border-radius: 6px;
       }
 
+      .item_container h2, h3, h4, p {
+        margin: 6px 0;
+      }
+
       #welcome-msg {
         font-size: 2.2em;
         text-align: center;
@@ -300,10 +304,10 @@ SOFTWARE. -->
                                         {% endif %}
                                         <h3>{{item.item_type}}</h3>
                                         <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</h4>
-                                        <h5><b>Condition</b>: {{item.condition}}</h5>
                                         <p>{{item.description}}</p>
-                                        <p>Article:{{item.clothing_article_type}}</p>
-                                        <p>Tags:{% for tag in item.tags %} {{tag}},{% endfor %}</p>
+                                        <p><b>Condition</b>: {{item.condition}}</p>
+                                        <p><b>Article</b>: {{item.clothing_article_type}}</p>
+                                        <p><b>Tags</b>:{% for tag in item.tags %} {{tag}},{% endfor %}</p>
                                         <form action="/item_details" method="get">
                                           <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
                                           <input type="submit" value="Item Details" class="submitButton">
@@ -324,10 +328,10 @@ SOFTWARE. -->
                                     {% endif %}
                                     <h3>{{item.item_type}}</h3>
                                     <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</h4>
-                                    <h5><b>Condition</b>: {{item.condition}}</h5>
                                     <p>{{item.description}}</p>
-                                    <p>Article:{{item.clothing_article_type}}</p>
-                                    <p>Tags:{% for tag in item.tags %} {{tag}},{% endfor %}</p>
+                                    <p><b>Condition</b>: {{item.condition}}</p>
+                                    <p><b>Article</b>: {{item.clothing_article_type}}</p>
+                                    <p><b>Tags</b>:{% for tag in item.tags %} {{tag}},{% endfor %}</p>
                                     <form action="/item_details" method="get">
                                       <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
                                       <input type="submit" value="Item Details" class="submitButton">
@@ -342,9 +346,6 @@ SOFTWARE. -->
       </div>
 
       <div id="right-pane">
-            <form style="display: block;" action="/add_item" method="get">
-                <input type="submit" value="Add Item" class="submitButton">
-            </form>
             <div>
                 <!-- Search form -->
                 <div class="form">
@@ -423,7 +424,7 @@ SOFTWARE. -->
             </div>
       </div>
   </div>
-  <div id="footer_holder"></div>
+  <footer id="footer_holder"></footer>
   <script>
     getCheckboxValues();
   </script>
