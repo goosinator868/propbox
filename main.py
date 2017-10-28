@@ -19,6 +19,7 @@
 # SOFTWARE.
 
 # Python built-in imports.
+import copy
 import os
 import urllib
 import requests
@@ -37,6 +38,14 @@ from warehouse_models import Item, cloneItem, User, possible_permissions
 from warehouse_models import List
 import auth
 from auth import GetCurrentUser
+
+# Encoodes items into JSON, this only includes information being actively used
+class ItemEncoder(json.JSONEncoder):
+    def default(self, item):
+        fields = {}
+        fields['name'] = item.name  # used in qr-code check in/out
+        fields['urlsafe_key'] = item.key.urlsafe() # used in qr-code check in/out
+        return fields
 
 # Validates an html string using the w3 validator.
 def ValidateHTML(html_string):
@@ -787,9 +796,10 @@ class PrintQRCodes(webapp2.RequestHandler):
 class ItemFromQRCode(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
-        qr_code = self.request.get('qr_code')
-        item = Item.query(ndb.And(Item.qr_code == qr_code, Item.outdated == False)).filter().fetch()[0]
-        self.response.write(json.dumps(item))
+        qr_code = int(self.request.get('qr_code'))
+        item = Item.query(ndb.AND(Item.qr_code == qr_code, Item.outdated == False)).filter().fetch()[0]
+        logging.info(item)
+        self.response.write(ItemEncoder().encode(item))
 
 class CheckIn(webapp2.RequestHandler):
     @auth.login_required
@@ -808,6 +818,13 @@ class CheckIn(webapp2.RequestHandler):
             item.put()
 
 class CheckOut(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('templates/check_out.html')
+        page = template.render({})
+        page = page.encode('utf-8')
+        self.response.write(ValidateHTML(page))
+
     @auth.login_required
     def post(self):
         to_check_in = self.request.get('to_check_out')
@@ -840,8 +857,10 @@ app = webapp2.WSGIApplication([
     ('/post_auth', PostAuth),
     ('/pending_approval', PendingApproval),
     ('/check_in', CheckIn),
+    ('/check_out', CheckOut),
     ('/item_details', ViewItemDetails),
     ('/review_deletions', ReviewDeletions),
     ('/print_qr_codes', PrintQRCodes),
+    ('/item_from_qr_code', ItemFromQRCode),
     ('/.*', MainPage),
 ], debug=True)

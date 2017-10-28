@@ -2,7 +2,7 @@
 2. Inherit QR codes on edit. // Done
 
 3. Print single QR code. // Done
-4. Print multiple QR code.
+4. Print multiple QR code. // Done
 
 5. Check out (single) based on QR code.
 6. Check in (single) based on QR code.
