@@ -89,12 +89,20 @@ SOFTWARE. -->
     function scanAndAddToList(list) {
       $("#scanner_container").show();
       scanQRCode(function(content){
-        
-        alert(jQuery.ajax("/item_from_qr_code?" + content));
-        scanned_codes.push(content);
-        new_content = document.createElement('li');
-        new_content.textContent = content;
-        document.getElementById('scanned_list').appendChild(new_content);
+        if (scanned_codes.indexOf(content) < 0) {
+          scanned_codes.push(content);
+          item = jQuery.getJSON("/item_from_qr_code?qr_code=" + content, "", function(item) {
+              hidden_id = document.createElement('input');
+              hidden_id.setAttribute("type", "hidden");
+              hidden_id.setAttribute("name", "to_check_out");
+              hidden_id.setAttribute("value", item.urlsafe_key);
+              document.getElementById('scanned_keys').appendChild(hidden_id);
+
+              new_content = document.createElement('li');
+              new_content.textContent = item.name;
+              document.getElementById('scanned_list').appendChild(new_content);
+            });
+        }
       });
     }
   </script>
@@ -117,8 +125,14 @@ SOFTWARE. -->
     </div>
     <video id="scanner_window"></video>
   </div>
+  <h2>Scanned Items</h2>
+   <form id="scanned_keys" action="/check_out" method="post">
+    Reason: 
+    <br> <textarea  name="reason"></textarea>
+    <br> <input type="submit" value="Check out scanned items">
+  </form>
   <ul id="scanned_list"></ul>
-
+ 
 
   <div id="footer_holder"></div>
 </body>

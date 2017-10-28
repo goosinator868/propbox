@@ -4,11 +4,11 @@
 3. Print single QR code. // Done
 4. Print multiple QR code. // Done
 
-5. Check out (single) based on QR code.
-6. Check in (single) based on QR code.
+5. Check out (single) based on QR code. // Done
+6. Check in (single) based on QR code. // Done
 
-7. Check out (multiple) based on QR code.
-8. Check in (multiple) based on QR code.
+7. Check out (multiple) based on QR code. // Done
+8. Check in (multiple) based on QR code. // Done
 
 9. Add check in and check out from item search page.
 10. Remove check in and check out from edit page.

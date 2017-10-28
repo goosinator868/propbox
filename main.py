@@ -811,11 +811,12 @@ class CheckIn(webapp2.RequestHandler):
 
     @auth.login_required
     def post(self):
-        to_check_in = self.request.get('to_check_in')
+        to_check_in = self.request.get_all('to_check_in')
         for urlsafe_key in to_check_in:
-            item = item = ndb.Key(urlsafe=urlsafe_key)
+            item = ndb.Key(urlsafe=urlsafe_key).get()
             item.checked_out = False
             item.put()
+            self.redirect("/")
 
 class CheckOut(webapp2.RequestHandler):
     @auth.login_required
@@ -827,11 +828,16 @@ class CheckOut(webapp2.RequestHandler):
 
     @auth.login_required
     def post(self):
-        to_check_in = self.request.get('to_check_out')
+        user = auth.get_user_id(self.request)
+        to_check_in = self.request.get_all('to_check_out')
+        reason = self.request.get('reason')
         for urlsafe_key in to_check_in:
-            item = ndb.Key(urlsafe=urlsafe_key)
+            item = ndb.Key(urlsafe=urlsafe_key).get()
             item.checked_out = True
+            item.checked_out_by = user
+            item.checked_out_reason = reason
             item.put()
+            self.redirect("/")
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(

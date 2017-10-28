@@ -23,7 +23,6 @@ SOFTWARE. -->
 {% include 'templates/common.html' %}
   <!-- QR-CODE reader import -->
   <script type="text/javascript" src="/scripts/instascan.min.js"></script>
-  <script type="text/javascript" src="/scripts/qr_code.min.js"></script>
   <script>
     $(document).ready(function(){
       $("#scanner_container").hide();
@@ -34,9 +33,6 @@ SOFTWARE. -->
   </script>
 
   <style>
-    #qrcode {
-      margin: 50px;
-    }
 
     #scanner_window {
       position: absolute;
@@ -93,10 +89,20 @@ SOFTWARE. -->
     function scanAndAddToList(list) {
       $("#scanner_container").show();
       scanQRCode(function(content){
-        scanned_codes.push(content);
-        new_content = document.createElement('li');
-        new_content.textContent = content;
-        document.getElementById('scanned_list').appendChild(new_content);
+        if (scanned_codes.indexOf(content) < 0) {
+          scanned_codes.push(content);
+          item = jQuery.getJSON("/item_from_qr_code?qr_code=" + content, "", function(item) {
+              hidden_id = document.createElement('input');
+              hidden_id.setAttribute("type", "hidden");
+              hidden_id.setAttribute("name", "to_check_in");
+              hidden_id.setAttribute("value", item.urlsafe_key);
+              document.getElementById('scanned_keys').appendChild(hidden_id);
+
+              new_content = document.createElement('li');
+              new_content.textContent = item.name;
+              document.getElementById('scanned_list').appendChild(new_content);
+            });
+        }
       });
     }
   </script>
@@ -119,20 +125,12 @@ SOFTWARE. -->
     </div>
     <video id="scanner_window"></video>
   </div>
+  <h2>Scanned Items</h2>
+   <form id="scanned_keys" action="/check_in" method="post">
+    <input type="submit" value="Check in scanned items">
+  </form>
   <ul id="scanned_list"></ul>
-
-  <div id="qrcode"></div>
-  <script type="text/javascript">
-  var qrcode = new QRCode(document.getElementById("qrcode"), {
-    text: "did it work??",
-    width: 128,
-    height: 128,
-    colorDark : "#000000",
-    colorLight : "#ffffff",
-    correctLevel : QRCode.CorrectLevel.H
-  });
-  </script>
-
+ 
 
   <div id="footer_holder"></div>
 </body>
