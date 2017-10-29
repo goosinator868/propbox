@@ -10,8 +10,8 @@
 7. Check out (multiple) based on QR code. // Done
 8. Check in (multiple) based on QR code. // Done
 
-9. Add check in and check out from item search page.
-10. Remove check in and check out from edit page.
+9. Add check in and check out from item search page. // Done
+10. Remove check in and check out from edit page. // Done
 
 11. Create lists tab in navbar
 12. Lists tab --> New list

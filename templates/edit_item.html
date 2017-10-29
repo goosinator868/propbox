@@ -145,10 +145,6 @@ SOFTWARE. -->
             {%- for tag in item.tags %}
             {{tag}}
             {%- endfor %}</textarea><br><br>
-            <label>Is this item checked out?</label><input type="checkbox" name="check_out_bool" value="checked" {% if item.checked_out %} checked {% endif %} style="width: auto; margin-left: 10px;">
-            <br><br>
-            <label>Reason for checkout</label><br><input name="check_out_reason" type="text" value="{{item.checked_out_reason}}"><br><br>
-              <input type="hidden" name="old_item_key" value="{{item.key.urlsafe()}}">
           <div id="confirm_popup" class="modal">
             <div class="modal-content">
             <span class="close" onclick="closeConfirm('popup')">&times;</span>

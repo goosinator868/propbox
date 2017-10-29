@@ -118,8 +118,6 @@ def CommitPurge(item_key):
     while item_key.parent():
         item_key = item_key.parent()
         toDelete.append(item_key)
-    # logging.info("\n\n\n")
-    # logging.info(toDelete)
     for k in toDelete:
         k.delete()
 
@@ -798,7 +796,6 @@ class ItemFromQRCode(webapp2.RequestHandler):
     def get(self):
         qr_code = int(self.request.get('qr_code'))
         item = Item.query(ndb.AND(Item.qr_code == qr_code, Item.outdated == False)).filter().fetch()[0]
-        logging.info(item)
         self.response.write(ItemEncoder().encode(item))
 
 class CheckIn(webapp2.RequestHandler):
@@ -815,6 +812,7 @@ class CheckIn(webapp2.RequestHandler):
         for urlsafe_key in to_check_in:
             item = ndb.Key(urlsafe=urlsafe_key).get()
             item.checked_out = False
+            item.checked_out_reason = ""
             item.put()
             self.redirect("/")
 
