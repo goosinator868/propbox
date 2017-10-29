@@ -18,7 +18,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# +---------------------+
+# | Third-party imports |
+# +---------------------+
+
 from google.appengine.ext import ndb
+
+
+# +------------------------+
+# | Item Class and Helpers |
+# +------------------------+
 
 class Item(ndb.Model):
     '''Describes the structure of an "item" in the warehouse.'''
@@ -71,12 +80,22 @@ def cloneItem(oldItem, parentKey=None):
         checked_out_reason = oldItem.checked_out_reason,
         checked_out_by = oldItem.checked_out_by)
 
+
+# +----------------------------+
+# | User Permissions Constants |
+# +----------------------------+
+
 # Only these values should be stored in the User ==> permissions field.
 STANDARD_USER = "Standard user"
 TRUSTED_USER = "Trusted user"
 ADMIN = "Admin"
 PENDING_USER = "Pending user" # Pending user is for users who have recently joined the site, awaiting admin approval
 DEACTIVATED_USER = "Deactivated user" # user has been deactivated by an admin
+
+
+# +---------------+
+# | Miscellaneous |
+# +---------------+
 
 possible_permissions = set([STANDARD_USER, TRUSTED_USER, ADMIN, PENDING_USER, DEACTIVATED_USER])
 

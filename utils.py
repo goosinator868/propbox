@@ -47,7 +47,7 @@ from google.appengine.ext.db import TransactionFailedError
 
 from warehouse_models import Item, cloneItem, User, possible_permissions
 import auth
-from auth import GetCurrentUser
+from auth import get_current_user
 
 
 # +-----------------+

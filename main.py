@@ -47,7 +47,7 @@ from google.appengine.ext.db import TransactionFailedError
 
 from warehouse_models import Item, cloneItem, User, possible_permissions
 import auth
-from auth import GetCurrentUser
+from auth import get_current_user
 import utils
 from utils import * 
 
@@ -132,7 +132,7 @@ class ResolveEdits(webapp2.RequestHandler):
         new_item.name = self.request.get('name')
         new_item.description = self.request.get('description', default_value='')
         new_item.orphan = False
-        new_item.suggested_by = GetCurrentUser(self.request).name
+        new_item.suggested_by = get_current_user(self.request).name
         try:
             CommitEdit(old_item.key, new_item, was_orphan=True)
             self.redirect("/")
@@ -159,7 +159,7 @@ class EditItem(webapp2.RequestHandler):
         item_id = ndb.Key(urlsafe=self.request.get('item_id'))
         item = item_id.get()
         item = FindUpdatedItem(item)
-        user = GetCurrentUser(self.request)
+        user = get_current_user(self.request)
         template = JINJA_ENVIRONMENT.get_template('templates/edit_item.html')
         page = template.render({'item': item, 'user':user})
         page = page.encode('utf-8')
@@ -168,7 +168,7 @@ class EditItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
         # permissions logic
-        user = GetCurrentUser(self.request)
+        user = get_current_user(self.request)
         standard_user = user.permissions == "Standard user"
         old_item_key = ndb.Key(urlsafe=self.request.get('old_item_key'))
         old_item = old_item_key.get()
@@ -238,7 +238,7 @@ class DeleteItem(webapp2.RequestHandler):
     def post(self):
         #template = JINJA_ENVIRONMENT.get_template('templates/index.html')
         item_key = ndb.Key(urlsafe=self.request.get('item_id'))
-        user = GetCurrentUser(self.request)
+        user = get_current_user(self.request)
         try:
             CommitDelete(item_key, user)
         except OutdatedEditException as e:
@@ -378,7 +378,7 @@ class ReviewEdits(webapp2.RequestHandler):
 
     @auth.login_required
     def get(self):
-        user = GetCurrentUser(self.request)
+        user = get_current_user(self.request)
         if (user.permissions == "Standard user"):
             self.redirect('/')
             return
@@ -421,7 +421,7 @@ class ReviewEdits(webapp2.RequestHandler):
 class KeepRevision(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
-        if GetCurrentUser(self.request).permissions == "Standard user":
+        if get_current_user(self.request).permissions == "Standard user":
             self.redirect('/')
             return
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
@@ -445,7 +445,7 @@ class KeepRevision(webapp2.RequestHandler):
 class DiscardRevision(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
-        if GetCurrentUser(self.request).permissions == "Standard user":
+        if get_current_user(self.request).permissions == "Standard user":
             self.redirect('/')
             return
         if self.request.get('revert') == "True":
@@ -474,7 +474,7 @@ class DiscardRevision(webapp2.RequestHandler):
 class RevertItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
-        if GetCurrentUser(self.request).permissions == "Standard user":
+        if get_current_user(self.request).permissions == "Standard user":
             self.redirect('/')
             return
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
@@ -494,7 +494,7 @@ class ViewItemDetails(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         logging.info("View Item Details")
-        user = GetCurrentUser(self.request)
+        user = get_current_user(self.request)
         template = JINJA_ENVIRONMENT.get_template('templates/item_details.html')
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
         pending_edit = (len(item.suggested_edits) > 0)
@@ -507,7 +507,7 @@ class ReviewDeletions(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         logging.info("Manage Deletions")
-        user = GetCurrentUser(self.request)
+        user = get_current_user(self.request)
         if (user.permissions == "Standard user"):
             self.redirect('/')
             return
@@ -528,7 +528,7 @@ class MainPage(webapp2.RequestHandler):
     def get(self):
         #template = JINJA_ENVIRONMENT.get_template('templates/search_and_browse_items.html')
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
-        user = GetCurrentUser(self.request);
+        user = get_current_user(self.request);
         try:
             # Filter search items
             item_name_filter = self.request.get('filter_by_name')
@@ -573,7 +573,7 @@ class MainPage(webapp2.RequestHandler):
 class ManageUsers(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
-        user = GetCurrentUser(self.request)
+        user = get_current_user(self.request)
         if (user.permissions != "Admin"):
             self.redirect('/')
             return
@@ -603,7 +603,7 @@ class ManageUsers(webapp2.RequestHandler):
 class PostAuth(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
-        user = GetCurrentUser(self.request)
+        user = get_current_user(self.request)
         firebase_name = auth.get_user_name(self.request)
         # Rare case that someone changed their name.
         if user.name != firebase_name:
