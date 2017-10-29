@@ -23,14 +23,8 @@
 # | Python built-in imports |
 # +-------------------------+
 
-import os
-import urllib
 import requests
-import json
 import logging
-import webapp2
-import jinja2
-from time import sleep
 
 
 # +---------------------+
@@ -38,16 +32,13 @@ from time import sleep
 # +---------------------+
 
 from google.appengine.ext import ndb
-from google.appengine.ext.db import TransactionFailedError
 
 
 # +---------------------+
 # | First party imports |
 # +---------------------+
 
-from warehouse_models import Item, cloneItem, User, possible_permissions
-import auth
-from auth import get_current_user
+from warehouse_models import Item
 
 
 # +-----------------+
@@ -80,7 +71,7 @@ class ItemPurgedException(Exception):
 # +-----------------------+
 
 @ndb.transactional(xg=True, retries=1)
-def CommitDelete(item_key,user):
+def commitDelete(item_key,user):
     item = item_key.get()
     if item.outdated:
         raise OutdatedEditException()
@@ -92,7 +83,7 @@ def CommitDelete(item_key,user):
     item.put()
 
 @ndb.transactional(xg=True, retries=1)
-def CommitUnDelete(item_key):
+def commitUnDelete(item_key):
     item = item_key.get()
     item.deleted = False
     item.marked_for_deletion = False
@@ -100,7 +91,7 @@ def CommitUnDelete(item_key):
     item.put()
 
 @ndb.transactional(xg=True, retries=1)
-def CommitPurge(item_key):
+def commitPurge(item_key):
     toDelete = [item_key] + [suggestion for suggestion in item_key.get().suggested_edits]
     while item_key.parent():
         item_key = item_key.parent()
@@ -111,7 +102,7 @@ def CommitPurge(item_key):
         k.delete()
 
 @ndb.transactional(xg=True, retries=1)
-def CommitEdit(old_key, new_item, was_orphan=False,suggestion=False):
+def commitEdit(old_key, new_item, was_orphan=False,suggestion=False):
     '''Stores the new item and ensures that the
        parent-child relationship is enforced between the
        old item and the new item.
@@ -155,7 +146,7 @@ def CommitEdit(old_key, new_item, was_orphan=False,suggestion=False):
 # +-----------------------+
 
 # Validates an html string using the w3 validator.
-def ValidateHTML(html_string):
+def validateHTML(html_string):
     # TODO disable when deployed
     response = requests.post("https://validator.w3.org/nu/?out=json",
         data=html_string,
@@ -173,7 +164,82 @@ def ValidateHTML(html_string):
     return html_string
 
 # Finds the most recent version of an item.
-def FindUpdatedItem(item):
+def findUpdatedItem(item):
     while item.outdated:
         item = item.child.get()
     return item
+
+# Converts text list of tags to array of tags
+def parseTags(tags_string):
+    tags_list = []
+
+    # Find newline character
+    tag_end_index = tags_string.find("\n")
+
+    # Check newline character exists in string
+    while tag_end_index != -1:
+        # Add tag to list
+        tags_list.append(tags_string[:tag_end_index - 1].lower())
+        # Shrink or delete string based on how much material is left in string
+        if tag_end_index + 1 < len(tags_string):
+            tags_string = tags_string[tag_end_index + 1:len(tags_string)]
+        else:
+            tags_string = ""
+
+        tag_end_index = tags_string.find("\n")
+
+    # Potentially still has a tag not covered. Adds last tag to list if possible
+    if len(tags_string) != 0:
+        tags_list.append(tags_string.lower())
+
+    return tags_list
+
+# Filters viewable items based on selected boxes in MainPage
+def filterItems(item_name, item_type, item_condition, costume_article,
+    costume_size_string, costume_size_number, tags_filter, tag_grouping):
+    # Check if costume or prop is selected individually
+    if (item_type == "Costume"):
+        if (len(costume_size_string) == 9):
+            costume_size_string.append("N/A")
+        elif (len(costume_size_string) == 0):
+            costume_size_string.append("N/A")
+            costume_size_string.append("XXS")
+            costume_size_string.append("XS")
+            costume_size_string.append("S")
+            costume_size_string.append("M")
+            costume_size_string.append("L")
+            costume_size_string.append("XL")
+            costume_size_string.append("XXL")
+            costume_size_string.append("XXXL")
+
+        if (len(costume_article) == 0):
+            costume_article.append("Top")
+            costume_article.append("Bottom")
+            costume_article.append("Dress")
+            costume_article.append("Shoes")
+            costume_article.append("Hat")
+            costume_article.append("Coat/Jacket")
+            costume_article.append("Other")
+
+        # Query separated into an if statement to diminish search time
+        if (len(costume_size_number) == 0 or len(costume_size_number) == 26):
+            query = Item.query(ndb.AND(Item.clothing_article_type.IN(costume_article),
+                Item.clothing_size_string.IN(costume_size_string))).order(Item.name)
+        else:
+            query = Item.query(ndb.AND(Item.clothing_article_type.IN(costume_article),
+                Item.clothing_size_string.IN(costume_size_string),
+                Item.clothing_size_num.IN(costume_size_number))).order(Item.name)
+    else:
+        query = Item.query().order(Item.name)
+
+    tags_list = ParseTags(tags_filter)
+    if len(tags_list) != 0:
+        if tag_grouping == "inclusive":
+            query = query.filter(Item.tags.IN(tags_list))
+        else:
+            for tag in tags_list:
+                query = query.filter(Item.tags == tag)
+
+    #query = query.filter(Item.condition.IN(item_condition))
+    return query
+

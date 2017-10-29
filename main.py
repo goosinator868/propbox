@@ -63,7 +63,7 @@ class AddItem(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/add_item.html')
         page = template.render({})
         page = page.encode('utf-8')
-        self.response.write(ValidateHTML(page))
+        self.response.write(validateHTML(page))
 
     @auth.login_required
     def post(self):
@@ -88,7 +88,7 @@ class AddItem(webapp2.RequestHandler):
                 costume_size_word = "N/A"
 
             # tags is a string. Needs to parsed into an array
-            tags_list = ParseTags(tags_string)
+            tags_list = parseTags(tags_string)
 
             # Create Item and add to the list
             newItem = Item(
@@ -112,16 +112,17 @@ class AddItem(webapp2.RequestHandler):
             # meaning that we forgot to refresh their token.
             self.redirect("/enforce_auth")
 
+
 class ResolveEdits(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         new_item = ndb.Key(urlsafe=self.request.get('new_item_key')).get()
         old_item = new_item.key.parent().get()
-        old_item = FindUpdatedItem(old_item)
+        old_item = findUpdatedItem(old_item)
         template = JINJA_ENVIRONMENT.get_template('templates/resolve_edits.html')
         page = template.render({'old_item': old_item, 'new_item': new_item})
         page = page.encode('utf-8')
-        self.response.write(ValidateHTML(page))
+        self.response.write(validateHTML(page))
 
     @auth.login_required
     def post(self):
@@ -134,7 +135,7 @@ class ResolveEdits(webapp2.RequestHandler):
         new_item.orphan = False
         new_item.suggested_by = get_current_user(self.request).name
         try:
-            CommitEdit(old_item.key, new_item, was_orphan=True)
+            commitEdit(old_item.key, new_item, was_orphan=True)
             self.redirect("/")
         except OutdatedEditException as e:
             new_item.orphan = True
@@ -152,18 +153,19 @@ class ResolveEdits(webapp2.RequestHandler):
              # TODO: Panic should never reach this, it should be caught by the other exceptions.
              logging.critical('transaction failed without reason being determined')
 
+
 #Handler for editing an item.
 class EditItem(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         item_id = ndb.Key(urlsafe=self.request.get('item_id'))
         item = item_id.get()
-        item = FindUpdatedItem(item)
+        item = findUpdatedItem(item)
         user = get_current_user(self.request)
         template = JINJA_ENVIRONMENT.get_template('templates/edit_item.html')
         page = template.render({'item': item, 'user':user})
         page = page.encode('utf-8')
-        self.response.write(ValidateHTML(page))
+        self.response.write(validateHTML(page))
 
     @auth.login_required
     def post(self):
@@ -192,7 +194,7 @@ class EditItem(webapp2.RequestHandler):
         new_item.item_type = self.request.get('item_type')
         new_item.costume_size_num = self.request.get('clothing_size_number')
         new_item.clothing_size_string = self.request.get('clothing_size_string')
-        new_item.tags = ParseTags(self.request.get('tags'))
+        new_item.tags = parseTags(self.request.get('tags'))
         new_item.condition = self.request.get('condition')
 
         # Override certain inputs due to costume and prop defaults
@@ -217,7 +219,7 @@ class EditItem(webapp2.RequestHandler):
             new_item.checked_out_by = ""
 
         try:
-            CommitEdit(old_item_key, new_item,suggestion=standard_user)
+            commitEdit(old_item_key, new_item,suggestion=standard_user)
             sleep(0.1)
             self.redirect("/item_details?" + urllib.urlencode({'item_id':(old_item_key if standard_user else new_item.key).urlsafe()}))
         except OutdatedEditException as e:
@@ -231,6 +233,7 @@ class EditItem(webapp2.RequestHandler):
              # TODO: Panic should never reach this, it should be caught by the other exceptions.
              logging.critical('transaction failed without reason being determined')
 
+
 # Marks an item for deletion. DOES NOT ACTUALLY DELETE.
 # TODO: Make transactional.
 class DeleteItem(webapp2.RequestHandler):
@@ -240,7 +243,7 @@ class DeleteItem(webapp2.RequestHandler):
         item_key = ndb.Key(urlsafe=self.request.get('item_id'))
         user = get_current_user(self.request)
         try:
-            CommitDelete(item_key, user)
+            commitDelete(item_key, user)
         except OutdatedEditException as e:
             # TODO: Expose this message to the user.
             logging.info('you are trying to delete an old version of this item, please reload the page and try again if you really wish to delete this item.')
@@ -254,12 +257,14 @@ class DeleteItem(webapp2.RequestHandler):
         else:
             self.redirect("/search_and_browse")
 
+
 class ViewImage(webapp2.RequestHandler):
     def get(self):
         item_key = ndb.Key(urlsafe=self.request.get('image_id'))
         item = item_key.get()
         self.response.headers['Content-Type'] = 'image/png'
         self.response.out.write(item.image)
+
 
 # Deletes an item from the database for good. THIS CANNOT BE UNDONE.
 # TODO: Make transactional.
@@ -268,12 +273,13 @@ class DeleteItemForever(webapp2.RequestHandler):
     def post(self):
         item_key = ndb.Key(urlsafe=self.request.get('item_id'))
         try:
-            CommitPurge(item_key)
+            commitPurge(item_key)
         except TransactionFailedError as e:
              # TODO: Expose this message to the user.
             logging.info('could not purge the item, pelase try again')
         sleep(0.1)
         self.redirect('/review_deletions')
+
 
 # Undeletes an item, returning it to the main list. Reverses the changes made by DeleteItem.
 class UndeleteItem(webapp2.RequestHandler):
@@ -281,7 +287,7 @@ class UndeleteItem(webapp2.RequestHandler):
     def post(self):
         item_key = ndb.Key(urlsafe=self.request.get('item_id'))
         try:
-            CommitUnDelete(item_key)
+            commitUnDelete(item_key)
         except TransactionFailedError as e:
              # TODO: Expose this message to the user.
             logging.info('could not un-delete the item, please try again')
@@ -294,81 +300,8 @@ class AuthHandler(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/auth.html')
         page = template.render({})
         page = page.encode('utf-8')
-        self.response.write(ValidateHTML(page))
+        self.response.write(validateHTML(page))
 
-# Filters viewable items based on selected boxes in MainPage
-def FilterItems(item_name, item_type, item_condition, costume_article,
-    costume_size_string, costume_size_number, tags_filter, tag_grouping):
-    # Check if costume or prop is selected individually
-    if (item_type == "Costume"):
-        if (len(costume_size_string) == 9):
-            costume_size_string.append("N/A")
-        elif (len(costume_size_string) == 0):
-            costume_size_string.append("N/A")
-            costume_size_string.append("XXS")
-            costume_size_string.append("XS")
-            costume_size_string.append("S")
-            costume_size_string.append("M")
-            costume_size_string.append("L")
-            costume_size_string.append("XL")
-            costume_size_string.append("XXL")
-            costume_size_string.append("XXXL")
-
-        if (len(costume_article) == 0):
-            costume_article.append("Top")
-            costume_article.append("Bottom")
-            costume_article.append("Dress")
-            costume_article.append("Shoes")
-            costume_article.append("Hat")
-            costume_article.append("Coat/Jacket")
-            costume_article.append("Other")
-
-        # Query separated into an if statement to diminish search time
-        if (len(costume_size_number) == 0 or len(costume_size_number) == 26):
-            query = Item.query(ndb.AND(Item.clothing_article_type.IN(costume_article),
-                Item.clothing_size_string.IN(costume_size_string))).order(Item.name)
-        else:
-            query = Item.query(ndb.AND(Item.clothing_article_type.IN(costume_article),
-                Item.clothing_size_string.IN(costume_size_string),
-                Item.clothing_size_num.IN(costume_size_number))).order(Item.name)
-    else:
-        query = Item.query().order(Item.name)
-
-    tags_list = ParseTags(tags_filter)
-    if len(tags_list) != 0:
-        if tag_grouping == "inclusive":
-            query = query.filter(Item.tags.IN(tags_list))
-        else:
-            for tag in tags_list:
-                query = query.filter(Item.tags == tag)
-
-    #query = query.filter(Item.condition.IN(item_condition))
-    return query
-
-# Converts text list of tags to array of tags
-def ParseTags(tags_string):
-    tags_list = []
-
-    # Find newline character
-    tag_end_index = tags_string.find("\n")
-
-    # Check newline character exists in string
-    while tag_end_index != -1:
-        # Add tag to list
-        tags_list.append(tags_string[:tag_end_index - 1].lower())
-        # Shrink or delete string based on how much material is left in string
-        if tag_end_index + 1 < len(tags_string):
-            tags_string = tags_string[tag_end_index + 1:len(tags_string)]
-        else:
-            tags_string = ""
-
-        tag_end_index = tags_string.find("\n")
-
-    # Potentially still has a tag not covered. Adds last tag to list if possible
-    if len(tags_string) != 0:
-        tags_list.append(tags_string.lower())
-
-    return tags_list
 
 class ReviewEdits(webapp2.RequestHandler):
     # Loads the edit page.
@@ -415,7 +348,8 @@ class ReviewEdits(webapp2.RequestHandler):
         #     logging.info(r)
         page = template.render({'revert':revert_list, 'suggest':suggestion_list})
         page = page.encode('utf-8')
-        self.response.write(ValidateHTML(page))
+        self.response.write(validateHTML(page))
+
 
 #Keeps the latest revision. Flags the revision as "approved" in the database.
 class KeepRevision(webapp2.RequestHandler):
@@ -440,6 +374,7 @@ class KeepRevision(webapp2.RequestHandler):
         item.put()
         sleep(0.1)
         self.redirect('/review_edits')
+
 
 #Discards a revision.
 class DiscardRevision(webapp2.RequestHandler):
@@ -470,6 +405,7 @@ class DiscardRevision(webapp2.RequestHandler):
         sleep(0.1)
         self.redirect('/review_edits')
 
+
 #Allows for undoing an item approval
 class RevertItem(webapp2.RequestHandler):
     @auth.login_required
@@ -483,12 +419,14 @@ class RevertItem(webapp2.RequestHandler):
         sleep(0.1)
         self.redirect('/review_edits')
 
+
 class CheckIn(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/check_in.html')
         page = template.render({})
         page = page.encode('utf-8')
-        self.response.write(ValidateHTML(page))
+        self.response.write(validateHTML(page))
+
 
 class ViewItemDetails(webapp2.RequestHandler):
     @auth.login_required
@@ -500,7 +438,8 @@ class ViewItemDetails(webapp2.RequestHandler):
         pending_edit = (len(item.suggested_edits) > 0)
         page = template.render({'item':item, 'pending_edit':pending_edit, 'user':user})
         page = page.encode('utf-8')
-        self.response.write(ValidateHTML(page))
+        self.response.write(validateHTML(page))
+
 
 #To admin-approve items that have been created or edited by lesser users.
 class ReviewDeletions(webapp2.RequestHandler):
@@ -519,7 +458,8 @@ class ReviewDeletions(webapp2.RequestHandler):
                 deleted.append(item)
         page = template.render({'deleted':deleted})
         page = page.encode('utf-8')
-        self.response.write(ValidateHTML(page))
+        self.response.write(validateHTML(page))
+
 
 #Loads the search and browsing page.
 # Renamed from SearchAndBrowse
@@ -540,7 +480,7 @@ class MainPage(webapp2.RequestHandler):
             tags_filter = self.request.get('filter_by_tags')
             tags_grouping_filter = self.request.get('filter_by_tag_grouping')
 
-            query = FilterItems(
+            query = filterItems(
                 item_name_filter,
                 item_type_filter,
                 item_condition_filter,
@@ -561,14 +501,15 @@ class MainPage(webapp2.RequestHandler):
             # send to display
             page = template.render({'user':user,'items': items, 'item_type_filter': item_type_filter, 'item_name_filter': item_name_filter, 'item_condition_filter': item_condition_filter})
             page = page.encode('utf-8')
-            self.response.write(ValidateHTML(page))
+            self.response.write(validateHTML(page))
         except:
             # first time opening or item has been added
             query = Item.query()
             items = query.fetch()
             page = template.render({'user':user,'items': items, 'item_name_filter': item_name_filter})
             page = page.encode('utf-8')
-            self.response.write(ValidateHTML(page))
+            self.response.write(validateHTML(page))
+
 
 class ManageUsers(webapp2.RequestHandler):
     @auth.login_required
@@ -590,7 +531,7 @@ class ManageUsers(webapp2.RequestHandler):
              'pending_users': pending_users,
              'permission_levels': list(possible_permissions)})
         page = page.encode('utf-8')
-        self.response.write(ValidateHTML(page))
+        self.response.write(validateHTML(page))
 
     @auth.login_required
     def post(self):
@@ -599,6 +540,7 @@ class ManageUsers(webapp2.RequestHandler):
         user.permissions = self.request.get('permission_level')
         user.put()
         self.redirect('/manage_users')
+
 
 class PostAuth(webapp2.RequestHandler):
     @auth.login_required
@@ -612,13 +554,15 @@ class PostAuth(webapp2.RequestHandler):
             user.put()
         self.redirect('/')
 
+
 class PendingApproval(webapp2.RequestHandler):
     @auth.firebase_login_required
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/pending_approval.html')
         page = template.render({})
         page = page.encode('utf-8')
-        self.response.write(ValidateHTML(page))
+        self.response.write(validateHTML(page))
+
 
 class AccountDeactivated(webapp2.RequestHandler):
     @auth.firebase_login_required
@@ -626,7 +570,7 @@ class AccountDeactivated(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/account_deactivated.html')
         page = template.render({})
         page = page.encode('utf-8')
-        self.response.write(ValidateHTML(page))
+        self.response.write(validateHTML(page))
 
 
 # +-------------------+
