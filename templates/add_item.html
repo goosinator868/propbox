@@ -19,37 +19,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. -->
 <!doctype html>
 <html>
-<head>
-  <!-- <link rel="import" href="/static/common.html"> -->
-  {% include 'templates/common.html' %}
 
+<head>
+  
+  {% include 'templates/common.html' %}
+  
   <script>
     $(document).ready(function(){
       SetUpNavBar(SetUpFirebase);
     });
   </script>
-
-  <style type="text/css">
-    div.form {
-      font-size: 1.2em;
-      padding: 8px;
-      width: 100%;
-    }
-
-    div.form form {
-      margin: 0 auto;
-      padding: 16px;
-      width: 1000px;
-    }
-
-    input, select, textarea {
-      border: 0;
-      border-radius: 6px;
-      padding: 6px;
-      width: 100%;
-    }
-  </style>
-
+  
+  <link rel="stylesheet" href="/stylesheets/add_item.css">
   <title>Propbox :: Add an item</title>
 </head>
 
@@ -78,62 +59,27 @@ SOFTWARE. -->
           </select><br><br>
           <label>Item condition</label>
           <select name="condition" class="addItemDropdown">
-              <option>Good</option>
-              <option>Fair</option>
-              <option>Poor</option>
-              <option>Being repaired</option>
+              {% for option in ["Good", "Fair", "Poor", "Being repaired"] %}
+                  <option> {{option}} </option>
+              {% endfor %}
           </select><br><br>
           <label>Clothing article</label>
           <select name="article" class="addItemDropdown">
-              <option>N/A</option>
-              <option>Top</option>
-              <option>Bottom</option>
-              <option>Dress</option>
-              <option>Shoes</option>
-              <option>Hat</option>
-              <option>Coat/Jacket</option>
-              <option>Other</option>
+              {% for option in ["N/A", "Top", "Bottom", "Dress", "Shoes", "Hat", "Coat/Jacket", "Other"] %}
+                  <option> {{option}} </option>
+              {% endfor %}
           </select><br><br>
           <label>Item size</label><br>
           <select name="clothing_size_number" class="addItemDropdown" style="display: inline-block; width: 100px;">
               <option>N/A</option>
-              <option>0</option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-              <option>7</option>
-              <option>8</option>
-              <option>9</option>
-              <option>10</option>
-              <option>11</option>
-              <option>12</option>
-              <option>13</option>
-              <option>14</option>
-              <option>15</option>
-              <option>16</option>
-              <option>17</option>
-              <option>18</option>
-              <option>19</option>
-              <option>20</option>
-              <option>21</option>
-              <option>22</option>
-              <option>23</option>
-              <option>24</option>
-              <option>25</option>
+              {% for option in range(26) %}
+                  <option> {{option}} </option>
+              {% endfor %}
           </select>
           <select name="clothing_size_string" class="addItemDropdown" style="display: inline-block; width: 100px;">
-              <option>N/A</option>
-              <option>XXS</option>
-              <option>XS</option>
-              <option>S</option>
-              <option>M</option>
-              <option>L</option>
-              <option>XL</option>
-              <option>XXL</option>
-              <option>XXXL</option>
+              {% for option in ["N/A", "XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"] %}
+                  <option> {{option}} </option>
+              {% endfor %}
           </select><br><br>
           <label>Tags</label>
           <textarea name="tags" placeholder="Separate tags with the enter key."></textarea><br><br>

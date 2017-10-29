@@ -232,7 +232,7 @@ def filterItems(item_name, item_type, item_condition, costume_article,
     else:
         query = Item.query().order(Item.name)
 
-    tags_list = ParseTags(tags_filter)
+    tags_list = parseTags(tags_filter)
     if len(tags_list) != 0:
         if tag_grouping == "inclusive":
             query = query.filter(Item.tags.IN(tags_list))

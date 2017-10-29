@@ -48,7 +48,6 @@ from google.appengine.ext.db import TransactionFailedError
 from warehouse_models import Item, cloneItem, User, possible_permissions
 import auth
 from auth import get_current_user
-import utils
 from utils import * 
 
 
@@ -480,6 +479,7 @@ class MainPage(webapp2.RequestHandler):
             tags_filter = self.request.get('filter_by_tags')
             tags_grouping_filter = self.request.get('filter_by_tag_grouping')
 
+
             query = filterItems(
                 item_name_filter,
                 item_type_filter,
@@ -496,16 +496,21 @@ class MainPage(webapp2.RequestHandler):
                 item_condition_filter.append("Poor")
                 item_condition_filter.append("Being repaired")
 
+            logging.info(items)
+
             if (item_type_filter == "" or item_type_filter == None):
                 item_type_filter = "All"
             # send to display
             page = template.render({'user':user,'items': items, 'item_type_filter': item_type_filter, 'item_name_filter': item_name_filter, 'item_condition_filter': item_condition_filter})
             page = page.encode('utf-8')
             self.response.write(validateHTML(page))
+        
+        # TODO: make this more specific OR preferably remove try/except infrastructure
         except:
             # first time opening or item has been added
             query = Item.query()
             items = query.fetch()
+            logging.info(items)
             page = template.render({'user':user,'items': items, 'item_name_filter': item_name_filter})
             page = page.encode('utf-8')
             self.response.write(validateHTML(page))

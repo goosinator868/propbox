@@ -1,4 +1,4 @@
-<!-- Copyright (c) 2017 Future Gadget Laboratories.
+/*Copyright (c) 2017 Future Gadget Laboratories.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -16,30 +16,50 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE. -->
+SOFTWARE.*/
 
-<!doctype html>
-<html>
-<head>
-  
-  {% include 'templates/common.html' %}
+#home-pg-container {
+  background-color: #efefef;
+  margin: 0 auto;
+  padding: 1.2em 0;
+}
 
-  <script>
-    $(document).ready(function(){
-      SetUpNavBar(SetUpFirebase);
-    });
-  </script>
+#home-pg-container button {
+  border-radius: 6px;
+}
 
-  <title>Your account has been deactivated. :: Propbox</title>
-  <link rel="stylesheet" href="/stylesheets/account_deactivated.css">
-</head>
+.item_container h2, h3, h4, p {
+  margin: 6px 0;
+}
 
-<body>
-  <div id="navbar_holder"></div>
-  <div id="error">
-    <i class="fa fa-ban fa-5x" aria-hidden="true"></i>
-    <h2>Your account has been deactivated and must be reactivated by an administrator. Contact an administrator to resolve.</h2>
-  </div>
-  <footer id="footer_holder"></footer>
-</body>
-</html>
+#welcome-msg {
+  font-size: 2.2em;
+  text-align: center;
+  width: 100%;
+}
+
+form {
+  border: 0;
+  display: inline-block;
+  padding: 0 10px;
+}
+
+form button {
+  border: 0;
+  background-color: rgb(174,100,211);
+  color: #fff;
+  font-size: 1.6em;
+  margin: 6px 0;
+  padding: 0.4em 2em;
+  transition: background-color 0.1s ease;
+  -webkit-transition: background-color 0.1s ease;
+}
+
+form button:hover {
+  background-color: rgb(203, 156, 227);
+}
+
+#actions {
+  margin: 30px auto;
+  text-align: center;
+}
