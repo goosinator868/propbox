@@ -17,7 +17,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. -->
-
 <!doctype html>
 <html>
 <head>
@@ -58,10 +57,35 @@ SOFTWARE. -->
   </style>
 
   <!-- Code to support scanQRCode() -->
-  <script type="text/javascript" src="/scripts/scan_qr_code.js"></script>
-  <link rel="stylesheet" href="/stylesheets/check_in.css"> 
-  
-  <script>
+  <script type="text/javascript">
+    function scanQRCode(callback) {
+      let scanner = new Instascan.Scanner({ video: document.getElementById('scanner_window'), mirror: false, backgroundScan: false });
+      scanner.addListener('scan', function (content) {
+        scanner.stop();
+        $("#scanner_container").hide();
+        callback(content);
+      });
+      // Close the scanner if someone clicks out of it.
+      $("#scanner_container").click(function(){
+        scanner.stop();
+        $("#scanner_container").hide();
+      });
+      Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length == 0) {
+          // desktop
+          scanner.start(cameras[0]);
+        } else if (cameras.length > 0) {
+          // mobile
+          scanner.start(cameras[cameras.length - 1]);
+        } else {
+          console.error('No cameras found.');
+          alert("No cameras found.");
+        }
+      }).catch(function (e) {
+        console.error(e);
+      });
+    }
+
     function scanAndAddToList(list) {
       $("#scanner_container").show();
       scanQRCode(function(content){
@@ -70,7 +94,7 @@ SOFTWARE. -->
           item = jQuery.getJSON("/item_from_qr_code?qr_code=" + content, "", function(item) {
               hidden_id = document.createElement('input');
               hidden_id.setAttribute("type", "hidden");
-              hidden_id.setAttribute("name", "to_check_in");
+              hidden_id.setAttribute("name", "to_check_out");
               hidden_id.setAttribute("value", item.urlsafe_key);
               document.getElementById('scanned_keys').appendChild(hidden_id);
 
@@ -92,6 +116,7 @@ SOFTWARE. -->
       <span> Check in items </span>
     </div>
   </div>
+  <!-- New content here -->
 
   <button onclick="scanAndAddToList(scanned_codes)">Scan QR code</button>
   <div id="scanner_container">
@@ -101,10 +126,13 @@ SOFTWARE. -->
     <video id="scanner_window"></video>
   </div>
   <h2>Scanned Items</h2>
-   <form id="scanned_keys" action="/check_in" method="post">
-    <input type="submit" value="Check in scanned items">
+   <form id="scanned_keys" action="/check_out" method="post">
+    Reason: 
+    <br> <textarea  name="reason"></textarea>
+    <br> <input type="submit" value="Check out scanned items">
   </form>
   <ul id="scanned_list"></ul>
+ 
 
   <div id="footer_holder"></div>
 </body>
