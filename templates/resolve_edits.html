@@ -17,52 +17,19 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. -->
+
 <!doctype html>
 <html>
 <head>
-  <!-- <link rel="import" href="/static/common.html"> -->
 {% include 'templates/common.html' %}
+
   <script>
     $(document).ready(function(){
       SetUpNavBar(SetUpFirebase);
     });
   </script>
 
-  <style type="text/css">
-      div.edit-version {
-        display: inline-block;
-        width: 100%;
-        box-sizing: border-box;
-      }
-
-      div.item_container {
-        padding: 5px 30px;
-        width: 100%;
-      }
-
-      h2 {
-        text-align: center;
-      }
-
-      div.form {
-        font-size: 1.2em;
-        padding: 8px;
-        width: 100%;
-      }
-
-      div.form form {
-        margin: 0 auto;
-        padding: 16px;
-        width: 1000px;
-      }
-
-      input, select, textarea {
-        border: 0;
-        border-radius: 6px;
-        padding: 6px;
-        width: 80%;
-      }
-  </style>
+  <link rel="stylesheet" href="/stylesheets/resolve_edits.css">
 
   <title>Resolve edit conflict :: Propbox</title>
 </head>
@@ -75,11 +42,13 @@ SOFTWARE. -->
       <span>Resolve edit</span>
     </div>
   </div>
-  <!-- New content here -->
+
   <div id="page-heading">
     <h1>An edit conflict exists!</h1>
   </div>
-<div id=pane_container>
+
+  <div id=pane_container>
+
     <div id="left-pane">
       <div class="edit-version">
         <h2> Current version </h2>
@@ -97,22 +66,23 @@ SOFTWARE. -->
         </div>
       </div>
 
-    <div class="edit-version">
-      <h2> Pending edit </h2>
-      <div class="item_container">
-        <h3>{{new_item.name}}</h3>
-        <p>{{new_item.description}}</p>
-        <br/>
-        <p><b>Item Type:</b> {{new_item.item_type}}</p>
-        <p><b>Condition</b>: {{new_item.condition}}</p>
-        <p><b>Article</b>: {{new_item.clothing_article_type}}</p>
-        <p><b>Size</b>: {{new_item.clothing_size_string}}, {{new_item.clothing_size_num}}</p>
-        <p><b>Tags</b>:{% for tag in new_item.tags %} {{tag}},{% endfor %}</p>
-        <p><b>QR Code</b>: {{new_item.qr_code}}</p>
-        <br/>
+      <div class="edit-version">
+        <h2> Pending edit </h2>
+        <div class="item_container">
+          <h3>{{new_item.name}}</h3>
+          <p>{{new_item.description}}</p>
+          <br/>
+          <p><b>Item Type:</b> {{new_item.item_type}}</p>
+          <p><b>Condition</b>: {{new_item.condition}}</p>
+          <p><b>Article</b>: {{new_item.clothing_article_type}}</p>
+          <p><b>Size</b>: {{new_item.clothing_size_string}}, {{new_item.clothing_size_num}}</p>
+          <p><b>Tags</b>:{% for tag in new_item.tags %} {{tag}},{% endfor %}</p>
+          <p><b>QR Code</b>: {{new_item.qr_code}}</p>
+          <br/>
+        </div>
       </div>
     </div>
-    </div>
+
 
     <div id="right-pane">
       <div class="form">
@@ -164,6 +134,7 @@ SOFTWARE. -->
       </div>
     </div>
   </div>
+  
   <footer id="footer_holder"></footer>
 </body>
 </html>

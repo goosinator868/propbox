@@ -17,10 +17,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. -->
+
 <!doctype html>
 <html>
 <head>
-  <!-- <link rel="import" href="/static/common.html"> -->
   {% include 'templates/common.html' %}
 
   <script>
@@ -31,36 +31,8 @@ SOFTWARE. -->
 
   <script type="text/javascript" src="/scripts/popup_confirm.js"></script>
 
-  <style type="text/css">
-    div.form {
-      font-size: 1.2em;
-      padding: 8px;
-      width: 100%;
-    }
+  <link rel="stylesheet" href="/stylesheets/edit_item.css">
 
-    div.form form {
-      margin: 0 auto;
-      padding: 16px;
-      width: 1000px;
-    }
-
-    input, select, textarea {
-      border: 0;
-      border-radius: 6px;
-      padding: 6px;
-      width: 80%;
-    }
-
-    div#left-pane {
-      text-align: center;
-    }
-
-    div.item_details h3, h4, h5, p {
-      padding: 0 10px;
-      text-align: left;
-      width: 100%;
-    }
-  </style>
   <title>Editing {{item.name}} :: Propbox</title>
 </head>
 
@@ -71,7 +43,7 @@ SOFTWARE. -->
       <span>Edit</span>
     </div>
   </div>
-  <!-- New content here -->
+
   <div id="page-heading">
     <h1>Edit: {{item.name}}</h1>
   </div>
@@ -102,6 +74,7 @@ SOFTWARE. -->
           <br/><br/><br/>
       </div>
     </div>
+    
     <div id="right-pane">
       <div class="form">
         <h1> Edit Item </h1>

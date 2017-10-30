@@ -1,5 +1,4 @@
-"""
-Copyright (c) 2017 Future Gadget Laboratories.
+/*Copyright (c) 2017 Future Gadget Laboratories.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -17,21 +16,8 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
+SOFTWARE.*/
 
-from enum import Enum
-
-class ShirtSizeString(Enum):
-    SHIRT_XS = "XS"
-    SHIRT_S = "S"
-    SHIRT_M = "M"
-    SHIRT_L = "L"
-    SHIRT_XL = "XL"
-
-class PantsSizeString(Enum):
-    PANTS_XS = "XS"
-    PANTS_S = "S"
-    PANTS_M = "M"
-    PANTS_L = "L"
-    PANTS_XL = "XL"
+h2 {
+  margin-left: 1em;
+}

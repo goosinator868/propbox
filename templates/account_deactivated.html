@@ -21,7 +21,6 @@ SOFTWARE. -->
 <!doctype html>
 <html>
 <head>
-  <!-- <link rel="import" href="/static/common.html"> -->
   {% include 'templates/common.html' %}
 
   <script>
@@ -30,17 +29,13 @@ SOFTWARE. -->
     });
   </script>
 
+  <link rel="stylesheet" href="/stylesheets/account_deactivated.css">
+
   <title>Your account has been deactivated. :: Propbox</title>
-  <style type="text/css">
-  /* Page-specific CSS */
-  div#navbar {display: none;}
-  div#breadcrumb_bar {display: none;}
-  </style>
 </head>
 
 <body>
   <div id="navbar_holder"></div>
-  <!-- New content here -->
   <div id="error">
     <i class="fa fa-ban fa-5x" aria-hidden="true"></i>
     <h2>Your account has been deactivated and must be reactivated by an administrator. Contact an administrator to resolve.</h2>

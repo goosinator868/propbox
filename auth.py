@@ -20,36 +20,43 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-# Python built-in imports.
+# +-------------------------+
+# | Python built-in imports |
+# +-------------------------+
+
 from functools import wraps
 
-# Third party imports.
+
+# +---------------------+
+# | Third party imports |
+# +---------------------+
+
 from google.appengine.ext import ndb
 import google.oauth2.id_token
 import requests_toolbelt.adapters.appengine
 import google.auth.transport.requests
 
-# First party imports.
+
+# +---------------------+
+# | First party imports |
+# +---------------------+
+
 from warehouse_models import User
+
+
+# +-------+
+# | Setup |
+# +-------+
 
 # Use the App Engine Requests adapter. This makes sure that Requests uses
 # URLFetch.
 requests_toolbelt.adapters.appengine.monkeypatch()
 HTTP_REQUEST = google.auth.transport.requests.Request()
 
-def GetCurrentUser(request):
-    return ndb.Key(User, get_user_id(request)).get()
 
-def get_cookies(request):
-    cookies = {}
-    raw_cookies = request.headers.get("Cookie")
-    if raw_cookies:
-        for cookie in raw_cookies.split(";"):
-            cookie = cookie.strip()
-            k_v = cookie.split("=")
-            if len(k_v) >= 2:
-                cookies[k_v[0]] = k_v[1]
-    return cookies
+# +--------------+
+# | Auth Helpers |
+# +--------------+
 
 def firebase_login_required(handler):
     def _decorator(_self, *args, **kwargs):
@@ -81,7 +88,7 @@ def login_required(handler):
         if claims is None:
             _self.redirect("/enforce_auth")
             return
-        user = GetCurrentUser(_self.request)
+        user = get_current_user(_self.request)
         if user is None:
             user = User(name=get_user_name(_self.request), id=get_user_id(_self.request), permissions="Pending user")
             if len(User.query(User.permissions == "Admin").fetch()) == 0:
@@ -96,6 +103,24 @@ def login_required(handler):
             handler(_self, *args, **kwargs)
     return wraps(handler)(_decorator)
 
+
+# +---------+
+# | Getters |
+# +---------+
+
+def get_current_user(request):
+    return ndb.Key(User, get_user_id(request)).get()
+
+def get_cookies(request):
+    cookies = {}
+    raw_cookies = request.headers.get("Cookie")
+    if raw_cookies:
+        for cookie in raw_cookies.split(";"):
+            cookie = cookie.strip()
+            k_v = cookie.split("=")
+            if len(k_v) >= 2:
+                cookies[k_v[0]] = k_v[1]
+    return cookies
 
 def _get_claims(request):
     cookies = get_cookies(request)
