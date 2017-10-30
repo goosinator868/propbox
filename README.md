@@ -16,6 +16,7 @@ An experiment with AppEngine to make a junior design project prototype.
 | auth.py             | Script for user authentication.               |
 | main.py             | Main handlers for web application.            |
 | requirements.txt    | Server requirements.                          |
+| utils.py 			  | Helpers for main.py 						  |
 | warehouse_models.py | Framework for items stored in the database.   |
 
 ## Folders

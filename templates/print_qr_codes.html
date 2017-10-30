@@ -17,17 +17,58 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. -->
-
 <!doctype html>
 <html>
 <head>
+  <!-- <link rel="import" href="/static/common.html"> -->
 {% include 'templates/common.html' %}
-
   <script>
     $(document).ready(function(){
       SetUpNavBar(SetUpFirebase);
+      SetUpQRCodes();
     });
   </script>
+  <script type="text/javascript" src="/scripts/qr_code.min.js"></script>
+
+  <script type="text/javascript">
+    function SetUpQRCodes() {
+      codes = $(".qr_code_image").toArray();
+      for (i in codes) {
+        code = codes[i];
+        var qr_code_value = code.innerText;
+        code.innerHTML = "";
+        var qrcode = new QRCode(code, {
+          text: qr_code_value,
+          width: 150,
+          height: 150,
+          colorDark : "#000000",
+          colorLight : "#ffffff",
+          correctLevel : QRCode.CorrectLevel.H
+        });
+      }
+    }
+  </script>
+
+  <style type="text/css">
+    .item_seperator {
+      background-color: white;
+      width: 240px;
+      overflow: hidden;
+      padding: 20px;
+      float: left;
+      border: 1px dashed black;
+    }
+    .qr_code_caption {
+      padding-left: 20px;
+    }
+    .qr_code_image {
+      background-color: white;
+      width: 200px;
+      height: 200px;
+      padding: 25px;
+      float: left;
+    }
+  </style>
 
   <title>Prop Box</title>
 </head>
@@ -38,6 +79,13 @@ SOFTWARE. -->
       <a href="/manage_users"> Manage users </a>
     </div>
   </div>
+  <!-- New content here -->
+  {% for item in items %}
+  <div class="item_seperator">
+    <h2 class="qr_code_caption">{{item.name}}</h2>
+    <div class="qr_code_image">{{item.qr_code}}</div>
+  </div>
+  {% endfor %}
   <footer id="footer_holder"></footer>
 </body>
 </html>

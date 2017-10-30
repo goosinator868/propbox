@@ -154,6 +154,7 @@ h2:first-child {
 
 #left-pane {
     padding: 5px;
+    padding-left: 50px;
     width: 50%;
     float: left;
 }

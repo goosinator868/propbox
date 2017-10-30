@@ -17,19 +17,21 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. -->
+
 <!doctype html>
 <html>
 <head>
-  <!-- <link rel="import" href="/static/common.html"> -->
   {% include 'templates/common.html' %}
-  <link rel="stylesheet" href="/stylesheets/item_details.css">
 
   <script>
     $(document).ready(function(){
       SetUpNavBar(SetUpFirebase);
     });
   </script>
+
   <script type="text/javascript" src="/scripts/popup_confirm.js"></script>
+
+  <link rel="stylesheet" href="/stylesheets/item_details.css">
 
   <title>{{item.name}} :: Propbox</title>
 </head>
@@ -40,7 +42,6 @@ SOFTWARE. -->
       <span> {{item.name}}</span>
     </div>
   </div>
-  <!-- New content here -->
 
   <div id="confirm_delete" class="modal">
     <div class="modal-content">
@@ -56,7 +57,6 @@ SOFTWARE. -->
      </div>
     </div>
   </div>
-
 
   {% if item.image %}
     <a href="view_image?image_id={{item.key.urlsafe()}}">
@@ -92,6 +92,10 @@ SOFTWARE. -->
           <input type="submit" value="Revert To Earlier Version" class="submitButton">
         </form>
       {% endif %}
+      <form action="/print_qr_codes" method="get">
+        <input type="hidden" name="keys" value="{{item.key.urlsafe()}}">
+        <input type="submit" value="Print QR code" class="submitButton">
+      </form>
       <button onclick="showConfirm('delete')" class="submitButton">Delete</button>
       {% endif %}
       <p id="creator">Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</p>
