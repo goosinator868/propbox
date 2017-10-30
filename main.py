@@ -496,8 +496,6 @@ class MainPage(webapp2.RequestHandler):
                 item_condition_filter.append("Poor")
                 item_condition_filter.append("Being repaired")
 
-            logging.info(items)
-
             if (item_type_filter == "" or item_type_filter == None):
                 item_type_filter = "All"
             # send to display
