@@ -29,6 +29,11 @@ from google.appengine.ext import ndb
 # | Item Class and Helpers |
 # +------------------------+
 
+class List(ndb.Model):
+    name = ndb.StringProperty(required=True)
+    owner = ndb.KeyProperty(required=True)
+    items = ndb.KeyProperty(repeated=True)
+
 class Item(ndb.Model):
     '''Describes the structure of an "item" in the warehouse.'''
     creator_id = ndb.StringProperty(required=True)

@@ -92,6 +92,10 @@ SOFTWARE. -->
           <input type="submit" value="Revert To Earlier Version" class="submitButton">
         </form>
       {% endif %}
+      <form action="/print_qr_codes" method="get">
+        <input type="hidden" name="keys" value="{{item.key.urlsafe()}}">
+        <input type="submit" value="Print QR code" class="submitButton">
+      </form>
       <button onclick="showConfirm('delete')" class="submitButton">Delete</button>
       {% endif %}
       <p id="creator">Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</p>

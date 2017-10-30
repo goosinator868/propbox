@@ -46,9 +46,18 @@ from google.appengine.ext.db import TransactionFailedError
 # +---------------------+
 
 from warehouse_models import Item, cloneItem, User, possible_permissions
+from warehouse_models import List
 import auth
 from auth import get_current_user
 from utils import * 
+
+# Encoodes items into JSON, this only includes information being actively used
+class ItemEncoder(json.JSONEncoder):
+    def default(self, item):
+        fields = {}
+        fields['name'] = item.name  # used in qr-code check in/out
+        fields['urlsafe_key'] = item.key.urlsafe() # used in qr-code check in/out
+        return fields
 
 
 # +------------------------+
@@ -66,6 +75,7 @@ class AddItem(webapp2.RequestHandler):
 
     @auth.login_required
     def post(self):
+        qr_code, _ = Item.allocate_ids(1)
         img = self.request.get('image', default_value='')
         if img == '':
             img = None
@@ -91,6 +101,7 @@ class AddItem(webapp2.RequestHandler):
 
             # Create Item and add to the list
             newItem = Item(
+                id=qr_code,
                 creator_id=auth.get_user_id(self.request),
                 creator_name=auth.get_user_name(self.request),
                 name=self.request.get('name'),
@@ -99,7 +110,7 @@ class AddItem(webapp2.RequestHandler):
                 condition=self.request.get('condition'),
                 clothing_article_type=article_type,
                 clothing_size_num=costume_size_number,
-                qr_code=1234,
+                qr_code=qr_code,
                 description=self.request.get('description', default_value=''),
                 clothing_size_string=costume_size_word,
                 tags=tags_list)
@@ -418,15 +429,6 @@ class RevertItem(webapp2.RequestHandler):
         sleep(0.1)
         self.redirect('/review_edits')
 
-
-class CheckIn(webapp2.RequestHandler):
-    def get(self):
-        template = JINJA_ENVIRONMENT.get_template('templates/check_in.html')
-        page = template.render({})
-        page = page.encode('utf-8')
-        self.response.write(validateHTML(page))
-
-
 class ViewItemDetails(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
@@ -575,6 +577,114 @@ class AccountDeactivated(webapp2.RequestHandler):
         page = page.encode('utf-8')
         self.response.write(validateHTML(page))
 
+# ============================================
+# Lists
+# ============================================
+# TODO: Pages:
+#         CheckOutViaQRCode
+#         CheckInViaQRCode
+#         ViewLists (also add new list)
+#         View single list
+#           * Check out group
+#           * Check in group
+#           * Print QR codes
+#         PrintQRCodes
+#       Edits:
+#          Add to list option on items
+#          Check out/in option on items
+#
+
+class NewList(webapp2.RequestHandler):
+    @auth.login_required
+    def post(self):
+        name = self.request.get('name')
+        l = List(name=name)
+        k = l.put()
+        self.response.write(k.urlsafe())
+
+class ViewLists(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        user = GetCurrentUser(self.request)
+        lists = List.Query(List.user == user.key).fetch()
+        template = JINJA_ENVIRONMENT.get_template('templates/view_lists.html')
+        page = tempalate.render({'lists': lists})
+        page = page.encode('utf-8')
+        self.response.write(ValidateHTML(page))
+
+class EditList(webapp2.RequestHandler):
+    @auth.login_required
+    def post(self):
+        listkey = self.request.get('list')
+        l = ndb.Key(urlsafe=listkey).get()
+
+        new_contents = self.request.get('new_contents')
+        del l.items[:]
+
+        for urlsafe_key in new_contents:
+            l.items.append(ndb.Key(urlsafe=urlsafe_key))
+        l.put()
+
+
+class PrintQRCodes(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        keys = self.request.get_all('keys')
+        items = []
+        for k in keys:
+            items.append(ndb.Key(urlsafe=k).get())
+        template = JINJA_ENVIRONMENT.get_template('templates/print_qr_codes.html')
+        page = template.render({'items': items})
+        page = page.encode('utf-8')
+        self.response.write(ValidateHTML(page))
+
+class ItemFromQRCode(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        qr_code = int(self.request.get('qr_code'))
+        item = Item.query(ndb.AND(Item.qr_code == qr_code, Item.outdated == False)).filter().fetch()[0]
+        self.response.write(ItemEncoder().encode(item))
+
+class CheckIn(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('templates/check_in.html')
+        page = template.render({})
+        page = page.encode('utf-8')
+        self.response.write(ValidateHTML(page))
+
+    @auth.login_required
+    def post(self):
+        to_check_in = self.request.get_all('to_check_in')
+        for urlsafe_key in to_check_in:
+            item = ndb.Key(urlsafe=urlsafe_key).get()
+            item.checked_out = False
+            item.checked_out_reason = ""
+            item.put()
+            self.redirect("/")
+
+class CheckOut(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('templates/check_out.html')
+        page = template.render({})
+        page = page.encode('utf-8')
+        self.response.write(ValidateHTML(page))
+
+    @auth.login_required
+    def post(self):
+        user = auth.get_user_id(self.request)
+        to_check_in = self.request.get_all('to_check_out')
+        reason = self.request.get('reason')
+        for urlsafe_key in to_check_in:
+            item = ndb.Key(urlsafe=urlsafe_key).get()
+            item.checked_out = True
+            item.checked_out_by = user
+            item.checked_out_reason = reason
+            item.put()
+            self.redirect("/")
+
+
 
 # +-------------------+
 # | Environment Setup |
@@ -603,7 +713,10 @@ app = webapp2.WSGIApplication([
     ('/post_auth', PostAuth),
     ('/pending_approval', PendingApproval),
     ('/check_in', CheckIn),
+    ('/check_out', CheckOut),
     ('/item_details', ViewItemDetails),
     ('/review_deletions', ReviewDeletions),
+    ('/print_qr_codes', PrintQRCodes),
+    ('/item_from_qr_code', ItemFromQRCode),
     ('/.*', MainPage),
 ], debug=True)

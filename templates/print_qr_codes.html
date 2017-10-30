@@ -17,24 +17,58 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. -->
-
 <!doctype html>
 <html>
 <head>
+  <!-- <link rel="import" href="/static/common.html"> -->
 {% include 'templates/common.html' %}
-  <!-- QR-CODE reader import -->
-  <script type="text/javascript" src="/scripts/instascan.min.js"></script>
   <script>
     $(document).ready(function(){
-      $("#scanner_container").hide();
       SetUpNavBar(SetUpFirebase);
+      SetUpQRCodes();
     });
-
-    var scanned_codes = [];
   </script>
-  <!-- Code to support scanQRCode() -->
-  <script type="text/javascript" src="/scripts/scan_qr_code.js"></script>
-  <link rel="stylesheet" href="/stylesheets/check_in.css"> 
+  <script type="text/javascript" src="/scripts/qr_code.min.js"></script>
+
+  <script type="text/javascript">
+    function SetUpQRCodes() {
+      codes = $(".qr_code_image").toArray();
+      for (i in codes) {
+        code = codes[i];
+        var qr_code_value = code.innerText;
+        code.innerHTML = "";
+        var qrcode = new QRCode(code, {
+          text: qr_code_value,
+          width: 150,
+          height: 150,
+          colorDark : "#000000",
+          colorLight : "#ffffff",
+          correctLevel : QRCode.CorrectLevel.H
+        });
+      }
+    }
+  </script>
+
+  <style type="text/css">
+    .item_seperator {
+      background-color: white;
+      width: 240px;
+      overflow: hidden;
+      padding: 20px;
+      float: left;
+      border: 1px dashed black;
+    }
+    .qr_code_caption {
+      padding-left: 20px;
+    }
+    .qr_code_image {
+      background-color: white;
+      width: 200px;
+      height: 200px;
+      padding: 25px;
+      float: left;
+    }
+  </style>
 
   <title>Prop Box</title>
 </head>
@@ -42,23 +76,16 @@ SOFTWARE. -->
 <body>
   <div id="navbar_holder">
     <div id="page_specific_breadcrumbs">
-      <span> Check in items </span>
+      <a href="/manage_users"> Manage users </a>
     </div>
   </div>
-
-  <button onclick="scanAndAddToList(scanned_codes)">Scan QR code</button>
-  <div id="scanner_container">
-    <div id="scanner_tooltip">
-      Click anywhere to exit
-    </div>
-    <video id="scanner_window"></video>
+  <!-- New content here -->
+  {% for item in items %}
+  <div class="item_seperator">
+    <h2 class="qr_code_caption">{{item.name}}</h2>
+    <div class="qr_code_image">{{item.qr_code}}</div>
   </div>
-  <h2>Scanned Items</h2>
-   <form id="scanned_keys" action="/check_in" method="post">
-    <input type="submit" value="Check in scanned items">
-  </form>
-  <ul id="scanned_list"></ul>
-
-  <div id="footer_holder"></div>
+  {% endfor %}
+  <footer id="footer_holder"></footer>
 </body>
 </html>
