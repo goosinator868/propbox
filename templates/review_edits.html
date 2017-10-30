@@ -17,37 +17,24 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. -->
+
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- <link rel="import" href="/static/common.html"> -->
   {% include 'templates/common.html' %}
+  
   <script>
     $(document).ready(function(){
       SetUpNavBar(SetUpFirebase);
     });
   </script>
 
-  <title>Review edits :: Propbox</title>
-  <script type="text/javascript">
-    function switchItem(hideID, showID) {
-      hide = document.getElementById(hideID);
-      show = document.getElementById(showID);
-      if (hide != null) {
-        hide.style.display = 'none';
-      }
-      if (show != null) {
-        show.style.display = 'block';
-      }
-      return;
-    }
-  </script>
+  <script type="text/javascript" src="/scripts/review_edits.js"></script>
   <script type="text/javascript" src="/scripts/popup_confirm.js"></script>
-  <style type="text/css">
-    h2 {
-      margin-left: 1em;
-    }
-  </style>
+
+  <link rel="stylesheet" href="/stylesheets/review_edits.css">
+
+  <title>Review edits :: Propbox</title>
 </head>
 
 <body>

@@ -148,6 +148,10 @@ def commitEdit(old_key, new_item, was_orphan=False,suggestion=False):
 # Validates an html string using the w3 validator.
 def validateHTML(html_string):
     # TODO disable when deployed
+
+    # TODO: Currently, the w3 html validator is broken. Remove when the site is up and running again
+    return html_string
+
     response = requests.post("https://validator.w3.org/nu/?out=json",
         data=html_string,
         headers={'Content-Type':'text/html; charset=utf-8'})
@@ -232,7 +236,7 @@ def filterItems(item_name, item_type, item_condition, costume_article,
     else:
         query = Item.query().order(Item.name)
 
-    tags_list = ParseTags(tags_filter)
+    tags_list = parseTags(tags_filter)
     if len(tags_list) != 0:
         if tag_grouping == "inclusive":
             query = query.filter(Item.tags.IN(tags_list))

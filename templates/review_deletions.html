@@ -17,10 +17,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. -->
+
 <!doctype html>
 <html>
 <head>
-  <!-- <link rel="import" href="/static/common.html"> -->
 {% include 'templates/common.html' %}
 
   <script>
@@ -30,25 +30,10 @@ SOFTWARE. -->
   </script>
 
   <script type="text/javascript" src="/scripts/popup_confirm.js"></script>
+  
   <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
-  <style type="text/css">
-    .item_container * {
-      text-align: center;
-    }
-    .item_container *:not(input):not(button) {
-      width: 100%;
-    }
-    .thumbnail {
-      position: static;
-      float: initial;
-      margin: auto;
-      height: auto;
-      max-width: 30%;
-    }
-    button, form {
-      display: inline;
-    }
-  </style>
+  <link rel="stylesheet" href="/stylesheets/review_deletions.css">
+  
   <title>Review deletions :: Propbox</title>
 </head>
 
@@ -58,7 +43,6 @@ SOFTWARE. -->
       <span>Review deletions</span>
     </div>
   </div>
-  <!-- New content here -->
   <div id="page-heading">
     <h1>Review Deletions</h1>
   </div>

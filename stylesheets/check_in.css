@@ -1,4 +1,4 @@
-<!-- Copyright (c) 2017 Future Gadget Laboratories.
+/*Copyright (c) 2017 Future Gadget Laboratories.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -16,30 +16,29 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE. -->
+SOFTWARE.*/
 
-<!doctype html>
-<html>
-<head>
-  {% include 'templates/common.html' %}
+#qrcode {
+	margin: 50px;
+}
 
-  <script>
-    $(document).ready(function(){
-      SetUpNavBar(SetUpFirebase);
-    });
-  </script>
+#scanner_window {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	z-index: 100;
+	width: 100vw;
+ 	height: 100vh;
+	background-color: #E9E9E9;
+}
 
-  <link rel="stylesheet" href="/stylesheets/pending_approval.css">
-
-  <title>Your account is pending approval. :: Propbox</title>
-</head>
-
-<body>
-  <div id="navbar_holder"></div>
-  <div id="error">
-    <i class="fa fa-exclamation-circle fa-5x" aria-hidden="true"></i>
-    <h2>Your account is under review and must be approved by an administrator. Contact an administrator to resolve.</h2>
-  </div>
-  <footer id="footer_holder"></footer>
-</body>
-</html>
+#scanner_tooltip {
+	position: absolute;
+	left: 0px;
+ 	top: 0px;
+	z-index: 101;
+	width: 100vw;
+	height: 10vh;
+	background-color:rgb(174,100,211);
+ 	font-size: 20pt;
+}
