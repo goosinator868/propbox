@@ -17,10 +17,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. -->
+
 <!doctype html>
 <html>
 <head>
-  <!-- <link rel="import" href="/static/common.html"> -->
   {% include 'templates/common.html' %}
 
   <script>
@@ -29,59 +29,9 @@ SOFTWARE. -->
     });
   </script>
 
+  <link rel="stylesheet" href="/stylesheets/manage_users.css">
+
   <title>Propbox :: Manage users</title>
-  <style type="text/css">
-    /* Manage Users page-specific CSS */
-    h3 {
-        font-size: 2em;
-        margin: 18px auto;
-        width: 75%;
-    }
-
-    .user-info {
-        background-color: #F9F9F9;
-        border-radius: 6px;
-        margin: 18pt auto;
-        padding: 12px 20px;
-        width: 75%;
-        display: table;
-    }
-
-      .user-info h4 {
-          float: left;
-          margin: 0;
-          padding-left: 0;
-          font-size: 36px;
-          width: 45%;
-      }
-
-      .user-info form {
-          font-size: 18px;
-          display: block;
-          float: right;
-      }
-
-      .user-info form select {
-          border: 0;
-          border-radius: 6px;
-          padding: 8px;
-      }
-
-      .user-info form input[type=submit] {
-          border: 0;
-          border-radius: 6px;
-          padding: 8px 14px;
-          color: #fff;
-          background-color: rgb(174,100,211);
-          margin: 0 14px;
-          transition: background-color 0.1s ease;
-          -webkit-transition: background-color 0.1s ease;
-      }
-
-      .user-info form input[type=submit]:hover {
-          background-color: #DA81F5;
-      }
-  </style>
 </head>
 
 <body>
@@ -110,7 +60,7 @@ SOFTWARE. -->
             <input type="submit" value="Update permissions">
           </form>
         </div>
-  {% endfor %}
+    {% endfor %}
   {% endif %}
 
   {% if active_users|length > 0 %}
@@ -128,7 +78,7 @@ SOFTWARE. -->
             <input type="submit" value="Update permissions">
           </form>
         </div>
-  {% endfor %}
+    {% endfor %}
   {% endif %}
 
   {% if deactivated_users|length > 0 %}
@@ -146,7 +96,10 @@ SOFTWARE. -->
             <input type="submit" value="Update permissions">
           </form>
         </div>
-  {% endfor %}
+    {% endfor %}
+  {% endif %}
+  {% if (active_users|length == 0) and (deactivated_users|length == 0) and (pending_users|length == 0) %}
+    <h3>No users found</h3>
   {% endif %}
   <footer id="footer_holder"></footer>
 </body>
