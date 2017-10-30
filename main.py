@@ -48,7 +48,7 @@ from warehouse_models import Item, cloneItem, User, possible_permissions
 from warehouse_models import List
 import auth
 from auth import get_current_user
-from utils import * 
+from utils import *
 
 # +--------------------------+
 # | TODO: Move this to utils |
@@ -109,6 +109,7 @@ class AddItem(webapp2.RequestHandler):
                 image=img,
                 item_type=costume_or_prop,
                 condition=self.request.get('condition'),
+                item_color=self.request.get_all('color'),
                 clothing_article_type=article_type,
                 clothing_size_num=costume_size_number,
                 qr_code=qr_code,
@@ -476,6 +477,7 @@ class MainPage(webapp2.RequestHandler):
             item_name_filter = self.request.get('filter_by_name')
             item_type_filter = self.request.get('filter_by_item_type')
             item_condition_filter = self.request.get_all('filter_by_condition')
+            item_color_filter = self.request.get_all('filter_by_color')
             item_article_filter = self.request.get_all('filter_by_article')
             costume_size_string_filter = self.request.get_all('filter_by_costume_size_string')
             costume_size_number_filter = self.request.get_all('filter_by_costume_size_number')
@@ -487,6 +489,7 @@ class MainPage(webapp2.RequestHandler):
                 item_name_filter,
                 item_type_filter,
                 item_condition_filter,
+                item_color_filter,
                 item_article_filter,
                 costume_size_string_filter,
                 costume_size_number_filter,
@@ -505,7 +508,7 @@ class MainPage(webapp2.RequestHandler):
             page = template.render({'user':user,'items': items, 'item_type_filter': item_type_filter, 'item_name_filter': item_name_filter, 'item_condition_filter': item_condition_filter})
             page = page.encode('utf-8')
             self.response.write(validateHTML(page))
-        
+
         # TODO: make this more specific OR preferably remove try/except infrastructure
         except:
             # first time opening or item has been added

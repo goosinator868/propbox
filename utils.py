@@ -199,7 +199,7 @@ def parseTags(tags_string):
     return tags_list
 
 # Filters viewable items based on selected boxes in MainPage
-def filterItems(item_name, item_type, item_condition, costume_article,
+def filterItems(item_name, item_type, item_condition, item_colors, costume_article,
     costume_size_string, costume_size_number, tags_filter, tag_grouping):
     # Check if costume or prop is selected individually
     if (item_type == "Costume"):
@@ -246,4 +246,3 @@ def filterItems(item_name, item_type, item_condition, costume_article,
 
     #query = query.filter(Item.condition.IN(item_condition))
     return query
-

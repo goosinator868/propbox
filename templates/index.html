@@ -97,7 +97,7 @@ SOFTWARE. -->
                     <h1> Filter Items </h1>
                     <form action="/search_and_browse" method="get" onsubmit="setCheckboxValues(this);">
                         <div id="result"></div>
-                        <input id="nameBox" name="filter_by_name" type="text" placeholder="name"><br><br>
+                        <input id="nameBox" name="filter_by_name" type="text" placeholder="Name"><br><br>
                         <h4> Type </h4>
                         <input type="radio" id="typeAll" name="filter_by_item_type" value="All" checked="checked" onclick="hideFilterCostumeForm(this); setCheckboxValues('filter_by_item_type', 'typeAll');"> All<br>
                         <input type="radio" id="typeCostume" name="filter_by_item_type" value="Costume" onclick="displayFilterCostumeForm(this);"> Costume<br>
@@ -138,6 +138,20 @@ SOFTWARE. -->
                             <input type="checkbox" id="condition{{option}}" name="filter_by_condition" value="{{option}}"> {{option}}<br>
                           {% endif %}
                         {% endfor %}
+                        <br>
+                        <h4> Color </h4>
+                        {% for option in ["Red", "Orange", "Yellow", "Green"] %}
+                          <input type="checkbox" id="sizeString{{option}}" name="filter_by_color" value="{{option}}"> {{option}} &nbsp;&nbsp;
+                        {% endfor %}
+                        <br>
+                        {% for option in ["Cyan", "Blue", "Indigo", "Purple"] %}
+                          <input type="checkbox" id="sizeString{{option}}" name="filter_by_color" value="{{option}}"> {{option}} &nbsp;&nbsp;
+                        {% endfor %}
+                        <br>
+                        {% for option in ["Pink", "Brown", "Black", "White"] %}
+                          <input type="checkbox" id="sizeString{{option}}" name="filter_by_color" value="{{option}}"> {{option}} &nbsp;&nbsp;
+                        {% endfor %}
+                        <br>
                         <br>
                         <h4> Tags </h4>
                         <textarea id="tagBox" name="filter_by_tags" placeholder="separate tags with enter key"></textarea><br>

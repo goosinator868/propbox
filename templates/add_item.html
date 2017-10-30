@@ -22,26 +22,26 @@ SOFTWARE. -->
 <html>
 <head>
   {% include 'templates/common.html' %}
-  
+
   <script>
     $(document).ready(function(){
       SetUpNavBar(SetUpFirebase);
     });
   </script>
-  
+
   <link rel="stylesheet" href="/stylesheets/add_item.css">
 
-  <title>Propbox :: Add an item</title>
+  <title>Propbox :: Add an Item</title>
 </head>
 
 <body>
   <div id="navbar_holder">
     <div id="page_specific_breadcrumbs">
-      <span>Add item</span>
+      <span>Add Item</span>
     </div>
   </div>
   <div id="page-heading">
-    <h1>Add an item</h1>
+    <h1>Add an Item</h1>
   </div>
 
   <div class="form">
@@ -81,6 +81,18 @@ SOFTWARE. -->
                   <option> {{option}} </option>
               {% endfor %}
           </select><br><br>
+          <label> Color</label><br>
+              {% for option in ["Red", "Orange", "Yellow", "Green"] %}
+                <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}"> {{option}} &nbsp;&nbsp;
+              {% endfor %}
+              <br>
+              {% for option in ["Cyan", "Blue", "Indigo", "Purple"] %}
+                <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}"> {{option}} &nbsp;&nbsp;
+              {% endfor %}
+              {% for option in ["Pink", "Brown", "Black", "White"] %}
+                <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}"> {{option}} &nbsp;&nbsp;
+              {% endfor %}
+          <br><br>
           <label>Tags</label>
           <textarea name="tags" placeholder="Separate tags with the enter key."></textarea><br><br>
           <input type="submit" value="Create" class="submitButton" style="max-width: 100px;">
