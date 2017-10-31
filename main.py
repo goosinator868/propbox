@@ -504,8 +504,24 @@ class MainPage(webapp2.RequestHandler):
 
             if (item_type_filter == "" or item_type_filter == None):
                 item_type_filter = "All"
+
+            if (len(item_color_filter) == 0):
+                item_color_filter.append("Red")
+                item_color_filter.append("Orange")
+                item_color_filter.append("Yellow")
+                item_color_filter.append("Green")
+                item_color_filter.append("Cyan")
+                item_color_filter.append("Blue")
+                item_color_filter.append("Indigo")
+                item_color_filter.append("Purple")
+                item_color_filter.append("Pink")
+                item_color_filter.append("Brown")
+                item_color_filter.append("Black")
+                item_color_filter.append("White")
+                item_color_filter.append("Gray")
+
             # send to display
-            page = template.render({'user':user,'items': items, 'item_type_filter': item_type_filter, 'item_name_filter': item_name_filter, 'item_condition_filter': item_condition_filter})
+            page = template.render({'user':user, 'items': items, 'item_type_filter': item_type_filter, 'item_name_filter': item_name_filter, 'item_condition_filter': item_condition_filter})
             page = page.encode('utf-8')
             self.response.write(validateHTML(page))
 

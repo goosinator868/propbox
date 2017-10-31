@@ -44,6 +44,7 @@ function setCheckboxValues(x) {
         var articleArray = new Array();
         var costumeSizeStringArray = new Array();
         var costumeSizeNumArray = new Array();
+        var colorArray = new Array();
         var tagGrouping = "groupingInclusive";
         var itemType = "All";
         var nameText = document.getElementById("nameBox").value;
@@ -53,6 +54,7 @@ function setCheckboxValues(x) {
         var costumeSizeStringList = x.filter_by_costume_size_string;
         var costumeSizeNumList = x.filter_by_costume_size_number;
         var itemTypeList = document.getElementsByName("filter_by_item_type");
+        var itemColorList = x.filter_by_color;
 
         if (conditionList != null) {
             for (var i = 0; i < conditionList.length; i++) {
@@ -98,14 +100,23 @@ function setCheckboxValues(x) {
             }
         }
 
+        if (itemColorList != null) {
+            for (var i = 0; i < itemColorList.length; i++) {
+                if (itemColorList[i].checked) {
+                    colorArray.push(itemColorList[i].id);
+                }
+            }
+        }
+
         localStorage.setItem("ConditionFilter", JSON.stringify(conditionArray));
         localStorage.setItem("ArticleFilter", JSON.stringify(articleArray));
         localStorage.setItem("CostumeSizeStringFilter", JSON.stringify(costumeSizeStringArray));
         localStorage.setItem("CostumeSizeNumFilter", JSON.stringify(costumeSizeNumArray));
+        localStorage.setItem("ColorFilter", JSON.stringify(colorArray));
         localStorage.setItem("GroupingFilter", tagGrouping);
         localStorage.setItem("ItemTypeFilter", itemType);
-        localStorage.setItem("nameFilter", nameText);
-        localStorage.setItem("tagFilter", tagText);
+        localStorage.setItem("NameFilter", nameText);
+        localStorage.setItem("TagFilter", tagText);
     }
 }
 
@@ -115,10 +126,11 @@ function getCheckboxValues() {
         var articleArray = JSON.parse(localStorage.getItem("ArticleFilter"));
         var costumeSizeStringArray = JSON.parse(localStorage.getItem("CostumeSizeStringFilter"));
         var costumeSizeNumArray = JSON.parse(localStorage.getItem("CostumeSizeNumFilter"));
+        var colorArray = JSON.parse(localStorage.getItem("ColorFilter"));
         var tagGrouping = localStorage.getItem("GroupingFilter");
         var itemType = localStorage.getItem("ItemTypeFilter");
-        var nameText = localStorage.getItem("nameFilter");
-        var tagText = localStorage.getItem("tagFilter");
+        var nameText = localStorage.getItem("NameFilter");
+        var tagText = localStorage.getItem("TagFilter");
 
         if (conditionArray == null) {
             conditionArray = [];
@@ -131,6 +143,9 @@ function getCheckboxValues() {
         }
         if (costumeSizeNumArray == null) {
             costumeSizeNumArray = [];
+        }
+        if (colorArray == null) {
+            colorArray = [];
         }
         if (tagGrouping == null) {
             tagGrouping = "groupingInclusive";
@@ -160,6 +175,12 @@ function getCheckboxValues() {
             }
         }
 
+        for (var i = 0; i < colorArray.length; i++) {
+            if (document.getElementById(colorArray[i]) != null) {
+                document.getElementById(colorArray[i]).checked = true;
+            }
+        }
+
         if (tagGrouping != null) {
             document.getElementById(tagGrouping).checked = true;
         } else {
@@ -186,9 +207,10 @@ function clearForm() {
   localStorage.setItem("ArticleFilter", JSON.stringify([]));
   localStorage.setItem("CostumeSizeStringFilter", JSON.stringify([]));
   localStorage.setItem("CostumeSizeNumFilter", JSON.stringify([]));
+  localStorage.setItem("ColorFilter", JSON.stringify([]));
   localStorage.setItem("GroupingFilter", "groupingInclusive");
   localStorage.setItem("ItemTypeFilter", "typeAll");
-  localStorage.setItem("nameFilter", "");
-  localStorage.setItem("tagFilter", "");
+  localStorage.setItem("NameFilter", "");
+  localStorage.setItem("TagFilter", "");
   getCheckboxValues();
 }
