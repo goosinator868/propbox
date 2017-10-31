@@ -199,8 +199,9 @@ def parseTags(tags_string):
     return tags_list
 
 # Filters viewable items based on selected boxes in MainPage
-def filterItems(item_name, item_type, item_condition, item_colors, costume_article,
-    costume_size_string, costume_size_number, tags_filter, tag_grouping):
+def filterItems(item_name, item_type, item_condition, item_colors,
+    item_color_grouping, costume_article, costume_size_string,
+    costume_size_number, tags_filter, tag_grouping):
     # Check if costume or prop is selected individually
     if (item_type == "Costume"):
         if (len(costume_size_string) == 9):
@@ -245,7 +246,12 @@ def filterItems(item_name, item_type, item_condition, item_colors, costume_artic
                 query = query.filter(Item.tags == tag)
 
     if len(item_colors) != 0:
-        query1 = query.filter(Item.item_color.IN(item_colors))
+        query1 = query;
+        if item_color_grouping == "inclusive":
+            query1 = query.filter(Item.item_color.IN(item_colors))
+        else:
+            for color in item_colors:
+                query1 = query1.filter(Item.item_color == color)
         return query1
 
     return query

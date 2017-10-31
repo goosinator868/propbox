@@ -46,6 +46,7 @@ function setCheckboxValues(x) {
         var costumeSizeNumArray = new Array();
         var colorArray = new Array();
         var tagGrouping = "groupingInclusive";
+        var colorGrouping = "colorInclusive";
         var itemType = "All";
         var nameText = document.getElementById("nameBox").value;
         var tagText = document.getElementById("tagBox").value;
@@ -88,6 +89,10 @@ function setCheckboxValues(x) {
             }
         }
 
+        if (document.getElementById("colorExclusive").checked) {
+            colorGrouping = "colorExclusive";
+        }
+
         if (document.getElementById("groupingExclusive").checked) {
             tagGrouping = "groupingExclusive";
         }
@@ -113,6 +118,7 @@ function setCheckboxValues(x) {
         localStorage.setItem("CostumeSizeStringFilter", JSON.stringify(costumeSizeStringArray));
         localStorage.setItem("CostumeSizeNumFilter", JSON.stringify(costumeSizeNumArray));
         localStorage.setItem("ColorFilter", JSON.stringify(colorArray));
+        localStorage.setItem("ColorGroupingFilter", colorGrouping);
         localStorage.setItem("GroupingFilter", tagGrouping);
         localStorage.setItem("ItemTypeFilter", itemType);
         localStorage.setItem("NameFilter", nameText);
@@ -127,6 +133,7 @@ function getCheckboxValues() {
         var costumeSizeStringArray = JSON.parse(localStorage.getItem("CostumeSizeStringFilter"));
         var costumeSizeNumArray = JSON.parse(localStorage.getItem("CostumeSizeNumFilter"));
         var colorArray = JSON.parse(localStorage.getItem("ColorFilter"));
+        var colorGrouping = localStorage.getItem("ColorGroupingFilter");
         var tagGrouping = localStorage.getItem("GroupingFilter");
         var itemType = localStorage.getItem("ItemTypeFilter");
         var nameText = localStorage.getItem("NameFilter");
@@ -146,6 +153,9 @@ function getCheckboxValues() {
         }
         if (colorArray == null) {
             colorArray = [];
+        }
+        if (colorGrouping == null) {
+            colorGrouping = "colorInclusive";
         }
         if (tagGrouping == null) {
             tagGrouping = "groupingInclusive";
@@ -181,6 +191,12 @@ function getCheckboxValues() {
             }
         }
 
+        if (colorGrouping != null) {
+            document.getElementById(colorGrouping).checked = true;
+        } else {
+            document.getElementById("colorInclusive").checked = true;
+        }
+
         if (tagGrouping != null) {
             document.getElementById(tagGrouping).checked = true;
         } else {
@@ -208,6 +224,7 @@ function clearForm() {
   localStorage.setItem("CostumeSizeStringFilter", JSON.stringify([]));
   localStorage.setItem("CostumeSizeNumFilter", JSON.stringify([]));
   localStorage.setItem("ColorFilter", JSON.stringify([]));
+  localStorage.setItem("ColorGroupingFilter", "colorInclusive");
   localStorage.setItem("GroupingFilter", "groupingInclusive");
   localStorage.setItem("ItemTypeFilter", "typeAll");
   localStorage.setItem("NameFilter", "");

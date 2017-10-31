@@ -478,6 +478,7 @@ class MainPage(webapp2.RequestHandler):
             item_type_filter = self.request.get('filter_by_item_type')
             item_condition_filter = self.request.get_all('filter_by_condition')
             item_color_filter = self.request.get_all('filter_by_color')
+            item_color_grouping_filter = self.request.get('filter_by_color_grouping')
             item_article_filter = self.request.get_all('filter_by_article')
             costume_size_string_filter = self.request.get_all('filter_by_costume_size_string')
             costume_size_number_filter = self.request.get_all('filter_by_costume_size_number')
@@ -490,10 +491,12 @@ class MainPage(webapp2.RequestHandler):
                 item_type_filter,
                 item_condition_filter,
                 item_color_filter,
+                item_color_grouping_filter,
                 item_article_filter,
                 costume_size_string_filter,
                 costume_size_number_filter,
-                tags_filter, tags_grouping_filter)
+                tags_filter,
+                tags_grouping_filter)
 
             items = query.fetch()
             if (len(item_condition_filter) == 0):

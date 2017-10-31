@@ -151,7 +151,9 @@ SOFTWARE. -->
                         {% for option in ["Pink", "Brown", "Black", "White", "Gray"] %}
                           <input type="checkbox" id="{{option}}" name="filter_by_color" value="{{option}}"> {{option}} &nbsp;&nbsp;
                         {% endfor %}
-                        <br>
+                        <br><br>
+                        <input type="radio" id="colorInclusive" name="filter_by_color_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_color_grouping, colorInclusive);"> Has One of Listed<br>
+                        <input type="radio" id="colorExclusive" name="filter_by_color_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_color_grouping, colorExclusive);"> Has All of Listed<br>
                         <br>
                         <h4> Tags </h4>
                         <textarea id="tagBox" name="filter_by_tags" placeholder="separate tags with enter key"></textarea><br>
