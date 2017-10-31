@@ -243,5 +243,9 @@ def filterItems(item_name, item_type, item_condition, item_colors, costume_artic
         else:
             for tag in tags_list:
                 query = query.filter(Item.tags == tag)
-    #query = query.filter(Item.condition.IN(item_condition))
+
+    if len(item_colors) != 0:
+        query1 = query.filter(Item.item_color.IN(item_colors))
+        return query1
+
     return query
