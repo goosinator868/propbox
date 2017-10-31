@@ -122,7 +122,11 @@ class AddItem(webapp2.RequestHandler):
                 d = d - 1;
                 sleep(0.1)
 
-            self.redirect("/search_and_browse")
+            next_page = self.request.get("next_page")
+            if next_page == "Make Another Item":
+                self.redirect("/add_item")
+            else:
+                self.redirect("/search_and_browse")
         except:
             # Should never be here unless the token has expired,
             # meaning that we forgot to refresh their token.
