@@ -76,7 +76,6 @@ class AddItem(webapp2.RequestHandler):
 
     @auth.login_required
     def post(self):
-        qr_code, _ = Item.allocate_ids(1)
         img = self.request.get('image', default_value='')
         if img == '':
             img = None
@@ -101,23 +100,28 @@ class AddItem(webapp2.RequestHandler):
             tags_list = parseTags(tags_string)
 
             # Create Item and add to the list
-            newItem = Item(
-                id=qr_code,
-                creator_id=auth.get_user_id(self.request),
-                creator_name=auth.get_user_name(self.request),
-                name=self.request.get('name'),
-                image=img,
-                item_type=costume_or_prop,
-                condition=self.request.get('condition'),
-                item_color=self.request.get_all('color'),
-                clothing_article_type=article_type,
-                clothing_size_num=costume_size_number,
-                qr_code=qr_code,
-                description=self.request.get('description', default_value=''),
-                clothing_size_string=costume_size_word,
-                tags=tags_list)
-            newItem.put()
-            sleep(0.1)
+            duplication = self.request.get('times_to_duplicate')
+            d = int(duplication)
+            while d > 0:
+                qr_code, _ = Item.allocate_ids(1)
+                Item(
+                    id=qr_code,
+                    creator_id=auth.get_user_id(self.request),
+                    creator_name=auth.get_user_name(self.request),
+                    name=self.request.get('name'),
+                    image=img,
+                    item_type=costume_or_prop,
+                    condition=self.request.get('condition'),
+                    item_color=self.request.get_all('color'),
+                    clothing_article_type=article_type,
+                    clothing_size_num=costume_size_number,
+                    qr_code=qr_code,
+                    description=self.request.get('description', default_value=''),
+                    clothing_size_string=costume_size_word,
+                    tags=tags_list).put()
+                d = d - 1;
+                sleep(0.1)
+
             self.redirect("/search_and_browse")
         except:
             # Should never be here unless the token has expired,
