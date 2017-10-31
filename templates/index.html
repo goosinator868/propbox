@@ -72,14 +72,22 @@ SOFTWARE. -->
                           {% if item.item_type==item_type_filter %}
                               {% for item_condition in item_condition_filter%}
                                   {% if item_condition==item.condition%}
-                                    {% include 'templates/item_template.html' %}
+                                    {% for item_color in item_color_filter %}
+                                        {% if item_color in item.item_color %}
+                                            {% include 'templates/item_template.html' %}
+                                        {% endif %}
+                                    {% endfor %}
                                   {% endif %}
                               {% endfor %}
                           {% endif %}
                       {% else %}
                           {% for item_condition in item_condition_filter%}
                               {% if item_condition==item.condition%}
-                                {% include 'templates/item_template.html' %}
+                                  {% for item_color in item_color_filter %}
+                                      {% if item_color in item.item_color %}
+                                        {% include 'templates/item_template.html' %}
+                                      {% endif %}
+                                  {% endfor %}
                               {% endif %}
                           {% endfor %}
                       {% endif %}

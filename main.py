@@ -521,7 +521,7 @@ class MainPage(webapp2.RequestHandler):
                 item_color_filter.append("Gray")
 
             # send to display
-            page = template.render({'user':user, 'items': items, 'item_type_filter': item_type_filter, 'item_name_filter': item_name_filter, 'item_condition_filter': item_condition_filter})
+            page = template.render({'user': user, 'items': items, 'item_type_filter': item_type_filter, 'item_name_filter': item_name_filter, 'item_condition_filter': item_condition_filter, 'item_color_filter': item_color_filter})
             page = page.encode('utf-8')
             self.response.write(validateHTML(page))
 
