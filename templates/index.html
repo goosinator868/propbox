@@ -152,13 +152,13 @@ SOFTWARE. -->
                           <input type="checkbox" id="{{option}}" name="filter_by_color" value="{{option}}"> {{option}} &nbsp;&nbsp;
                         {% endfor %}
                         <br><br>
-                        <input type="radio" id="colorInclusive" name="filter_by_color_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_color_grouping, colorInclusive);"> Has One of Listed<br>
-                        <input type="radio" id="colorExclusive" name="filter_by_color_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_color_grouping, colorExclusive);"> Has All of Listed<br>
+                        <input type="radio" id="colorGroupingInclusive" name="filter_by_color_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_color_grouping, colorGroupingInclusive);"> Has One of Listed<br>
+                        <input type="radio" id="colorGroupingExclusive" name="filter_by_color_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_color_grouping, colorGroupingExclusive);"> Has All of Listed<br>
                         <br>
                         <h4> Tags </h4>
                         <textarea id="tagBox" name="filter_by_tags" placeholder="separate tags with enter key"></textarea><br>
-                        <input type="radio" id="groupingInclusive" name="filter_by_tag_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, groupingInclusive);"> Has One of Listed<br>
-                        <input type="radio" id="groupingExclusive" name="filter_by_tag_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, groupingExclusive);"> Has All of Listed<br>
+                        <input type="radio" id="tagGroupingInclusive" name="filter_by_tag_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, tagGroupingInclusive);"> Has One of Listed<br>
+                        <input type="radio" id="tagGroupingExclusive" name="filter_by_tag_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, tagGroupingExclusive);"> Has All of Listed<br>
                         <input type="submit" value="Search" class="submitButton">
                     </form>
                     <form action="/search_and_browse" method="get" onsubmit="clearForm();">

@@ -45,8 +45,8 @@ function setCheckboxValues(x) {
         var costumeSizeStringArray = new Array();
         var costumeSizeNumArray = new Array();
         var colorArray = new Array();
-        var tagGrouping = "groupingInclusive";
-        var colorGrouping = "colorInclusive";
+        var tagGrouping = "tagGroupingInclusive";
+        var colorGrouping = "colorGroupingInclusive";
         var itemType = "All";
         var nameText = document.getElementById("nameBox").value;
         var tagText = document.getElementById("tagBox").value;
@@ -89,12 +89,12 @@ function setCheckboxValues(x) {
             }
         }
 
-        if (document.getElementById("colorExclusive").checked) {
-            colorGrouping = "colorExclusive";
+        if (document.getElementById("colorGroupingExclusive").checked) {
+            colorGrouping = "colorGroupingExclusive";
         }
 
-        if (document.getElementById("groupingExclusive").checked) {
-            tagGrouping = "groupingExclusive";
+        if (document.getElementById("tagGroupingExclusive").checked) {
+            tagGrouping = "tagGroupingExclusive";
         }
 
         if (itemTypeList != null) {
@@ -119,7 +119,7 @@ function setCheckboxValues(x) {
         localStorage.setItem("CostumeSizeNumFilter", JSON.stringify(costumeSizeNumArray));
         localStorage.setItem("ColorFilter", JSON.stringify(colorArray));
         localStorage.setItem("ColorGroupingFilter", colorGrouping);
-        localStorage.setItem("GroupingFilter", tagGrouping);
+        localStorage.setItem("TagGroupingFilter", tagGrouping);
         localStorage.setItem("ItemTypeFilter", itemType);
         localStorage.setItem("NameFilter", nameText);
         localStorage.setItem("TagFilter", tagText);
@@ -134,7 +134,7 @@ function getCheckboxValues() {
         var costumeSizeNumArray = JSON.parse(localStorage.getItem("CostumeSizeNumFilter"));
         var colorArray = JSON.parse(localStorage.getItem("ColorFilter"));
         var colorGrouping = localStorage.getItem("ColorGroupingFilter");
-        var tagGrouping = localStorage.getItem("GroupingFilter");
+        var tagGrouping = localStorage.getItem("TagGroupingFilter");
         var itemType = localStorage.getItem("ItemTypeFilter");
         var nameText = localStorage.getItem("NameFilter");
         var tagText = localStorage.getItem("TagFilter");
@@ -155,10 +155,10 @@ function getCheckboxValues() {
             colorArray = [];
         }
         if (colorGrouping == null) {
-            colorGrouping = "colorInclusive";
+            colorGrouping = "colorGroupingInclusive";
         }
         if (tagGrouping == null) {
-            tagGrouping = "groupingInclusive";
+            tagGrouping = "tagGroupingInclusive";
         }
 
         for (var i = 0; i < conditionArray.length; i++) {
@@ -194,13 +194,13 @@ function getCheckboxValues() {
         if (colorGrouping != null) {
             document.getElementById(colorGrouping).checked = true;
         } else {
-            document.getElementById("colorInclusive").checked = true;
+            document.getElementById("colorGroupingInclusive").checked = true;
         }
 
         if (tagGrouping != null) {
             document.getElementById(tagGrouping).checked = true;
         } else {
-            document.getElementById("groupingInclusive").checked = true;
+            document.getElementById("tagGroupingInclusive").checked = true;
         }
 
         if (itemType != null) {
@@ -224,8 +224,8 @@ function clearForm() {
   localStorage.setItem("CostumeSizeStringFilter", JSON.stringify([]));
   localStorage.setItem("CostumeSizeNumFilter", JSON.stringify([]));
   localStorage.setItem("ColorFilter", JSON.stringify([]));
-  localStorage.setItem("ColorGroupingFilter", "colorInclusive");
-  localStorage.setItem("GroupingFilter", "groupingInclusive");
+  localStorage.setItem("ColorGroupingFilter", "colorGroupingInclusive");
+  localStorage.setItem("TagGroupingFilter", "tagGroupingInclusive");
   localStorage.setItem("ItemTypeFilter", "typeAll");
   localStorage.setItem("NameFilter", "");
   localStorage.setItem("TagFilter", "");
