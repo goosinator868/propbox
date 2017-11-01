@@ -150,7 +150,7 @@ def validateHTML(html_string):
     # TODO disable when deployed
 
     # TODO: Currently, the w3 html validator is broken. Remove when the site is up and running again
-    return html_string
+    # return html_string
 
     response = requests.post("https://validator.w3.org/nu/?out=json",
         data=html_string,
