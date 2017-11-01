@@ -90,6 +90,7 @@ SOFTWARE. -->
               {% for option in ["Cyan", "Blue", "Indigo", "Purple"] %}
                 <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if item is not none %}{% if option in item.item_color %}checked="checked"{% endif %}{% endif %}> {{option}} &nbsp;&nbsp;
               {% endfor %}
+              <br>
               {% for option in ["Pink", "Brown", "Black", "White"] %}
                 <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if item is not none %}{% if option in item.item_color %}checked="checked"{% endif %}{% endif %}> {{option}} &nbsp;&nbsp;
               {% endfor %}
