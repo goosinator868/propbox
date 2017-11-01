@@ -86,6 +86,10 @@ SOFTWARE. -->
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
         <input type="submit" value="Edit" class="submitButton">
       </form>
+      <form action="/add_item" method="get">
+        <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+        <input type="submit" value="Duplicate" class="submitButton">
+      </form>
       {% if user.permissions != "Standard user" %}
         <form action="/revert_item" method="post">
           <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">

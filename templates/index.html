@@ -47,50 +47,53 @@ SOFTWARE. -->
     {% if user.permissions != "Standard user" %}
     {{user.name}},
     you are currently logged in as a{% if user.permissions == "Trusted user" %} trusted user.{% else %}n admin.{% endif %}</p>
+    {% endif %}
     <div id="actions">
-      &nbsp;<form action='/review_edits' method='get'><button type="submit"><i class='fa fa-pencil fa-3x' aria-hidden='true'></i><br>Review edits</button></form>
+      &nbsp;
+      <form action='/add_item'>
+          <button type="submit"><i class='fa fa-plus-circle fa-3x' aria-hidden='true'></i><br>Add an Item</button>
+      </form>
+      {% if user.permissions != "Standard user" %}
+      <form action='/review_edits' method='get'>
+          <button type="submit"><i class='fa fa-pencil fa-3x' aria-hidden='true'></i><br>Review Edits</button>
+      </form>
+      <form action="review_deletions">
+        <button type="submit"><i class='fa fa-trash fa-3x' aria-hidden='true'></i><br>Review Deletions</button>
+      </form>
       {% if user.permissions == "Admin" %}
       <form action="manage_users">
-        <button type="submit"><i class='fa fa-user fa-3x' aria-hidden='true'></i><br>Manage users</button>
+        <button type="submit"><i class='fa fa-user fa-3x' aria-hidden='true'></i><br>Manage Users</button>
       </form>
       {% endif %}
-      <form action="review_deletions">
-        <button type="submit"><i class='fa fa-trash fa-3x' aria-hidden='true'></i><br>Review deletions</button>
-      </form>
     </div>
     {% endif %}
   </div>
   <br/><br/>
   <div id="pane_container">
       <div id="right-pane">
-            <!-- View current items -->
-            <div>
-              <!-- TODO: clean this up so no filter logic is happening, it should all happen on the server -->
-                {% for item in items %}
-                    {% if item_name_filter|lower in item.name|lower and not item.deleted and not item.outdated and not item.orphan and not item.is_suggestion%}
-                        {% if item_type_filter!="All" %}
-                            {% if item.item_type==item_type_filter %}
-                                {% for item_condition in item_condition_filter%}
-                                    {% if item_condition==item.condition%}
-                                      {% include 'templates/item_template.html' %}
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        {% else %}
-                            {% for item_condition in item_condition_filter%}
-                                {% if item_condition==item.condition%}
-                                  {% include 'templates/item_template.html' %}
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    {% endif %}
-                {% endfor %}
+          <!-- View current items -->
+          <div>
+            <!-- TODO: clean this up so no filter logic is happening, it should all happen on the server -->
+              {% for item in items %}
+                  {% if item_name_filter|lower in item.name|lower and not item.deleted and not item.outdated and not item.orphan and not item.is_suggestion%}
+                      {% if item_type_filter!="All" %}
+                          {% if item.item_type==item_type_filter %}
+                              {% for item_condition in item_condition_filter%}
+                                  {% if item_condition==item.condition%}
+                                    {% include 'templates/item_template.html' %}
+                                  {% endif %}
+                              {% endfor %}
+                          {% endif %}
+                      {% else %}
+                          {% for item_condition in item_condition_filter%}
+                              {% if item_condition==item.condition%}
+                                {% include 'templates/item_template.html' %}
+                              {% endif %}
+                          {% endfor %}
+                      {% endif %}
+                  {% endif %}
+              {% endfor %}
             </div>
-          {% endif %}
-        {% endfor %}
-      {% endif %} <!-- END type filter (All v Not all) -->
-    {% endif %} <!-- END check for outdated, deleted, name matches, suggestion -->
-  {% endfor %}  <!-- END all item loop -->
   </div>
 
       </div>
@@ -99,10 +102,10 @@ SOFTWARE. -->
             <div>
                 <!-- Search form -->
                 <div class="form">
-                    <h1> Filter items </h1>
+                    <h1> Filter Items </h1>
                     <form action="/search_and_browse" method="get" onsubmit="setCheckboxValues(this);">
                         <div id="result"></div>
-                        <input id="nameBox" name="filter_by_name" type="text" placeholder="name"><br><br>
+                        <input id="nameBox" name="filter_by_name" type="text" placeholder="Name"><br><br>
                         <h4> Type </h4>
                         <input type="radio" id="typeAll" name="filter_by_item_type" value="All" checked="checked" onclick="hideFilterCostumeForm(this); setCheckboxValues('filter_by_item_type', 'typeAll');"> All<br>
                         <input type="radio" id="typeCostume" name="filter_by_item_type" value="Costume" onclick="displayFilterCostumeForm(this);"> Costume<br>
@@ -144,10 +147,26 @@ SOFTWARE. -->
                           {% endif %}
                         {% endfor %}
                         <br>
+                        <h4> Color </h4>
+                        {% for option in ["Red", "Orange", "Yellow", "Green"] %}
+                          <input type="checkbox" id="{{option}}" name="filter_by_color" value="{{option}}"> {{option}} &nbsp;&nbsp;
+                        {% endfor %}
+                        <br>
+                        {% for option in ["Cyan", "Blue", "Indigo", "Purple"] %}
+                          <input type="checkbox" id="{{option}}" name="filter_by_color" value="{{option}}"> {{option}} &nbsp;&nbsp;
+                        {% endfor %}
+                        <br>
+                        {% for option in ["Pink", "Brown", "Black", "White", "Gray"] %}
+                          <input type="checkbox" id="{{option}}" name="filter_by_color" value="{{option}}"> {{option}} &nbsp;&nbsp;
+                        {% endfor %}
+                        <br><br>
+                        <input type="radio" id="colorGroupingInclusive" name="filter_by_color_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_color_grouping, colorGroupingInclusive);"> Has One of Listed<br>
+                        <input type="radio" id="colorGroupingExclusive" name="filter_by_color_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_color_grouping, colorGroupingExclusive);"> Has All of Listed<br>
+                        <br>
                         <h4> Tags </h4>
                         <textarea id="tagBox" name="filter_by_tags" placeholder="separate tags with enter key"></textarea><br>
-                        <input type="radio" id="groupingInclusive" name="filter_by_tag_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, groupingInclusive);"> Has One of Listed<br>
-                        <input type="radio" id="groupingExclusive" name="filter_by_tag_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, groupingExclusive);"> Has All of Listed<br>
+                        <input type="radio" id="tagGroupingInclusive" name="filter_by_tag_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, tagGroupingInclusive);"> Has One of Listed<br>
+                        <input type="radio" id="tagGroupingExclusive" name="filter_by_tag_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, tagGroupingExclusive);"> Has All of Listed<br>
                         <input type="submit" value="Search" class="submitButton">
                     </form>
                     <form action="/search_and_browse" method="get" onsubmit="clearForm();">

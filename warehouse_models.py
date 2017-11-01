@@ -34,6 +34,7 @@ class List(ndb.Model):
     owner = ndb.KeyProperty(required=True)
     items = ndb.KeyProperty(repeated=True)
 
+
 class Item(ndb.Model):
     '''Describes the structure of an "item" in the warehouse.'''
     creator_id = ndb.StringProperty(required=True)
@@ -44,6 +45,7 @@ class Item(ndb.Model):
     description = ndb.TextProperty(required=False)
     qr_code = ndb.IntegerProperty(required=False)
     item_type = ndb.StringProperty(required=True)
+    item_color = ndb.StringProperty(repeated=True)
     condition = ndb.StringProperty(required=True)
     clothing_size_string = ndb.StringProperty(required=False)
     clothing_size_num = ndb.StringProperty(required=False)

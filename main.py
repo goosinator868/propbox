@@ -18,7 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
 # +-------------------------+
 # | Python built-in imports |
 # +-------------------------+
@@ -49,8 +48,11 @@ from warehouse_models import Item, cloneItem, User, possible_permissions
 from warehouse_models import List
 import auth
 from auth import get_current_user
-from utils import * 
+from utils import *
 
+# +--------------------------+
+# | TODO: Move this to utils |
+# +--------------------------+
 # Encoodes items into JSON, this only includes information being actively used
 class ItemEncoder(json.JSONEncoder):
     def default(self, item):
@@ -69,13 +71,25 @@ class AddItem(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/add_item.html')
-        page = template.render({})
-        page = page.encode('utf-8')
-        self.response.write(validateHTML(page))
+        try:
+            item_id = ndb.Key(urlsafe=self.request.get('item_id'))
+            if item_id != None:
+                item = item_id.get()
+                item = findUpdatedItem(item)
+                page = template.render({'item': item})
+            else:
+                item = None;
+                page = template.render({'item': item})
+            page = page.encode('utf-8')
+            self.response.write(validateHTML(page))
+        except:
+            item = None;
+            page = template.render({'item': item})
+            page = page.encode('utf-8')
+            self.response.write(validateHTML(page))
 
     @auth.login_required
     def post(self):
-        qr_code, _ = Item.allocate_ids(1)
         img = self.request.get('image', default_value='')
         if img == '':
             img = None
@@ -100,23 +114,33 @@ class AddItem(webapp2.RequestHandler):
             tags_list = parseTags(tags_string)
 
             # Create Item and add to the list
-            newItem = Item(
-                id=qr_code,
-                creator_id=auth.get_user_id(self.request),
-                creator_name=auth.get_user_name(self.request),
-                name=self.request.get('name'),
-                image=img,
-                item_type=costume_or_prop,
-                condition=self.request.get('condition'),
-                clothing_article_type=article_type,
-                clothing_size_num=costume_size_number,
-                qr_code=qr_code,
-                description=self.request.get('description', default_value=''),
-                clothing_size_string=costume_size_word,
-                tags=tags_list)
-            newItem.put()
-            sleep(0.1)
-            self.redirect("/search_and_browse")
+            duplication = self.request.get('times_to_duplicate')
+            d = int(duplication)
+            while d > 0:
+                qr_code, _ = Item.allocate_ids(1)
+                Item(
+                    id=qr_code,
+                    creator_id=auth.get_user_id(self.request),
+                    creator_name=auth.get_user_name(self.request),
+                    name=self.request.get('name'),
+                    image=img,
+                    item_type=costume_or_prop,
+                    condition=self.request.get('condition'),
+                    item_color=self.request.get_all('color'),
+                    clothing_article_type=article_type,
+                    clothing_size_num=costume_size_number,
+                    qr_code=qr_code,
+                    description=self.request.get('description', default_value=''),
+                    clothing_size_string=costume_size_word,
+                    tags=tags_list).put()
+                d = d - 1;
+                sleep(0.1)
+
+            next_page = self.request.get("next_page")
+            if next_page == "Make Another Item":
+                self.redirect("/add_item")
+            else:
+                self.redirect("/search_and_browse")
         except:
             # Should never be here unless the token has expired,
             # meaning that we forgot to refresh their token.
@@ -475,6 +499,8 @@ class MainPage(webapp2.RequestHandler):
             item_name_filter = self.request.get('filter_by_name')
             item_type_filter = self.request.get('filter_by_item_type')
             item_condition_filter = self.request.get_all('filter_by_condition')
+            item_color_filter = self.request.get_all('filter_by_color')
+            item_color_grouping_filter = self.request.get('filter_by_color_grouping')
             item_article_filter = self.request.get_all('filter_by_article')
             costume_size_string_filter = self.request.get_all('filter_by_costume_size_string')
             costume_size_number_filter = self.request.get_all('filter_by_costume_size_number')
@@ -486,10 +512,13 @@ class MainPage(webapp2.RequestHandler):
                 item_name_filter,
                 item_type_filter,
                 item_condition_filter,
+                item_color_filter,
+                item_color_grouping_filter,
                 item_article_filter,
                 costume_size_string_filter,
                 costume_size_number_filter,
-                tags_filter, tags_grouping_filter)
+                tags_filter,
+                tags_grouping_filter)
 
             items = query.fetch()
             if (len(item_condition_filter) == 0):
@@ -500,11 +529,27 @@ class MainPage(webapp2.RequestHandler):
 
             if (item_type_filter == "" or item_type_filter == None):
                 item_type_filter = "All"
+
+            if (len(item_color_filter) == 0):
+                item_color_filter.append("Red")
+                item_color_filter.append("Orange")
+                item_color_filter.append("Yellow")
+                item_color_filter.append("Green")
+                item_color_filter.append("Cyan")
+                item_color_filter.append("Blue")
+                item_color_filter.append("Indigo")
+                item_color_filter.append("Purple")
+                item_color_filter.append("Pink")
+                item_color_filter.append("Brown")
+                item_color_filter.append("Black")
+                item_color_filter.append("White")
+                item_color_filter.append("Gray")
+
             # send to display
-            page = template.render({'user':user,'items': items, 'item_type_filter': item_type_filter, 'item_name_filter': item_name_filter, 'item_condition_filter': item_condition_filter})
+            page = template.render({'user': user, 'items': items, 'item_type_filter': item_type_filter, 'item_name_filter': item_name_filter, 'item_condition_filter': item_condition_filter, 'item_color_filter': item_color_filter})
             page = page.encode('utf-8')
             self.response.write(validateHTML(page))
-        
+
         # TODO: make this more specific OR preferably remove try/except infrastructure
         except:
             # first time opening or item has been added
