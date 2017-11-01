@@ -70,9 +70,22 @@ class AddItem(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/add_item.html')
-        page = template.render({})
-        page = page.encode('utf-8')
-        self.response.write(validateHTML(page))
+        try:
+            item_id = ndb.Key(urlsafe=self.request.get('item_id'))
+            if item_id != None:
+                item = item_id.get()
+                item = findUpdatedItem(item)
+                page = template.render({'item': item})
+            else:
+                item = None;
+                page = template.render({'item': item})
+            page = page.encode('utf-8')
+            self.response.write(validateHTML(page))
+        except:
+            item = None;
+            page = template.render({'item': item})
+            page = page.encode('utf-8')
+            self.response.write(validateHTML(page))
 
     @auth.login_required
     def post(self):

@@ -47,54 +47,56 @@ SOFTWARE. -->
   <div class="form">
       <form action="/add_item" enctype="multipart/form-data" method="post">
           <label>Name</label>
-          <input name="name" type="text" placeholder="Enter the name of the item."><br><br>
+          <input name="name" type="text" placeholder="Enter the name of the item." value={% if item is not none %}{{item.name}}{% endif %}>
+          <br><br>
           <label>Image</label>
           <input name="image" type="file" accept=".png, .gif, .jpg, .jpeg"><br>
           <label>Describe the item.</label>
-          <textarea name="description" placeholder="Enter a description for the item."></textarea><br><br>
+          <textarea name="description" placeholder="Enter a description for the item.">{% if item is not none %}{{item.description}}{% endif %}</textarea><br><br>
           <label>Is this a costume or a prop?</label>
           <select name="item_type" class="addItemDropdown">
-              <option>Costume</option>
-              <option>Prop</option>
+                <option>Costume</option>
+                <option {% if item is not none %}{% if item.item_type == 'Prop' %}selected="selected"{% endif %}{% endif %}>Prop</option>
           </select><br><br>
           <label>What condition is it in?</label>
           <select name="condition" class="addItemDropdown">
               {% for option in ["Good", "Fair", "Poor", "Being repaired"] %}
-                  <option> {{option}} </option>
+                  <option {% if item is not none %}{% if item.condition == option %}selected="selected"{% endif %}{% endif %}> {{option}} </option>
               {% endfor %}
           </select><br><br>
           <label>If it's a costume, what article of clothing is it?</label>
           <select name="article" class="addItemDropdown">
               {% for option in ["N/A", "Top", "Bottom", "Dress", "Shoes", "Hat", "Coat/Jacket", "Other"] %}
-                  <option> {{option}} </option>
+                  <option {% if item is not none %}{% if item.clothing_article_type == option %}selected="selected"{% endif %}{% endif %}> {{option}} </option>
               {% endfor %}
           </select><br><br>
           <label>If it's a costume, what size is it?</label><br>
           <select name="clothing_size_number" class="addItemDropdown" style="display: inline-block; width: 100px;">
               <option>N/A</option>
               {% for option in range(26) %}
-                  <option> {{option}} </option>
+                  <option {% if item is not none %}{% if item.clothing_size_num == option|string %}selected="selected"{% endif %}{% endif %}> {{option}} </option>
               {% endfor %}
           </select>
           <select name="clothing_size_string" class="addItemDropdown" style="display: inline-block; width: 100px;">
               {% for option in ["N/A", "XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"] %}
-                  <option> {{option}} </option>
+                  <option {% if item is not none %}{% if item.clothing_size_string == option %}selected="selected"{% endif %}{% endif %}> {{option}} </option>
               {% endfor %}
           </select><br><br>
           <label>What color is the item?</label><br>
               {% for option in ["Red", "Orange", "Yellow", "Green"] %}
-                <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}"> {{option}} &nbsp;&nbsp;
+                <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if item is not none %}{% if option in item.item_color %}checked="checked"{% endif %}{% endif %}> {{option}} &nbsp;&nbsp;
               {% endfor %}
               <br>
               {% for option in ["Cyan", "Blue", "Indigo", "Purple"] %}
-                <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}"> {{option}} &nbsp;&nbsp;
+                <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if item is not none %}{% if option in item.item_color %}checked="checked"{% endif %}{% endif %}> {{option}} &nbsp;&nbsp;
               {% endfor %}
               {% for option in ["Pink", "Brown", "Black", "White"] %}
-                <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}"> {{option}} &nbsp;&nbsp;
+                <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if item is not none %}{% if option in item.item_color %}checked="checked"{% endif %}{% endif %}> {{option}} &nbsp;&nbsp;
               {% endfor %}
           <br><br>
           <label>Place any tags here.</label>
-          <textarea name="tags" placeholder="Separate tags with the enter key."></textarea>
+          <textarea name="tags" placeholder="Separate tags with the enter key.">{% if item is not none %}{% for tag in item.tags %}{{tag}}
+{% endfor %}{% endif %}</textarea>
           <br><br>
           <label>How many of this item would you like to add?</label>
           <select name="times_to_duplicate" class="addItemDropdown" style="display: inline-block; width: 100px;">
