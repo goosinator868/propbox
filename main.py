@@ -655,7 +655,7 @@ class ViewLists(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/view_lists.html')
         page = tempalate.render({'lists': lists})
         page = page.encode('utf-8')
-        self.response.write(ValidateHTML(page))
+        self.response.write(validateHTML(page))
 
 class EditList(webapp2.RequestHandler):
     @auth.login_required
@@ -681,7 +681,7 @@ class PrintQRCodes(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/print_qr_codes.html')
         page = template.render({'items': items})
         page = page.encode('utf-8')
-        self.response.write(ValidateHTML(page))
+        self.response.write(validateHTML(page))
 
 class ItemFromQRCode(webapp2.RequestHandler):
     @auth.login_required
@@ -696,7 +696,7 @@ class CheckIn(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/check_in.html')
         page = template.render({})
         page = page.encode('utf-8')
-        self.response.write(ValidateHTML(page))
+        self.response.write(validateHTML(page))
 
     @auth.login_required
     def post(self):
@@ -714,7 +714,7 @@ class CheckOut(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/check_out.html')
         page = template.render({})
         page = page.encode('utf-8')
-        self.response.write(ValidateHTML(page))
+        self.response.write(validateHTML(page))
 
     @auth.login_required
     def post(self):
