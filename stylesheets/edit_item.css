@@ -37,6 +37,10 @@ input, select, textarea {
   width: 80%;
 }
 
+input[type=checkbox] {
+    width: auto;
+}
+
 div#left-pane {
   text-align: center;
 }
