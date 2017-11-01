@@ -729,8 +729,6 @@ class CheckOut(webapp2.RequestHandler):
             item.put()
             self.redirect("/")
 
-
-
 # +-------------------+
 # | Environment Setup |
 # +-------------------+
