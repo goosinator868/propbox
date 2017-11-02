@@ -100,6 +100,7 @@ SOFTWARE. -->
 {% endfor %}{% endif %}</textarea>
           <br><br>
           <label>How many of this item would you like to add?</label>
+          <br>
           <select name="times_to_duplicate" class="addItemDropdown" style="display: inline-block; width: 100px;">
               {% for option in range(1, 50) %}
                   <option> {{option}} </option>
@@ -107,6 +108,7 @@ SOFTWARE. -->
           </select>
           <br><br>
           <label>When you create this item, what do you want to do next?</label>
+          <br>
           <select name="next_page" class="addItemDropdown" style="display: inline-block; width: 200px;">
               <option> Go to Home Page </option>
               <option> Make Another Item </option>
