@@ -61,6 +61,7 @@ SOFTWARE. -->
           <p><b>Condition</b>: {{item.condition}}</p>
           <p><b>Article</b>: {{item.clothing_article_type}}</p>
           <p><b>Size</b>: {{item.clothing_size_string}}, {{item.clothing_size_num}}</p>
+          <p><b>Colors</b>:{% for color in item.item_color %} {{color}},{% endfor %}</p>
           <p><b>Tags</b>:{% for tag in item.tags %} {{tag}},{% endfor %}</p>
           <p><b>QR Code</b>: {{item.qr_code}}</p>
           <p>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</p>
@@ -113,6 +114,19 @@ SOFTWARE. -->
                   <option {% if item.clothing_size_string == option|string() %} selected {% endif %}> {{option}} </option>
                 {% endfor %}
               </select><br><br>
+              <label>What color is the item?</label><br>
+                  {% for option in ["Red", "Orange", "Yellow", "Green"] %}
+                    <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if option in item.item_color %}checked="checked"{% endif %}> {{option}} &nbsp;&nbsp;
+                  {% endfor %}
+                  <br>
+                  {% for option in ["Cyan", "Blue", "Indigo", "Purple"] %}
+                    <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if option in item.item_color %}checked="checked"{% endif %}> {{option}} &nbsp;&nbsp;
+                  {% endfor %}
+                  <br>
+                  {% for option in ["Pink", "Brown", "Black", "White"] %}
+                    <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if option in item.item_color %}checked="checked"{% endif %}> {{option}} &nbsp;&nbsp;
+                  {% endfor %}
+              <br><br>
               <label>Tags</label><br>
               <!-- See http://jinja.pocoo.org/docs/2.9/templates/#whitespace-control -->
               <textarea name="tags" placeholder="Separate tags with the enter key.">

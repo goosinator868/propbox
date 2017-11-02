@@ -227,6 +227,7 @@ class EditItem(webapp2.RequestHandler):
         new_item.item_type = self.request.get('item_type')
         new_item.costume_size_num = self.request.get('clothing_size_number')
         new_item.clothing_size_string = self.request.get('clothing_size_string')
+        new_item.item_color = self.request.get_all('color')
         new_item.tags = parseTags(self.request.get('tags'))
         new_item.condition = self.request.get('condition')
 
