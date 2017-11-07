@@ -22,7 +22,7 @@ SOFTWARE. -->
 <html lang="en">
 <head>
   {% include 'templates/common.html' %}
-  
+
   <script>
     $(document).ready(function(){
       SetUpNavBar(SetUpFirebase);
@@ -34,7 +34,8 @@ SOFTWARE. -->
 
   <link rel="stylesheet" href="/stylesheets/review_edits.css">
 
-  <title>Review edits :: Propbox</title>
+  <title>Review Edits :: Propbox</title>
+  <link rel="shortcut icon" type="image/png" href="/image/propboxicon_color.png" />
 </head>
 
 <body>
@@ -116,7 +117,7 @@ SOFTWARE. -->
   </div>
   <div id="pane_container">
     <div id="right-pane" class="pane">
-      <h2>Items with past versions</h2>
+      <h2>Items with Rollback Requests</h2>
       {% if revert==[] %}<div style="min-width: 100%; text-align: center;"><p style="width: auto; margin: auto; margin-top: 2vh; font-size: 1.8em;">There's nothing to revert.</p></div>{% endif %}
       <br/>
       <div>
@@ -160,7 +161,7 @@ SOFTWARE. -->
     </div>
 
     <div id="left-pane" class="pane">
-      <h2>Items awaiting edit approval</h2>
+      <h2>Items Awaiting Edit Approval</h2>
       {% if suggest==[] %}<div style="min-width: 100%; text-align: center;"><p style="width: auto; margin: auto; margin-top: 2vh; font-size: 1.8em;">There's nothing to approve.</p></div>{% endif %}
       <br/>
       <div>

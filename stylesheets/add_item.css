@@ -36,3 +36,7 @@ div.form {
       padding: 6px;
       width: 100%;
     }
+
+    input[type=checkbox] {
+        width: auto;
+    }

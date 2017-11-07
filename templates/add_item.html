@@ -32,6 +32,7 @@ SOFTWARE. -->
   <link rel="stylesheet" href="/stylesheets/add_item.css">
 
   <title>Propbox :: Add an Item</title>
+  <link rel="shortcut icon" type="image/png" href="/image/propboxicon_color.png" />
 </head>
 
 <body>
@@ -90,6 +91,7 @@ SOFTWARE. -->
               {% for option in ["Cyan", "Blue", "Indigo", "Purple"] %}
                 <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if item is not none %}{% if option in item.item_color %}checked="checked"{% endif %}{% endif %}> {{option}} &nbsp;&nbsp;
               {% endfor %}
+              <br>
               {% for option in ["Pink", "Brown", "Black", "White"] %}
                 <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if item is not none %}{% if option in item.item_color %}checked="checked"{% endif %}{% endif %}> {{option}} &nbsp;&nbsp;
               {% endfor %}
@@ -99,6 +101,7 @@ SOFTWARE. -->
 {% endfor %}{% endif %}</textarea>
           <br><br>
           <label>How many of this item would you like to add?</label>
+          <br>
           <select name="times_to_duplicate" class="addItemDropdown" style="display: inline-block; width: 100px;">
               {% for option in range(1, 50) %}
                   <option> {{option}} </option>
@@ -106,6 +109,7 @@ SOFTWARE. -->
           </select>
           <br><br>
           <label>When you create this item, what do you want to do next?</label>
+          <br>
           <select name="next_page" class="addItemDropdown" style="display: inline-block; width: 200px;">
               <option> Go to Home Page </option>
               <option> Make Another Item </option>
