@@ -64,7 +64,7 @@ function scanAndAddToList(list) {
           item = jQuery.getJSON("/item_from_qr_code?qr_code=" + content, "", function(item) {
               hidden_id = document.createElement('input');
               hidden_id.setAttribute("type", "hidden");
-              hidden_id.setAttribute("name", "to_check_in");
+              hidden_id.setAttribute("name", "keys");
               hidden_id.setAttribute("value", item.urlsafe_key);
               document.getElementById('scanned_keys').appendChild(hidden_id);
 
