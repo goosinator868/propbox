@@ -38,25 +38,15 @@ from google.appengine.ext import ndb
 # | First party imports |
 # +---------------------+
 
-from warehouse_models import Item
+from warehouse_models import Item, cloneItem
 
 
 # +-----------------+
 # | Item Exceptions |
 # +-----------------+
 
-class OutdatedEditException(Exception):
-    '''Raised when trying to submit an edit to an out of date item.'''
-    def __init__(self,*args,**kwargs):
-        Exception.__init__(self,*args,**kwargs)
-
 class ItemDeletedException(Exception):
     '''Raised when trying to submit an edit to a deleted item.'''
-    def __init__(self,*args,**kwargs):
-        Exception.__init__(self,*args,**kwargs)
-
-class AlreadyCommitedException(Exception):
-    '''Raised when trying to resolve an orphan that has already been resolved.'''
     def __init__(self,*args,**kwargs):
         Exception.__init__(self,*args,**kwargs)
 
@@ -102,7 +92,7 @@ def commitPurge(item_key):
         k.delete()
 
 @ndb.transactional(xg=True, retries=1)
-def commitEdit(old_key, new_item, was_orphan=False,suggestion=False):
+def commitEdit(old_key, new_item, suggestion=False):
     '''Stores the new item and ensures that the
        parent-child relationship is enforced between the
        old item and the new item.
@@ -115,23 +105,24 @@ def commitEdit(old_key, new_item, was_orphan=False,suggestion=False):
        Args:
             old_key: The key of the item that this is an edit to.
             new_item: The new version of the item to be commited.
-            was_orphan: If the item was already stored in the database as an orphan
-                        (likely due to a edit item race)
+
+       Returns:
+            The key of the item that was commited, this could not be the new_item 
+            since it may have been mutated to work with previous versions.
     '''
     old_item = old_key.get()
+    # Check if item was deleted
     if old_item is None:
         raise ItemPurgedException()
+    # Find newest version
     if old_item.outdated:
-        raise OutdatedEditException()
+        while old_item.outdated:
+            old_item = old_item.child.get()
+        # Update the parent
+        new_item = cloneItem(new_item, parentKey=old_item.key)
+    # check if deleted but not purged
     if old_item.deleted:
         raise ItemDeletedException()
-    if was_orphan:
-        if not new_item.key.get().orphan:
-            raise AlreadyCommitedException()
-        # Create a new copy with the correct parent
-        copy = cloneItem(new_item, parentKey=old_key)
-        new_item.key.delete()
-        new_item = copy
     old_item.outdated = not suggestion
     new_key = new_item.put()
     if suggestion:
@@ -139,6 +130,7 @@ def commitEdit(old_key, new_item, was_orphan=False,suggestion=False):
     else:
         old_item.child = new_key
     old_item.put()
+    return new_item.key
 
 
 # +-----------------------+

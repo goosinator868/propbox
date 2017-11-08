@@ -146,48 +146,6 @@ class AddItem(webapp2.RequestHandler):
             # meaning that we forgot to refresh their token.
             self.redirect("/enforce_auth")
 
-
-class ResolveEdits(webapp2.RequestHandler):
-    @auth.login_required
-    def get(self):
-        new_item = ndb.Key(urlsafe=self.request.get('new_item_key')).get()
-        old_item = new_item.key.parent().get()
-        old_item = findUpdatedItem(old_item)
-        template = JINJA_ENVIRONMENT.get_template('templates/resolve_edits.html')
-        page = template.render({'old_item': old_item, 'new_item': new_item})
-        page = page.encode('utf-8')
-        self.response.write(validateHTML(page))
-
-    @auth.login_required
-    def post(self):
-        old_item = ndb.Key(urlsafe=self.request.get('old_item_key')).get()
-        new_item = ndb.Key(urlsafe=self.request.get('new_item_key')).get()
-        # Update the fields of the pending item.
-        new_item.creator_id = auth.get_user_id(self.request)
-        new_item.name = self.request.get('name')
-        new_item.description = self.request.get('description', default_value='')
-        new_item.orphan = False
-        new_item.suggested_by = get_current_user(self.request).name
-        try:
-            commitEdit(old_item.key, new_item, was_orphan=True)
-            self.redirect("/")
-        except OutdatedEditException as e:
-            new_item.orphan = True
-            new_item_key = new_item.put()
-            self.redirect("/resolve_edits?" + urllib.urlencode({'new_item_key': new_key.urlsafe()}))
-        except AlreadyCommitedException as e:
-            # TODO: Make this visible to the user.
-            logging.info('someone resolved this edit before you.')
-            self.redirect("/review_edits")
-        except (ItemPurgedException, ItemDeletedException) as e:
-            # TODO: Make this visible to the user.
-            logging.info('Item was deleted by someone else before your edits could be saved.')
-            self.redirect("/review_edits")
-        except TransactionFailedError as e:
-             # TODO: Panic should never reach this, it should be caught by the other exceptions.
-             logging.critical('transaction failed without reason being determined')
-
-
 #Handler for editing an item.
 class EditItem(webapp2.RequestHandler):
     @auth.login_required
@@ -254,13 +212,9 @@ class EditItem(webapp2.RequestHandler):
             new_item.checked_out_by = ""
 
         try:
-            commitEdit(old_item_key, new_item,suggestion=standard_user)
+            new_item_key = commitEdit(old_item_key, new_item,suggestion=standard_user)
             sleep(0.1)
-            self.redirect("/item_details?" + urllib.urlencode({'item_id':(old_item_key if standard_user else new_item.key).urlsafe()}))
-        except OutdatedEditException as e:
-            new_item.orphan = True
-            new_item_key = new_item.put()
-            self.redirect('/resolve_edits?' + urllib.urlencode({'new_item_key': new_item_key.urlsafe()}))
+            self.redirect("/item_details?" + urllib.urlencode({'item_id':(old_item_key if standard_user else new_item_key).urlsafe()}))
         except (ItemPurgedException, ItemDeletedException) as e:
             # TODO: Make this visible to the user.
             logging.info('Item was deleted by someone else before your edits could be saved.')
@@ -749,7 +703,6 @@ app = webapp2.WSGIApplication([
     ('/edit_item', EditItem),
     ('/enforce_auth', AuthHandler),
     ('/review_edits', ReviewEdits),
-    ('/resolve_edits', ResolveEdits),
     ('/discard_revision',DiscardRevision),
     ('/keep_revision',KeepRevision),
     ('/revert_item', RevertItem),
