@@ -1,6 +1,6 @@
 function checkIn(key) {
     url = "/check_in?";
-    url += "to_check_in=" + key;
+    url += "keys=" + key;
     $.ajax({
       type: "POST",
       dataType: "html",
@@ -26,7 +26,7 @@ function checkOut(key) {
       type: "POST",
       dataType: "html",
       url: url ,
-      data: {'to_check_out': key, 'reason': $("#item_" + key).find(".reason").val()},
+      data: {'keys': key, 'reason': $("#item_" + key).find(".reason").val()},
       success: function(data) {
         $("#item_" + key).find(".check_out_button").hide();
         $("#item_" + key).find(".check_in_button").show();

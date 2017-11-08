@@ -81,6 +81,13 @@ SOFTWARE.*/
   text-align: right;
 }
 
+#navItems a {
+    border: 0;
+    color: #fff;
+    font-size: 1.5em;
+    margin: 6px 0;
+}
+
 #userBar a {
   background-color: #45ad85;
   color: #fff;

@@ -55,3 +55,23 @@ function scanAndAddToList(list) {
     document.getElementById('scanned_list').appendChild(new_content);
   });
 }
+
+function scanAndAddToList(list) {
+      $("#scanner_container").show();
+      scanQRCode(function(content){
+        if (scanned_codes.indexOf(content) < 0) {
+          scanned_codes.push(content);
+          item = jQuery.getJSON("/item_from_qr_code?qr_code=" + content, "", function(item) {
+              hidden_id = document.createElement('input');
+              hidden_id.setAttribute("type", "hidden");
+              hidden_id.setAttribute("name", "keys");
+              hidden_id.setAttribute("value", item.urlsafe_key);
+              document.getElementById('scanned_keys').appendChild(hidden_id);
+
+              new_content = document.createElement('li');
+              new_content.textContent = item.name;
+              document.getElementById('scanned_list').appendChild(new_content);
+            });
+        }
+      });
+    }

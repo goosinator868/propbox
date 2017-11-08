@@ -65,7 +65,6 @@ class Item(ndb.Model):
     suggested_edits = ndb.KeyProperty(required=False,repeated=True)
     is_suggestion = ndb.BooleanProperty(required=True, default=False)
     suggested_by = ndb.StringProperty(required=True, default="")
-    orphan = ndb.BooleanProperty(required=True, default=False)
 
 #Returns a clone of a given item.
 def cloneItem(oldItem, parentKey=None):
