@@ -48,7 +48,7 @@ SOFTWARE. -->
   <div class="form">
       <form action="/add_item" enctype="multipart/form-data" method="post">
           <label>Name</label>
-          <input name="name" type="text" placeholder="Enter the name of the item." value={% if item is not none %}{{item.name}}{% endif %}>
+          <input name="name" type="text" placeholder="Enter the name of the item." value="{% if item is not none %}{{item.name}}{% endif %}">
           <br><br>
           <label>Image</label>
           <input name="image" type="file" accept=".png, .gif, .jpg, .jpeg"><br>

@@ -72,10 +72,11 @@ class AddItem(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('templates/add_item.html')
         try:
+            page = ""
             item_id = ndb.Key(urlsafe=self.request.get('item_id'))
             if item_id != None:
                 item = item_id.get()
-                item = findUpdatedItem(item)
+                item = findUpdatedItem(item_id)
                 page = template.render({'item': item})
             else:
                 item = None;
@@ -152,7 +153,7 @@ class EditItem(webapp2.RequestHandler):
     def get(self):
         item_id = ndb.Key(urlsafe=self.request.get('item_id'))
         item = item_id.get()
-        item = findUpdatedItem(item)
+        item = findUpdatedItem(item_id)
         user = get_current_user(self.request)
         template = JINJA_ENVIRONMENT.get_template('templates/edit_item.html')
         page = template.render({'item': item, 'user':user})
@@ -446,9 +447,11 @@ class ReviewDeletions(webapp2.RequestHandler):
 class MainPage(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
+        user = get_current_user(self.request)
         #template = JINJA_ENVIRONMENT.get_template('templates/search_and_browse_items.html')
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
         user = get_current_user(self.request);
+        lists = List.query(List.owner == user.key).fetch()
         try:
             # Filter search items
             item_name_filter = self.request.get('filter_by_name')
@@ -501,7 +504,14 @@ class MainPage(webapp2.RequestHandler):
                 item_color_filter.append("Gray")
 
             # send to display
-            page = template.render({'user': user, 'items': items, 'item_type_filter': item_type_filter, 'item_name_filter': item_name_filter, 'item_condition_filter': item_condition_filter, 'item_color_filter': item_color_filter})
+            page = template.render({
+                'lists': lists, 
+                'user': user, 
+                'items': items, 
+                'item_type_filter': item_type_filter, 
+                'item_name_filter': item_name_filter, 
+                'item_condition_filter': item_condition_filter, 
+                'item_color_filter': item_color_filter})
             page = page.encode('utf-8')
             self.response.write(validateHTML(page))
 
@@ -511,7 +521,11 @@ class MainPage(webapp2.RequestHandler):
             query = Item.query()
             items = query.fetch()
             logging.info(items)
-            page = template.render({'user':user,'items': items, 'item_name_filter': item_name_filter})
+            page = template.render({
+                'lists': lists, 
+                'user': user, 
+                'items': items, 
+                'item_type_filter': item_type_filter})
             page = page.encode('utf-8')
             self.response.write(validateHTML(page))
 
@@ -597,33 +611,63 @@ class AccountDeactivated(webapp2.RequestHandler):
 class NewList(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
+        user = get_current_user(self.request)
         name = self.request.get('name')
-        l = List(name=name)
+        l = List(name=name, owner=user.key)
         k = l.put()
-        self.response.write(k.urlsafe())
+        self.redirect('/view_lists')
+
+class DeleteList(webapp2.RequestHandler):
+    @auth.login_required
+    def post(self):
+        user = get_current_user(self.request)
+        l = ndb.Key(urlsafe=self.request.get('list')).get()
+        if l.owner == user.key:
+            l.key.delete()
+        self.redirect('/view_lists')
 
 class ViewLists(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
-        user = GetCurrentUser(self.request)
-        lists = List.Query(List.user == user.key).fetch()
+        user = get_current_user(self.request)
+        lists = List.query(List.owner == user.key).fetch()
         template = JINJA_ENVIRONMENT.get_template('templates/view_lists.html')
-        page = tempalate.render({'lists': lists})
+        page = template.render({'lists': lists})
         page = page.encode('utf-8')
         self.response.write(validateHTML(page))
 
-class EditList(webapp2.RequestHandler):
+class ViewList(webapp2.RequestHandler):
+    @auth.login_required
+    def get(self):
+        l = ndb.Key(urlsafe=self.request.get('list')).get()
+        updateList(l)
+        items = [k.get() for k in l.items]
+        template = JINJA_ENVIRONMENT.get_template('templates/view_list.html')
+        page = template.render({'list': l, 'items': items})
+        page = page.encode('utf-8')
+        self.response.write(validateHTML(page))
+
+class AddToList(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
-        listkey = self.request.get('list')
-        l = ndb.Key(urlsafe=listkey).get()
+        l = ndb.Key(urlsafe=self.request.get('list')).get()
+        updateList(l)
+        codes = [i.get().qr_code for i in l.items]
+        item = ndb.Key(urlsafe=self.request.get('item')).get()
+        if item.qr_code not in codes:
+            l.items.append(item.key)
+            l.put()
 
-        new_contents = self.request.get('new_contents')
-        del l.items[:]
-
-        for urlsafe_key in new_contents:
-            l.items.append(ndb.Key(urlsafe=urlsafe_key))
-        l.put()
+class RemoveFromList(webapp2.RequestHandler):
+    @auth.login_required
+    def post(self):
+        l = ndb.Key(urlsafe=self.request.get('list')).get()
+        updateList(l)
+        codes = [i.get().qr_code for i in l.items]
+        item = ndb.Key(urlsafe=self.request.get('item')).get()
+        if item.qr_code in codes:
+            l.items.remove([i for i in l.items if i.get().qr_code == item.qr_code][0])
+            l.put()
 
 
 class PrintQRCodes(webapp2.RequestHandler):
@@ -715,5 +759,12 @@ app = webapp2.WSGIApplication([
     ('/review_deletions', ReviewDeletions),
     ('/print_qr_codes', PrintQRCodes),
     ('/item_from_qr_code', ItemFromQRCode),
+    # Lists
+    ('/new_list', NewList),
+    ('/delete_list', DeleteList),
+    ('/view_lists', ViewLists),
+    ('/view_list', ViewList),
+    ('/add_to_list', AddToList),
+    ('/remove_from_list', RemoveFromList),
     ('/.*', MainPage),
 ], debug=True)

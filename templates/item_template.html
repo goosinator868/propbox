@@ -15,7 +15,31 @@
       <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
       <input type="submit" value="Item Details" class="submitButton">
     </form>
-    <button onclick="showListSignUp('{{item.key.urlsafe()}}')" class="submitButton">Add to list</button>
+
+    {% if lists %}
+        <button onclick="toggleListSignUp('{{item.key.urlsafe()}}')" class="submitButton">Add to list</button>
+        
+        <div class="list_drop_down" style='display: none'>
+            Lists:
+            <ul>
+            {% for list in lists %}
+                <li>
+                <input 
+                    name="list" 
+                    type="checkbox" 
+                    value="{{list.key.urlsafe()}}" 
+                    {% if item.key in list.items %}
+                    checked 
+                    {% endif %}
+                    onchange="toggleListMembership(this, '{{list.key.urlsafe()}}', '{{item.key.urlsafe()}}')">
+                    {{list.name}}
+                </li>
+            {% endfor %}
+        </ul>
+        </div>
+    {% endif %}
+
+
     <button class="submitButton check_in_button" {% if item.checked_out == false %} style='display: none' {% endif %} onclick="checkIn('{{item.key.urlsafe()}}')">Check in</button>
     <button class="submitButton check_out_button" {% if item.checked_out == true %} style='display: none' {% endif %} onclick="showCheckOutPopup('{{item.key.urlsafe()}}')">Check out</button>
     <div style='display: none' class="popup">

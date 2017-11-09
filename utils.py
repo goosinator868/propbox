@@ -160,10 +160,25 @@ def validateHTML(html_string):
     return html_string
 
 # Finds the most recent version of an item.
-def findUpdatedItem(item):
-    while item.outdated:
-        item = item.child.get()
-    return item
+def findUpdatedItem(item_key):
+    updated = item_key.get()
+    updated_key = item_key
+    # Ensure item exists, if not find an ancestor that does.
+    while updated is None and updated_key.parent():
+        # Checks if item has been rolled back or deleted
+        updated_key = item_key.parent()
+        updated = updated_key.get()
+    
+    # If no ancestor exists the item has been deleted/purged
+    # TODO test this case where item is deleted/purged
+    if updated is None or updated_key is None:
+        return None
+    
+    # We have a valid item, now ensure it is the most recent copy
+    else:
+        while updated.outdated:
+            updated = updated.child.get()
+    return updated
 
 # Converts text list of tags to array of tags
 def parseTags(tags_string):
@@ -247,3 +262,25 @@ def filterItems(item_name, item_type, item_condition, item_colors,
         return query1
 
     return query
+
+
+# TODO: actually remove rolled back and deleted items
+def updateList(l):
+    to_add = []
+    to_remove = []
+    for item_key in l.items:
+        updated = findUpdatedItem(item_key)
+        logging.info('Updated key:%s Item key:%s', updated.key, item_key)
+        if updated is None:
+            to_remove.append(item_key)
+        elif updated.key != item_key:
+            to_add.append(updated.key)
+            to_remove.append(item_key)
+    
+    # logging.info("Adding %s", [i.urlsafe() for i in to_add])
+    # logging.info("Removing %s", [i.urlsafe() for i in to_remove])
+    l.items = filter(lambda a: a not in to_remove, l.items)
+    l.items.extend(to_add)
+
+    if to_add or to_remove:
+        l.put()

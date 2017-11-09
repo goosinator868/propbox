@@ -17,20 +17,33 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. -->
-<!-- User bar / navigation -->
-<div id="userBar">
-  <i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;<span id="user"></span>
-  <a href="" id="sign-out">Log out</a>
-</div>
-<div id="navbar">
-  <ul id="navItems">
-    <li><a href="/"><img id="propbox_logo" src="/image/propboxlogo_white.png" alt="Home page"></a></li>
-    <li><a href="/add_item">Add Item</a></li>
-    <li><a href="/check_in">Check in</a></li>
-    <li><a href="/check_out">Check out</a></li>
-    <li><a href="/view_lists">My lists</a></li>
-  </ul>
-</div>
-<div id="breadcrumb_bar">
-  <span id="breadcrumbs"><a href="/">Home</a>   //   </span>
-</div>
+
+<!doctype html>
+<html>
+<head>
+{% include 'templates/common.html' %}
+
+  <script>
+    $(document).ready(function(){
+      SetUpNavBar(SetUpFirebase);
+    });
+  </script>
+
+  <title>Prop Box</title>
+  <link rel="shortcut icon" type="image/png" href="/image/propboxicon_color.png" />
+</head>
+
+<body>
+  <div id="navbar_holder">
+    <div id="page_specific_breadcrumbs">
+      <a href="/view_lists"> Lists </a>
+      <span href="/{{list.name}}"> Lists </span>
+    </div>
+  </div>
+  <h2> {{ list.name }} </h2>
+  {% for item in items %}
+    {% include 'templates/item_template.html' %}
+  {% endfor %}
+  <footer id="footer_holder"></footer>
+</body>
+</html>
