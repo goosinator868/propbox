@@ -41,6 +41,12 @@ SOFTWARE. -->
     </div>
   </div>
   <h2> {{ list.name }} </h2>
+  <form action="/print_qr_codes" method="get">
+    {% for item in items %}
+      <input type="hidden" name="keys" value="{{item.key.urlsafe()}}">
+    {% endfor %}
+    <input type="submit" value="Print QR codes">
+  </form>
   {% for item in items %}
     {% include 'templates/item_template.html' %}
   {% endfor %}
