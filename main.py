@@ -46,6 +46,7 @@ from google.appengine.ext.db import TransactionFailedError
 
 from warehouse_models import Item, cloneItem, User, possible_permissions
 from warehouse_models import List
+import warehouse_models as wmodels
 import auth
 from auth import get_current_user
 from utils import *
@@ -451,7 +452,7 @@ class MainPage(webapp2.RequestHandler):
         #template = JINJA_ENVIRONMENT.get_template('templates/search_and_browse_items.html')
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
         user = get_current_user(self.request);
-        lists = List.query(List.owner == user.key).fetch()
+        lists = List.query(ndb.OR(List.owner == user.key, List.public == True)).fetch()
         try:
             # Filter search items
             item_name_filter = self.request.get('filter_by_name')
@@ -613,7 +614,8 @@ class NewList(webapp2.RequestHandler):
     def post(self):
         user = get_current_user(self.request)
         name = self.request.get('name')
-        l = List(name=name, owner=user.key)
+        public = self.request.get('public') == 'public'
+        l = List(name=name, owner=user.key, public=public)
         k = l.put()
         self.redirect('/view_lists')
 
@@ -622,15 +624,21 @@ class DeleteList(webapp2.RequestHandler):
     def post(self):
         user = get_current_user(self.request)
         l = ndb.Key(urlsafe=self.request.get('list')).get()
-        if l.owner == user.key:
+        if l.public and user.permissions in [wmodels.TRUSTED_USER, wmodels.ADMIN]:
             l.key.delete()
+        elif l.owner == user.key:
+            l.key.delete()
+            
         self.redirect('/view_lists')
 
 class ViewLists(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         user = get_current_user(self.request)
-        lists = List.query(List.owner == user.key).fetch()
+        lists = List.query(ndb.OR(
+            List.owner == user.key,
+            List.public == True,
+            )).fetch()
         template = JINJA_ENVIRONMENT.get_template('templates/view_lists.html')
         page = template.render({'lists': lists})
         page = page.encode('utf-8')
@@ -650,24 +658,28 @@ class ViewList(webapp2.RequestHandler):
 class AddToList(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
+        user = get_current_user(self.request)
         l = ndb.Key(urlsafe=self.request.get('list')).get()
         updateList(l)
         codes = [i.get().qr_code for i in l.items]
         item = ndb.Key(urlsafe=self.request.get('item')).get()
-        if item.qr_code not in codes:
-            l.items.append(item.key)
-            l.put()
+        if (l.public and user.permissions in [wmodels.TRUSTED_USER, wmodels.ADMIN]) or user.key == l.owner:
+            if item.qr_code not in codes:
+                l.items.append(item.key)
+                l.put()
 
 class RemoveFromList(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
+        user = get_current_user(self.request)
         l = ndb.Key(urlsafe=self.request.get('list')).get()
         updateList(l)
         codes = [i.get().qr_code for i in l.items]
         item = ndb.Key(urlsafe=self.request.get('item')).get()
-        if item.qr_code in codes:
-            l.items.remove([i for i in l.items if i.get().qr_code == item.qr_code][0])
-            l.put()
+        if (l.public and user.permissions in [wmodels.TRUSTED_USER, wmodels.ADMIN]) or user.key == l.owner:
+            if item.qr_code in codes:
+                l.items.remove([i for i in l.items if i.get().qr_code == item.qr_code][0])
+                l.put()
 
 
 class PrintQRCodes(webapp2.RequestHandler):
