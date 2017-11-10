@@ -31,6 +31,7 @@ SOFTWARE. -->
 
   <title>Prop Box</title>
   <link rel="shortcut icon" type="image/png" href="/image/propboxicon_color.png" />
+  <link rel="stylesheet" href="/stylesheets/view_lists.css">
 </head>
 
 <body>
@@ -39,16 +40,22 @@ SOFTWARE. -->
       <a href="/view_lists"> Lists </a>
     </div>
   </div>
-  <form action="/new_list" method="post">
-    Name: <input type="text" name="name">
-    <input type="submit" value="Create New List">
-  </form>
+
+  <!-- New list form -->
+  <div class="item_container">
+    <form action="/new_list" method="post">
+      <input type="text" name="name" placeholder="new list name">
+      <input class="submitButton" type="submit" value="Create New List">
+      <br>
+    </form>
+  </div>
+  <!-- All the lists -->
   {% for l in lists %}
-  <div>
-    <a href="/view_list?list={{l.key.urlsafe()}}">{{ l.name }} ({{l.items | length}} items)</a> 
+  <div class="listview item_container">
     <form action='/delete_list' method="post">
+      <a href="/view_list?list={{l.key.urlsafe()}}">{{ l.name }} ({{l.items | length}} items)</a> 
       <input type="hidden" name="list" value="{{l.key.urlsafe()}}">
-      <input type="submit" value="Delete">
+      <input class="submitButton" type="submit" value="Delete">
     </form>
   </div>
   {% endfor %}
