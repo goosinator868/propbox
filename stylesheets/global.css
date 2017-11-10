@@ -18,6 +18,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
 
+.item_actions form {
+  padding: 0px;
+}
+
+.item_actions .submitButton {
+    width: 120px;
+    text-align: left;
+}
+
 body {
   background-color: #E9E9E9;
   font-family: 'Quicksand', sans-serif;
@@ -177,4 +186,8 @@ h2:first-child {
 
 #error i {
   color: #DF0101;
+}
+
+.list_drop_down {
+  text-align: left; 
 }

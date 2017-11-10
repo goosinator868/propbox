@@ -33,6 +33,7 @@ class List(ndb.Model):
     name = ndb.StringProperty(required=True)
     owner = ndb.KeyProperty(required=True)
     items = ndb.KeyProperty(repeated=True)
+    public = ndb.BooleanProperty(default=False)
 
 
 class Item(ndb.Model):

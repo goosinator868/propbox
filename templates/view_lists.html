@@ -17,78 +17,48 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. -->
+
 <!doctype html>
 <html>
 <head>
-  <!-- <link rel="import" href="/static/common.html"> -->
 {% include 'templates/common.html' %}
+
   <script>
     $(document).ready(function(){
       SetUpNavBar(SetUpFirebase);
-      SetUpQRCodes();
     });
   </script>
-  <script type="text/javascript" src="/scripts/qr_code.min.js"></script>
-
-  <script type="text/javascript">
-    function SetUpQRCodes() {
-      codes = $(".qr_code_image").toArray();
-      for (i in codes) {
-        code = codes[i];
-        var qr_code_value = code.innerText;
-        code.innerHTML = "";
-        var qrcode = new QRCode(code, {
-          text: qr_code_value,
-          width: 150,
-          height: 150,
-          colorDark : "#000000",
-          colorLight : "#ffffff",
-          correctLevel : QRCode.CorrectLevel.H
-        });
-      }
-    }
-  </script>
-
-  <style type="text/css">
-    h2 {
-      font-size: 18px;
-    }
-
-    .item_seperator {
-      background-color: white;
-      width: 240px;
-      overflow: hidden;
-      padding: 20px;
-      float: left;
-      border: 1px dashed black;
-    }
-    .qr_code_caption {
-      padding-left: 20px;
-    }
-    .qr_code_image {
-      background-color: white;
-      width: 200px;
-      height: 200px;
-      padding: 25px;
-      float: left;
-    }
-  </style>
 
   <title>Prop Box</title>
+  <link rel="shortcut icon" type="image/png" href="/image/propboxicon_color.png" />
+  <link rel="stylesheet" href="/stylesheets/view_lists.css">
 </head>
 
 <body>
   <div id="navbar_holder">
     <div id="page_specific_breadcrumbs">
-      <a href="/"> Items </a>
-      <span>Print QR codes</span>
+      <a href="/view_lists"> Lists </a>
     </div>
   </div>
-  <!-- New content here -->
-  {% for item in items %}
-  <div class="item_seperator">
-    <h2 class="qr_code_caption">{{item.name}}</h2>
-    <div class="qr_code_image">{{item.qr_code}}</div>
+
+
+  <!-- New list form -->
+  <div class="item_container">
+    <form action="/new_list" method="post">
+      <input type="text" name="name" placeholder="new list name">
+      Public? <input type="checkbox" name="public" value="public">
+      <input class="submitButton" type="submit" value="Create New List">
+      <br>
+    </form>
+  </div>
+  <!-- All the lists -->
+  {% for l in lists %}
+  <div class="listview item_container">
+    <form action='/delete_list' method="post">
+      <a href="/view_list?list={{l.key.urlsafe()}}">{{ l.name }} ({{l.items | length}} items)</a> 
+      <input type="hidden" name="list" value="{{l.key.urlsafe()}}">
+      <input class="submitButton" type="submit" value="Delete">
+    </form>
   </div>
   {% endfor %}
   <footer id="footer_holder"></footer>
