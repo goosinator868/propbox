@@ -178,6 +178,8 @@ def findUpdatedItem(item_key):
     else:
         while updated.outdated:
             updated = updated.child.get()
+    if updated.deleted:
+        return None
     return updated
 
 # Converts text list of tags to array of tags
@@ -270,7 +272,7 @@ def updateList(l):
     to_remove = []
     for item_key in l.items:
         updated = findUpdatedItem(item_key)
-        logging.info('Updated key:%s Item key:%s', updated.key, item_key)
+        logging.info('Updated key:%s Item key:%s', updated.key if updated else None, item_key)
         if updated is None:
             to_remove.append(item_key)
         elif updated.key != item_key:

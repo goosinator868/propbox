@@ -647,11 +647,16 @@ class ViewLists(webapp2.RequestHandler):
 class ViewList(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
+        user = get_current_user(self.request)
+        lists = List.query(ndb.OR(
+            List.owner == user.key,
+            List.public == True,
+            )).fetch()
         l = ndb.Key(urlsafe=self.request.get('list')).get()
         updateList(l)
         items = [k.get() for k in l.items]
         template = JINJA_ENVIRONMENT.get_template('templates/view_list.html')
-        page = template.render({'list': l, 'items': items})
+        page = template.render({'list': l, 'items': items, 'lists': lists})
         page = page.encode('utf-8')
         self.response.write(validateHTML(page))
 
