@@ -42,26 +42,27 @@ SOFTWARE. -->
 <body>
   <div id="navbar_holder">
     <div id="page_specific_breadcrumbs">
-      <span> Check in items </span>
+      <span> Check Out Items </span>
     </div>
   </div>
   <!-- New content here -->
 
-  <button onclick="scanAndAddToList(scanned_codes)">Scan QR code</button>
-  <div id="scanner_container">
-    <div id="scanner_tooltip">
-      Click anywhere to exit
+  <div id="body_div">
+    <button onclick="scanAndAddToList(scanned_codes)" class="submitButton">Scan QR code</button>
+    <div id="scanner_container">
+      <div id="scanner_tooltip">
+        Click anywhere to exit
+      </div>
+      <video id="scanner_window"></video>
     </div>
-    <video id="scanner_window"></video>
+    <h2>Scanned Items</h2>
+    <ul id="scanned_list"></ul>
+    <form id="scanned_keys" action="/check_out" method="post">
+      Reason:
+      <br> <textarea  name="reason"></textarea>
+      <br> <input type="submit" value="Check out scanned items" class="submitButton">
+    </form>
   </div>
-  <h2>Scanned Items</h2>
-   <form id="scanned_keys" action="/check_out" method="post">
-    Reason:
-    <br> <textarea  name="reason"></textarea>
-    <br> <input type="submit" value="Check out scanned items">
-  </form>
-  <ul id="scanned_list"></ul>
-
 
   <div id="footer_holder"></div>
 </body>
