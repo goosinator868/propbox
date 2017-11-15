@@ -15,6 +15,7 @@
             <p><b>Condition</b>: {{item.condition}}</p>
             <p><b>Article</b>: {{item.clothing_article_type}}</p>
             <p><b>Tags</b>:{% for tag in item.tags %} {{tag}},{% endfor %}</p>
+            <p><b>Colors</b>: {% for color in item.item_color %} {{color}},{% endfor %}</p>
         </div>
     </div>
     <br/>
