@@ -48,18 +48,22 @@ SOFTWARE. -->
   <div class="form">
       <form action="/add_item" enctype="multipart/form-data" method="post">
           <label>Name</label>
+          <br>
           <input name="name" type="text" placeholder="Enter the name of the item." value="{% if item is not none %}{{item.name}}{% endif %}">
           <br><br>
           <label>Image</label>
           <input name="image" type="file" accept=".png, .gif, .jpg, .jpeg"><br>
           <label>Describe the item.</label>
+          <br>
           <textarea name="description" placeholder="Enter a description for the item.">{% if item is not none %}{{item.description}}{% endif %}</textarea><br><br>
           <label>Is this a costume or a prop?</label>
+          <br>
           <select name="item_type" class="addItemDropdown">
                 <option>Costume</option>
                 <option {% if item is not none %}{% if item.item_type == 'Prop' %}selected="selected"{% endif %}{% endif %}>Prop</option>
           </select><br><br>
           <label>What condition is it in?</label>
+          <br>
           <select name="condition" class="addItemDropdown">
               {% for option in ["Good", "Fair", "Poor", "Being repaired"] %}
                   <option {% if item is not none %}{% if item.condition == option %}selected="selected"{% endif %}{% endif %}> {{option}} </option>
@@ -97,6 +101,7 @@ SOFTWARE. -->
               {% endfor %}
           <br><br>
           <label>Place any tags here.</label>
+          <br>
           <textarea name="tags" placeholder="Separate tags with the enter key.">{% if item is not none %}{% for tag in item.tags %}{{tag}}
 {% endfor %}{% endif %}</textarea>
           <br><br>
