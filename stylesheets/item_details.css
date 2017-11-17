@@ -33,11 +33,11 @@ SOFTWARE.*/
 	border-radius: 5px 5px 5px 5px;
 }
 
-#item_details, #buttons {
+#item_details, .buttons {
 	text-align: center;
 }
 
-#buttons>form {
+.buttons>form {
 	display: inline-block;
 	margin: 8px 2px 0px 2px;
 }

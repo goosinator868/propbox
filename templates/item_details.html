@@ -60,12 +60,12 @@ SOFTWARE. -->
     </div>
   </div>
 
+  <div id="item_{{item.key.urlsafe()}}">
   {% if item.image %}
     <a href="view_image?image_id={{item.key.urlsafe()}}">
     <img src="view_image?image_id={{item.key.urlsafe()}}" alt="image of {{item.name}}" class="item_image" />
     </a>
   {% endif %}
-  <div id="item_{{item.key.urlsafe()}}">
     <div id="item_details">
         <h1>{{item.name}}</h1>
         <p id="description">{{item.description}}</p>
@@ -83,7 +83,12 @@ SOFTWARE. -->
         {% if item.marked_for_deletion %}<p id="marked_for_deletion">{% if user.permissions != "Standard user" %} <a href="/review_deletions">{% endif %}<strong>[THIS ITEM HAS BEEN MARKED FOR DELETION]</strong>{% if user.permissions != "Standard user" %}</a>{% endif %}</p>{% endif %}
         <br/>
       </div>
-      <div id="buttons">
+      <div class="buttons">
+        <form action="/print_qr_codes" method="get">
+          <input type="hidden" name="keys" value="{{item.key.urlsafe()}}">
+          <input type="submit" value="Print QR code" class="submitButton">
+        </form>
+        <br/>
         {% if not item.marked_for_deletion %}
         <form action="/edit_item" method="get">
           <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
@@ -93,18 +98,6 @@ SOFTWARE. -->
           <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
           <input type="submit" value="Duplicate" class="submitButton">
         </form>
-        {% if user.permissions != "Standard user" %}
-          <form action="/revert_item" method="post">
-            <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-            <input type="submit" value="Revert To Earlier Version" class="submitButton">
-          </form>
-        {% endif %}
-        <form action="/print_qr_codes" method="get">
-          <input type="hidden" name="keys" value="{{item.key.urlsafe()}}">
-          <input type="submit" value="Print QR code" class="submitButton">
-        </form>
-        <button onclick="showConfirm('delete')" class="submitButton">Delete</button>
-        {% endif %}
         {% if lists %}
           <div class="dropdown">
               <button onclick="toggleListSignUp('{{item.key.urlsafe()}}')" class="submitButton"><i class='fa fa-list fa-1x' aria-hidden='true'></i> Lists</button>
@@ -126,6 +119,16 @@ SOFTWARE. -->
               </div>
           </div>
         {% endif %}
+        <br/>
+        {% if user.permissions != "Standard user" %}
+          <form action="/revert_item" method="post">
+            <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+            <b><input type="submit" value="Revert To Earlier Version" class="submitButton" style="background-color: gold; color: black;"></b>
+          </form>
+        {% endif %}
+        <button onclick="showConfirm('delete')" class="submitButton" style="background-color: red; color: black;"><b>Delete</b></button>
+        {% endif %}
+        
       </div>
       <p id="creator">Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</p>
     </div>
