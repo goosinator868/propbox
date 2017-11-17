@@ -132,10 +132,17 @@ def commitEdit(old_key, new_item, suggestion=False):
     old_item.put()
     return new_item.key
 
-@ndb.transactional(retries=3)
+@ndb.transactional(xg=True, retries=3)
 def removeFromList(list_key, item_key):
     l = list_key.get()
-    l.items.remove(item_key)
+    item = item_key.get();
+    l.items.remove([i for i in l.items if i.get().qr_code == item.qr_code][0])
+    l.put()
+
+@ndb.transactional(retries=3)
+def addToList(list_key, item_key):
+    l = list_key.get()
+    l.items.append(item_key)
     l.put()
 
 def removeFromAllLists(item_key):

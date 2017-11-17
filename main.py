@@ -667,8 +667,7 @@ class AddToList(webapp2.RequestHandler):
         item = ndb.Key(urlsafe=self.request.get('item')).get()
         if (l.public and user.permissions in [wmodels.TRUSTED_USER, wmodels.ADMIN]) or user.key == l.owner:
             if item.qr_code not in codes:
-                l.items.append(item.key)
-                l.put()
+                addToList(l.key, item.key)
 
 class RemoveFromList(webapp2.RequestHandler):
     @auth.login_required
@@ -680,8 +679,7 @@ class RemoveFromList(webapp2.RequestHandler):
         item = ndb.Key(urlsafe=self.request.get('item')).get()
         if (l.public and user.permissions in [wmodels.TRUSTED_USER, wmodels.ADMIN]) or user.key == l.owner:
             if item.qr_code in codes:
-                l.items.remove([i for i in l.items if i.get().qr_code == item.qr_code][0])
-                l.put()
+                removeFromList(l.key, i)
 
 
 class PrintQRCodes(webapp2.RequestHandler):
