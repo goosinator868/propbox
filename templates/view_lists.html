@@ -29,7 +29,7 @@ SOFTWARE. -->
     });
   </script>
 
-  <title>Prop Box</title>
+  <title>Lists :: Prop Box</title>
   <link rel="shortcut icon" type="image/png" href="/image/propboxicon_color.png" />
   <link rel="stylesheet" href="/stylesheets/view_lists.css">
 </head>
@@ -48,7 +48,7 @@ SOFTWARE. -->
     <form action='/delete_list' method="post">
       <a href="/view_list?list={{l.key.urlsafe()}}">{{ l.name }} ({{l.items | length}} items)</a> 
       <input type="hidden" name="list" value="{{l.key.urlsafe()}}">
-      <input class="submitButton" type="submit" value="Delete">
+      <button class="submitButton" type="submit"><i class="fa fa-trash fa-1x" aria-hidden="true"></i> Delete</button>
     </form>
     <p style="font-size: 0.8em">{% if l.public %}Public{% else %}Private{% endif %} List</p>
   </div>
@@ -58,7 +58,7 @@ SOFTWARE. -->
     <form action="/new_list" method="post">
       <input type="text" name="name" placeholder="New List Name">
       <input type="checkbox" name="public" value="public"> Make Public
-      <input class="submitButton" type="submit" value="Create New List" style="margin-left: 0px">
+      <button class="submitButton" type="submit" style="margin-left: 0px">><i class="fa fa-plus-circle fa-1x"></i> Create New List</button>
       <br>
     </form>
   </div>

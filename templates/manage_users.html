@@ -31,7 +31,7 @@ SOFTWARE. -->
 
   <link rel="stylesheet" href="/stylesheets/manage_users.css">
 
-  <title>Propbox :: Manage Users</title>
+  <title>Manage Users :: Propbox</title>
   <link rel="shortcut icon" type="image/png" href="/image/propboxicon_color.png" />
 </head>
 
@@ -58,7 +58,7 @@ SOFTWARE. -->
               {% endfor %}
             </select>
             <input type="hidden" name="user_key" value="{{user.key.urlsafe()}}">
-            <input type="submit" value="Update permissions">
+            <button type="submit" class="submitButton"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
           </form>
         </div>
     {% endfor %}
@@ -76,7 +76,7 @@ SOFTWARE. -->
               {% endfor %}
             </select>
             <input type="hidden" name="user_key" value="{{user.key.urlsafe()}}">
-            <input type="submit" value="Update permissions">
+            <button type="submit" class="submitButton"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
           </form>
         </div>
     {% endfor %}
@@ -94,7 +94,7 @@ SOFTWARE. -->
               {% endfor %}
             </select>
             <input type="hidden" name="user_key" value="{{user.key.urlsafe()}}">
-            <input type="submit" value="Update permissions">
+            <button type="submit" class="submitButton"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
           </form>
         </div>
     {% endfor %}

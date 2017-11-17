@@ -34,7 +34,7 @@ SOFTWARE. -->
     <link rel="stylesheet" href="/stylesheets/index.css">
     <link rel="stylesheet" href="/stylesheets/list_dropdown.css">
 
-    <title>Home page :: Propbox</title>
+    <title>Home :: Propbox</title>
     <link rel="shortcut icon" type="image/png" href="/image/propboxicon_color.png" />
 </head>
 
@@ -139,11 +139,11 @@ SOFTWARE. -->
                         <textarea id="tagBox" name="filter_by_tags" placeholder="separate tags with enter key"></textarea><br>
                         <input type="radio" id="tagGroupingInclusive" name="filter_by_tag_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, tagGroupingInclusive);"> Any of the Tags Listed<br>
                         <input type="radio" id="tagGroupingExclusive" name="filter_by_tag_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, tagGroupingExclusive);"> All of the Tags Listed<br>
-                        <input type="submit" value="Search" class="submitButton">
+                        <button type="submit"class="submitButton"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
                     </form>
                     <br>
                     <form action="/search_and_browse" method="get" onsubmit="clearForm();">
-                        <input type="submit" value="Clear Form" class="submitButton">
+                        <button type="submit" class="submitButton"><i class="fa fa-undo" aria-hidden="true"></i> Clear Form</button>
                     </form>
 
                 </div>

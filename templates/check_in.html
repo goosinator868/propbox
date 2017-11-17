@@ -36,7 +36,7 @@ SOFTWARE. -->
   <script type="text/javascript" src="/scripts/scan_qr_code.js"></script>
   <link rel="stylesheet" href="/stylesheets/check_in.css"> 
 
-  <title>Prop Box</title>
+  <title>Check In :: Prop Box</title>
   <link rel="shortcut icon" type="image/png" href="/image/propboxicon_color.png" />
 </head>
 
@@ -54,13 +54,13 @@ SOFTWARE. -->
       </div>
       <video id="scanner_window"></video>
     </div>
-    <button onclick="scanAndAddToList(scanned_codes)" class="submitButton" style="display: inline-block;">Scan QR code</button>
+    <button onclick="scanAndAddToList(scanned_codes)" class="submitButton" style="display: inline-block;"><i class="fa fa-camera" aria-hidden="true"></i> Scan QR Code</button>
     
     <h2>Scanned Items</h2>
     <ul id="scanned_list"></ul>
     <br>
      <form id="scanned_keys" action="/check_in" method="post">
-      <input type="submit" value="Check in scanned items" class="submitButton">
+      <button type="submit" value="" class="submitButton"><i class="fa fa-sign-in" aria-hidden="true"></i> Check In Scanned Items</button>
     </form>
   </div>
 
