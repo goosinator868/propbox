@@ -31,7 +31,7 @@ SOFTWARE. -->
 
   <link rel="stylesheet" href="/stylesheets/add_item.css">
 
-  <title>Propbox :: Add an Item</title>
+  <title>Add Item :: Propbox</title>
   <link rel="shortcut icon" type="image/png" href="/image/propboxicon_color.png" />
 </head>
 
@@ -102,8 +102,7 @@ SOFTWARE. -->
           <br><br>
           <label>Place any tags here.</label>
           <br>
-          <textarea name="tags" placeholder="Separate tags with the enter key.">{% if item is not none %}{% for tag in item.tags %}{{tag}}
-{% endfor %}{% endif %}</textarea>
+          <textarea name="tags" placeholder="Separate tags with the enter key.">{% if item is not none %}{% for tag in item.tags %}{{tag}}&#10;{% endfor %}{% endif %}</textarea>
           <br><br>
           <label>How many of this item would you like to add?</label>
           <br>
@@ -120,7 +119,7 @@ SOFTWARE. -->
               <option> Make Another Item </option>
           </select>
           <br><br>
-          <input type="submit" value="Create" class="submitButton" style="max-width: 100px;">
+          <button type="submit" class="submitButton" style="max-width: 100px;"><i class="fa fa-plus-circle" aria-hidden="true"></i> Create</button>
       </form>
   </div>
 

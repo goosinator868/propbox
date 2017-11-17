@@ -51,23 +51,21 @@ SOFTWARE. -->
       <div class="sub_item_container" style="display: inline-block;">
         <strong>Current Version</strong>
         <h2>{{item[0].name}}</h2>
-        <h4>created by : {{item[0].creator_name}} at {{item[0].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
         <p>{{item[0].description}}</p>
       </div>
       <div class="sub_item_container" style="display: inline-block;">
         <strong>Previous Versions</strong>
         <h2>{{item[1][i].name}}</h2>
-        <h4>created by : {{item[1][i].creator_name}} at {{item[1][i].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
         <p>{{item[1][i].description}}</p>
       </div>
 
       <br/>
-      <button class="submitButton" onclick="iCloseConfirm('{{item[0].key.urlsafe()}}',{{i}})">No.</button>
+      <button class="submitButton" onclick="iCloseConfirm('{{item[0].key.urlsafe()}}',{{i}})"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
       <form action="/discard_revision" method="post" style="display: inline-block;">
         <input type="hidden" name="item_id" value="{{item[1][i].key.urlsafe()}}">
         <input type="hidden" name="newest_id" value="{{item[0].key.urlsafe()}}">
         <input type="hidden" name="revert" value="True">
-        <input class="submitButton" type="submit" value="Yes, Revert To Earlier Version">
+        <button class="submitButton" type="submit"><i class="fa fa-undo" aria-hidden="true"></i> Yes, Revert To Earlier Version</button>
       </form>
     </div>
   </div>
@@ -90,19 +88,19 @@ SOFTWARE. -->
         <p>{{item[0].description}}</p>
         </div>
       <div class="sub_item_container" style="display: inline-block;">
-        <strong>New Versions</strong>
+        <strong>New Version</strong>
         <h2>{{item[1][i].name}}</h2>
         <h4>created by : {{item[1][i].creator_name}} at {{item[1][i].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
         <p>{{item[1][i].description}}</p>
       </div>
 
       <br/>
-      <button onclick="iCloseConfirm('{{item[0].key.urlsafe()}}',{{i}})" class="submitButton">Cancel</button>
+      <button onclick="iCloseConfirm('{{item[0].key.urlsafe()}}',{{i}})" class="submitButton"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
       <form action="/keep_revision" method="post"  style="display: inline-block;">
         <input type="hidden" name="item_id" value="{{item[1][i].key.urlsafe()}}">
         <input type="hidden" name="parent_id" value="{{item[0].key.urlsafe()}}">
         <input type="hidden" name="proposed_edit" value="True">
-        <input type="submit" value="Accept New Version" class="submitButton">
+        <button type="submit" class="submitButton"><i class="fa fa-check-square-o" aria-hidden="true"></i> Accept New Version</button>
       </form>
     </div>
   </div>
@@ -154,15 +152,15 @@ SOFTWARE. -->
                   <img src="view_image?image_id={{item[1][i].key.urlsafe()}}" class="thumbnail" alt="{{item[1][i].name}}"/>
                 {% endif %}
                 <br/>
-                <button onclick="iShowConfirm('{{item[0].key.urlsafe()}}',{{i}})" class="submitButton">Revert To This Version</button>
-                <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i-1)|string}}')"{% if i == 0 %} disabled="disabled" {% endif %} class="submitButton">Newer</button>
-                <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i+1)|string}}')"{% if i == item[2][-1] %} disabled="disabled" {% endif %} class="submitButton">Older</button>
+                <button onclick="iShowConfirm('{{item[0].key.urlsafe()}}',{{i}})" class="submitButton"><i class="fa fa-undo" aria-hidden="true"></i> Revert To This Version</button>
+                <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i-1)|string}}')"{% if i == 0 %} disabled="disabled" {% endif %} class="submitButton"><i class="fa fa-long-arrow-left" aria-hidden="true"></i> Newer</button>
+                <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i+1)|string}}')"{% if i == item[2][-1] %} disabled="disabled" {% endif %} class="submitButton">Older <i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
               </div>
               {% endfor %}
             <form action="/keep_revision" method="post">
               <input type="hidden" name="item_id" value="{{item[0].key.urlsafe()}}">
               <input type="hidden" name="proposed_edit" value="False">
-              <input type="submit" value="Keep Current Version" class="submitButton">
+              <button type="submit" class="submitButton"><i class="fa fa-check-square-o" aria-hidden="true"></i> Keep Current Version</button>
             </form>
           </div>
         {% endfor %}
@@ -203,15 +201,16 @@ SOFTWARE. -->
                   <img src="view_image?image_id={{item[1][i].key.urlsafe()}}" class="thumbnail" alt="{{item[1][i].name}}"/>
                 {% endif %}
                 <br/>
-                <button onclick="iShowConfirm('{{item[0].key.urlsafe()}}',{{i}})" class="submitButton">Update To This Version</button>
-                <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i-1)|string}}')"{% if i == 0 %} disabled="disabled" style="color: #bbb;" {% endif %} class="submitButton">Previous</button>
-                <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i+1)|string}}')"{% if i == item[2][-1] %} disabled="disabled" style="color: #bbb;" {% endif %} class="submitButton">Next</button>
+                <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i-1)|string}}')"{% if i == 0 %} disabled="disabled" style="color: #bbb;" {% endif %} class="submitButton"><i class="fa fa-long-arrow-left" aria-hidden="true"></i> Previous</button>
+                <button onclick="switchItem('{{item[0].key.urlsafe()+'_'+i|string}}','{{item[0].key.urlsafe()+'_'+(i+1)|string}}')"{% if i == item[2][-1] %} disabled="disabled" style="color: #bbb;" {% endif %} class="submitButton">Next <i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
+                <br/>
+                <button onclick="iShowConfirm('{{item[0].key.urlsafe()}}',{{i}})" class="submitButton"><i class="fa fa-check-square-o" aria-hidden="true"></i> Update To This Version</button>
               </div>
               {% endfor %}
             <form action="/discard_revision" method="post" style="display: inline-block;">
               <input type="hidden" name="item_id" value="{{item[0].key.urlsafe()}}">
               <input type="hidden" name="revert" value="False">
-              <input type="submit" value="Keep Original Version" class="submitButton">
+              <button type="submit" class="submitButton"><i class="fa fa-undo" aria-hidden="true"></i> Keep Original Version</button>
             </form>
           </div>
         {% endfor %}

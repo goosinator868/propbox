@@ -64,8 +64,6 @@ SOFTWARE. -->
           <p><b>Size</b>: {{item.clothing_size_string}}, {{item.clothing_size_num}}</p>
           <p><b>Colors</b>:{% for color in item.item_color %} {{color}},{% endfor %}</p>
           <p><b>Tags</b>:{% for tag in item.tags %} {{tag}},{% endfor %}</p>
-          <p><b>QR Code</b>: {{item.qr_code}}</p>
-          <p>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M:%S%p %b %d %Y')}}</p>
           <br/>
           {% if pending_edit %}<p>{% if user.permissions != "STANDARD_USER" %} <a href="/review_edits">{% endif %}<strong>[EDITS ARE PENDING APPROVAL]</strong>{% if user.permissions != "STANDARD_USER" %}</a>{% endif %}</p>{% endif %}
 
@@ -131,27 +129,25 @@ SOFTWARE. -->
               <label>Tags</label><br>
               <!-- See http://jinja.pocoo.org/docs/2.9/templates/#whitespace-control -->
               <textarea name="tags" placeholder="Separate tags with the enter key.">
-            {%- for tag in item.tags %}
-{{tag}}
-{%- endfor %}</textarea><br><br>
+            {%- for tag in item.tags %}{{tag}}&#10;{%- endfor %}</textarea><br><br>
           <div id="confirm_popup" class="modal">
             <div class="modal-content">
             <span class="close" onclick="closeConfirm('popup')">&times;</span>
             Are you sure you want to submit
-            {% if user.permissions=="STANDARD_USER" %}
+            {% if user.permissions=="Standard user" %}
             an edit request for <strong>{{item.name}}</strong>? Changes must be approved before they are visible to everyone.
             <br/>
-            <input type="submit" value="Submit edit request" class="submitButton" style="width: auto;">
+            <button type="submit" class="submitButton" style="width: auto;"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit Edit Request</button>
             {% else %}
             an edit for <strong>{{item.name}}</strong>? Changes will take place immediately.
             <br/>
-            <input type="submit" value="Submit changes" class="submitButton" style="width: auto;">
+            <button type="submit" class="submitButton" style="width: auto;"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit Changes</button>
             {% endif %}
-            <button onclick="closeConfirm('popup')" type="button" class="submitButton" style="width: auto;">Cancel</button>
+            <button onclick="closeConfirm('popup')" type="button" class="submitButton" style="width: auto;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
             </div>
           </div>
 
-          <button onclick="showConfirm('popup')" type="button" class="submitButton">Submit Edit{% if user.permissions=="STANDARD_USER" %} Request{% endif %}</button>
+          <button onclick="showConfirm('popup')" type="button" class="submitButton"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit Edit{% if user.permissions=="STANDARD_USER" %} Request{% endif %}</button>
         </form>
       </div>
     </div>

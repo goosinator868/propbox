@@ -49,12 +49,12 @@ SOFTWARE. -->
     <div class="modal-content">
      <span class="close" onclick="closeConfirm('delete')">&times;</span>
      <h5 class="modal-title" style="font-size: 1.3em;">Do you really want to {% if user.permissions=="Standard user" %}mark <b>{{item.name}}</b> for deletion?{% else %} delete <b>{{item.name}}</b>?{% endif %}</h5>
-     <p style="text-align: center; margin: 4px 0;">{% if user.permissions=="Standard user" %}This will mark <b>{{item.name}}</b> for permanent deletion by a Trusted user, and while it will still be visible, nobody will be able to edit it.{% else %}This will immediately remove <b>{{item.name}}</b> from everyone's view, although it can still be restored again from the <a href="/review_deletions">Review Deletions page.</a>{% endif %}</p>
+     <p style="text-align: center; margin: 4px 0;">{% if user.permissions=="Standard user" %}This will mark <b>{{item.name}}</b> for permanent deletion by a trusted user, and while it will still be visible to everyone, nobody will be able to edit it.{% else %}This will immediately remove <b>{{item.name}}</b> from everyone's view, although it can still be restored again from the <a href="/review_deletions">Review Deletions page.</a>{% endif %}</p>
      <div>
-      <button onclick="closeConfirm('delete')" class="submitButton" type="submit">No.</button>
-      <form action="/delete_item" method="post">
+      <button onclick="closeConfirm('delete')" class="submitButton" type="submit"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
+      <form action="/delete_item" method="post" style="display: inline-block;">
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-        <input type="submit" value="Delete" class="submitButton">
+        <button type="submit" class="submitButton"><i class="fa fa-trash fa-1x" aria-hidden="true"></i> Delete</button>
       </form>
      </div>
     </div>
@@ -77,7 +77,6 @@ SOFTWARE. -->
         <p id="size"><b>Size:</b> {{item.clothing_size_string}}, {{item.clothing_size_num}}</p>
         {% endif %}
         <p id="tags"><b>Tags:</b> {% for tag in item.tags %} {{tag}},{% endfor %}</p>
-        <p id="qr_code"><b>QR Code:</b> {{item.qr_code}}</p>
 
         {% if pending_edit %}<p id="pending_edit">{% if user.permissions != "Standard user" %} <a href="/review_edits">{% endif %}<strong>[EDITS ARE PENDING APPROVAL]</strong>{% if user.permissions != "Standard user" %}</a>{% endif %}</p>{% endif %}
         {% if item.marked_for_deletion %}<p id="marked_for_deletion">{% if user.permissions != "Standard user" %} <a href="/review_deletions">{% endif %}<strong>[THIS ITEM HAS BEEN MARKED FOR DELETION]</strong>{% if user.permissions != "Standard user" %}</a>{% endif %}</p>{% endif %}
@@ -86,17 +85,17 @@ SOFTWARE. -->
       <div class="buttons">
         <form action="/print_qr_codes" method="get">
           <input type="hidden" name="keys" value="{{item.key.urlsafe()}}">
-          <input type="submit" value="Print QR code" class="submitButton">
+          <button type="submit" class="submitButton"><i class="fa fa-print" aria-hidden="true"></i> Print QR Code</button>
         </form>
         <br/>
         {% if not item.marked_for_deletion %}
         <form action="/edit_item" method="get">
           <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-          <input type="submit" value="Edit" class="submitButton">
+          <button type="submit" class="submitButton"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
         </form>
         <form action="/add_item" method="get">
           <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-          <input type="submit" value="Duplicate" class="submitButton">
+          <button type="submit" class="submitButton"><i class="fa fa-copy fa-1x" aria-hidden="true"></i> Duplicate</button>
         </form>
         {% if lists %}
           <div class="dropdown">
@@ -123,10 +122,10 @@ SOFTWARE. -->
         {% if user.permissions != "Standard user" %}
           <form action="/revert_item" method="post">
             <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-            <b><input type="submit" value="Revert To Earlier Version" class="submitButton" style="background-color: gold; color: black;"></b>
+            <button type="submit" class="submitButton" style="background-color: gold; color: black;"><i class='fa fa-undo fa-1x' aria-hidden="true"></i> <b>Revert To Earlier Version</b></button>
           </form>
         {% endif %}
-        <button onclick="showConfirm('delete')" class="submitButton" style="background-color: red; color: black;"><b>Delete</b></button>
+        <button onclick="showConfirm('delete')" class="submitButton" style="background-color:{% if user.permissions=="Standard user" %} gold{% else %} red{% endif %}; color: black;"><i class="fa fa-trash fa-1x" aria-hidden="true"></i> <b>Delete</b></button>
         {% endif %}
         
       </div>

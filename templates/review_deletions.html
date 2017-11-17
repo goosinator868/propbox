@@ -34,7 +34,7 @@ SOFTWARE. -->
   <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
   <link rel="stylesheet" href="/stylesheets/review_deletions.css">
 
-  <title>Review deletions :: Propbox</title>
+  <title>Review Deletions :: Propbox</title>
   <link rel="shortcut icon" type="image/png" href="/image/propboxicon_color.png" />
 </head>
 
@@ -54,10 +54,10 @@ SOFTWARE. -->
       <span class="close" onclick="closeConfirm('{{item.key.urlsafe()}}')">&times;</span>
       <h5 class="modal-title" style="font-size: 1.3em;">Do you really want to delete <strong>{{item.name}}</strong>?</h5>
       <p>This cannot be undone.</p>
-      <button onclick="closeConfirm('{{item.key.urlsafe()}}')" class="submitButton" type="submit">No.</button>
+      <button onclick="closeConfirm('{{item.key.urlsafe()}}')" class="submitButton" type="submit"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
       <form action="/delete_item_forever" method="post">
         <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-        <input type="submit" value="Yes, Delete Forever" class="submitButton">
+        <button type="submit" class="submitButton"><i class="fa fa-trash-o" aria-hidden="true" style="display: inline;"></i> Delete Forever</button>
       </form>
     </div>
   </div>
@@ -73,14 +73,13 @@ SOFTWARE. -->
             <img src="view_image?image_id={{item.key.urlsafe()}}" alt="image of {{item.name}}" class="thumbnail" />
           {% endif %}
           <p>{% if item.marked_for_deletion %}<b>Marked for deletion by</b>:{% else %}<b>Deleted by</b>:{% endif %} {{item.suggested_by}}</p>
-          <p>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</p>
           <p>{{item.description}}</p>
           <br/>
           <div>
-            <button onclick="showConfirm('{{item.key.urlsafe()}}')" class="submitButton">Delete Forever</button>
+            <button onclick="showConfirm('{{item.key.urlsafe()}}')" class="submitButton"><i class="fa fa-trash-o" aria-hidden="true" style="display: inline;"></i> Delete Forever</button>
             <form action="/undelete_item" method="post">
               <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-              <input type="submit" value="Restore Item" class="submitButton">
+              <button type="submit" class="submitButton"><i class="fa fa-undo" aria-hidden="true" style="display: inline;"></i> Restore Item</button>
             </form>
           </div>
         </div>

@@ -31,7 +31,7 @@
                 style='display: none' 
             {% endif %} 
             onclick="checkIn('{{item.key.urlsafe()}}')">
-            <i class='fa fa-arrow-left fa-1x' aria-hidden='true'></i> 
+            <i class='fa fa-sign-in fa-1x' aria-hidden='true'></i> 
             Check in
             </button>
         <button 
@@ -40,12 +40,12 @@
                 style='display: none'
             {% endif %} 
             onclick="showCheckOutPopup('{{item.key.urlsafe()}}')">
-            <i class='fa fa-arrow-right fa-1x' aria-hidden='true'></i> 
+            <i class='fa fa-sign-out fa-1x' aria-hidden='true'></i> 
             Check out
         </button>
         <div style='display: none' class="popup">
             Reason <textarea class="reason"></textarea><br>
-            <button class="submitButton" onclick="checkOut('{{item.key.urlsafe()}}')">Check out</button>
+            <button class="submitButton" onclick="checkOut('{{item.key.urlsafe()}}')"><i class="fa fa-sign-out" aria-hidden="true"></i> Check Out</button>
         </div>
         <!-- Lists add/remove button -->
         {% if lists %}
