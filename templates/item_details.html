@@ -32,6 +32,7 @@ SOFTWARE. -->
   <script type="text/javascript" src="/scripts/popup_confirm.js"></script>
 
   <link rel="stylesheet" href="/stylesheets/item_details.css">
+  <link rel="stylesheet" href="/stylesheets/list_dropdown.css">
 
   <title>{{item.name}} :: Propbox</title>
   <link rel="shortcut icon" type="image/png" href="/image/propboxicon_color.png" />
@@ -64,45 +65,68 @@ SOFTWARE. -->
     <img src="view_image?image_id={{item.key.urlsafe()}}" alt="image of {{item.name}}" class="item_image" />
     </a>
   {% endif %}
-  <div id="item_details">
-      <h1>{{item.name}}</h1>
-      <p id="description">{{item.description}}</p>
-      <br/>
-      <p id="item_type"><b>Item Type:</b> {{item.item_type}}</p>
-      <p id="condition"><b>Condition</b>: {{item.condition}}</p>
-      <p id="article_type"><b>Article:</b> {{item.clothing_article_type}}</p>
-      {% if item.clothing_size_string != "N/A" or item.clothing_size_num != "N/A" %}
-      <p id="size"><b>Size:</b> {{item.clothing_size_string}}, {{item.clothing_size_num}}</p>
-      {% endif %}
-      <p id="tags"><b>Tags:</b> {% for tag in item.tags %} {{tag}},{% endfor %}</p>
-      <p id="qr_code"><b>QR Code:</b> {{item.qr_code}}</p>
+  <div id="item_{{item.key.urlsafe()}}">
+    <div id="item_details">
+        <h1>{{item.name}}</h1>
+        <p id="description">{{item.description}}</p>
+        <br/>
+        <p id="item_type"><b>Item Type:</b> {{item.item_type}}</p>
+        <p id="condition"><b>Condition</b>: {{item.condition}}</p>
+        <p id="article_type"><b>Article:</b> {{item.clothing_article_type}}</p>
+        {% if item.clothing_size_string != "N/A" or item.clothing_size_num != "N/A" %}
+        <p id="size"><b>Size:</b> {{item.clothing_size_string}}, {{item.clothing_size_num}}</p>
+        {% endif %}
+        <p id="tags"><b>Tags:</b> {% for tag in item.tags %} {{tag}},{% endfor %}</p>
+        <p id="qr_code"><b>QR Code:</b> {{item.qr_code}}</p>
 
-      {% if pending_edit %}<p id="pending_edit">{% if user.permissions != "Standard user" %} <a href="/review_edits">{% endif %}<strong>[EDITS ARE PENDING APPROVAL]</strong>{% if user.permissions != "Standard user" %}</a>{% endif %}</p>{% endif %}
-      {% if item.marked_for_deletion %}<p id="marked_for_deletion">{% if user.permissions != "Standard user" %} <a href="/review_deletions">{% endif %}<strong>[THIS ITEM HAS BEEN MARKED FOR DELETION]</strong>{% if user.permissions != "Standard user" %}</a>{% endif %}</p>{% endif %}
-      <br/>
-    </div>
-    <div id="buttons">
-      {% if not item.marked_for_deletion %}
-      <form action="/edit_item" method="get">
-        <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-        <input type="submit" value="Edit" class="submitButton">
-      </form>
-      <form action="/add_item" method="get">
-        <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-        <input type="submit" value="Duplicate" class="submitButton">
-      </form>
-      {% if user.permissions != "Standard user" %}
-        <form action="/revert_item" method="post">
+        {% if pending_edit %}<p id="pending_edit">{% if user.permissions != "Standard user" %} <a href="/review_edits">{% endif %}<strong>[EDITS ARE PENDING APPROVAL]</strong>{% if user.permissions != "Standard user" %}</a>{% endif %}</p>{% endif %}
+        {% if item.marked_for_deletion %}<p id="marked_for_deletion">{% if user.permissions != "Standard user" %} <a href="/review_deletions">{% endif %}<strong>[THIS ITEM HAS BEEN MARKED FOR DELETION]</strong>{% if user.permissions != "Standard user" %}</a>{% endif %}</p>{% endif %}
+        <br/>
+      </div>
+      <div id="buttons">
+        {% if not item.marked_for_deletion %}
+        <form action="/edit_item" method="get">
           <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-          <input type="submit" value="Revert To Earlier Version" class="submitButton">
+          <input type="submit" value="Edit" class="submitButton">
         </form>
-      {% endif %}
-      <form action="/print_qr_codes" method="get">
-        <input type="hidden" name="keys" value="{{item.key.urlsafe()}}">
-        <input type="submit" value="Print QR code" class="submitButton">
-      </form>
-      <button onclick="showConfirm('delete')" class="submitButton">Delete</button>
-      {% endif %}
+        <form action="/add_item" method="get">
+          <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+          <input type="submit" value="Duplicate" class="submitButton">
+        </form>
+        {% if user.permissions != "Standard user" %}
+          <form action="/revert_item" method="post">
+            <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+            <input type="submit" value="Revert To Earlier Version" class="submitButton">
+          </form>
+        {% endif %}
+        <form action="/print_qr_codes" method="get">
+          <input type="hidden" name="keys" value="{{item.key.urlsafe()}}">
+          <input type="submit" value="Print QR code" class="submitButton">
+        </form>
+        <button onclick="showConfirm('delete')" class="submitButton">Delete</button>
+        {% endif %}
+        {% if lists %}
+          <div class="dropdown">
+              <button onclick="toggleListSignUp('{{item.key.urlsafe()}}')" class="submitButton"><i class='fa fa-list fa-1x' aria-hidden='true'></i> Lists</button>
+              <div class="list_drop_down" style='display: none'>
+                  <!-- <ul> -->
+                  {% for list in lists %}
+                      <!-- <li> -->
+                      <label> <input 
+                          name="list" 
+                          type="checkbox" 
+                          value="{{list.key.urlsafe()}}" 
+                          {% if item.key in list.items %}
+                          checked 
+                          {% endif %}
+                          onchange="toggleListMembership(this, '{{list.key.urlsafe()}}', '{{item.key.urlsafe()}}')">  {{list.name}}</label>
+                      <!-- </li> -->
+                  {% endfor %}
+              <!-- </ul> -->
+              </div>
+          </div>
+        {% endif %}
+      </div>
       <p id="creator">Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</p>
     </div>
     <br/><br/>
