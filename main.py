@@ -418,7 +418,11 @@ class ViewItemDetails(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('templates/item_details.html')
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
         pending_edit = (len(item.suggested_edits) > 0)
-        page = template.render({'item':item, 'pending_edit':pending_edit, 'user':user})
+        lists = List.query(ndb.OR(List.owner == user.key, List.public == True)).fetch()
+        page = template.render({'item':item, 
+                                'pending_edit':pending_edit, 
+                                'user':user,
+                                'lists':lists})
         page = page.encode('utf-8')
         self.response.write(validateHTML(page))
 
