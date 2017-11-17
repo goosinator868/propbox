@@ -38,7 +38,7 @@ from google.appengine.ext import ndb
 # | First party imports |
 # +---------------------+
 
-from warehouse_models import Item, cloneItem
+from warehouse_models import Item, cloneItem, List
 
 
 # +-----------------+
@@ -132,6 +132,28 @@ def commitEdit(old_key, new_item, suggestion=False):
     old_item.put()
     return new_item.key
 
+@ndb.transactional(xg=True, retries=3)
+def removeFromList(list_key, item_key):
+    l = list_key.get()
+    item = item_key.get();
+    l.items.remove([i for i in l.items if i.get().qr_code == item.qr_code][0])
+    l.put()
+
+@ndb.transactional(retries=3)
+def addToList(list_key, item_key):
+    l = list_key.get()
+    l.items.append(item_key)
+    l.put()
+
+def removeFromAllLists(item_key):
+    lists = List.query().fetch()
+    # NOTE: This still allows for a race if someone adds to a list
+    # after this point in the function. This is okay since it will 
+    # only lead to the number of items being off and is not worth
+    # creating a huge transaction for every time.
+    for l in lists:
+        if item_key in l.items:
+            removeFromList(l.key, item_key)
 
 # +-----------------------+
 # | Miscellaneous Helpers |
