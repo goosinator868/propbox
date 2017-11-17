@@ -41,16 +41,7 @@ SOFTWARE. -->
     </div>
   </div>
 
-
-  <!-- New list form -->
-  <div class="item_container">
-    <form action="/new_list" method="post">
-      <input type="text" name="name" placeholder="new list name">
-      Public? <input type="checkbox" name="public" value="public">
-      <input class="submitButton" type="submit" value="Create New List">
-      <br>
-    </form>
-  </div>
+  <h2 style="margin:5px auto; text-align: center;">Your Lists</h2>
   <!-- All the lists -->
   {% for l in lists %}
   <div class="listview item_container">
@@ -59,8 +50,19 @@ SOFTWARE. -->
       <input type="hidden" name="list" value="{{l.key.urlsafe()}}">
       <input class="submitButton" type="submit" value="Delete">
     </form>
+    <p style="font-size: 0.8em">{% if l.public %}Public{% else %}Private{% endif %} List</p>
   </div>
   {% endfor %}
+  <!-- New list form -->
+  <div class="item_container">
+    <form action="/new_list" method="post">
+      <input type="text" name="name" placeholder="New List Name">
+      <input type="checkbox" name="public" value="public"> Make Public
+      <input class="submitButton" type="submit" value="Create New List" style="margin-left: 0px">
+      <br>
+    </form>
+  </div>
+  
   <footer id="footer_holder"></footer>
 </body>
 </html>

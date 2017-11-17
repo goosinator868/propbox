@@ -43,22 +43,27 @@ SOFTWARE. -->
 <body>
   <div id="navbar_holder">
     <div id="page_specific_breadcrumbs">
-      <span> Check in items </span>
+      <span> Check In Items </span>
     </div>
   </div>
 
-  <button onclick="scanAndAddToList(scanned_codes)">Scan QR code</button>
-  <div id="scanner_container">
-    <div id="scanner_tooltip">
-      Click anywhere to exit
+  <div id="body_div">
+    <div id="scanner_container" style='display: inline;'>
+      <div id="scanner_tooltip">
+        Click anywhere to exit
+      </div>
+      <video id="scanner_window"></video>
     </div>
-    <video id="scanner_window"></video>
+    <button onclick="scanAndAddToList(scanned_codes)" class="submitButton" style="display: inline-block;">Scan QR code</button>
+    
+    <h2>Scanned Items</h2>
+    <ul id="scanned_list"></ul>
+    <br>
+     <form id="scanned_keys" action="/check_in" method="post">
+      <input type="submit" value="Check in scanned items" class="submitButton">
+    </form>
   </div>
-  <h2>Scanned Items</h2>
-   <form id="scanned_keys" action="/check_in" method="post">
-    <input type="submit" value="Check in scanned items">
-  </form>
-  <ul id="scanned_list"></ul>
+
 
   <div id="footer_holder"></div>
 </body>

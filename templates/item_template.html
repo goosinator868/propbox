@@ -1,17 +1,24 @@
 <div class="item_container" id="item_{{item.key.urlsafe()}}">
     <h2>{{item.name}}</h2>
-    {% if item.image %}
-        <a href="view_image?image_id={{item.key.urlsafe()}}">
-        <img src="view_image?image_id={{item.key.urlsafe()}}" alt="image of {{item.name}}" class="thumbnail" />
-        </a>
-    {% endif %}
-    <h3>{{item.item_type}}</h3>
-    <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</h4>
-    <p>{{item.description}}</p>
-    <p><b>Condition</b>: {{item.condition}}</p>
-    <p><b>Article</b>: {{item.clothing_article_type}}</p>
-    <p><b>Tags</b>:{% for tag in item.tags %} {{tag}},{% endfor %}</p>
-    
+    <div style="min-width: 100%">
+        {% if item.image %}
+            <div class="thumbnail_container">
+                <a href="view_image?image_id={{item.key.urlsafe()}}">
+                <img src="view_image?image_id={{item.key.urlsafe()}}" alt="image of {{item.name}}" class="thumbnail" />
+                </a>
+            </div>
+        {% endif %}
+        <div class="item_details_container">
+            <h3>{{item.item_type}}</h3>
+            <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</h4>
+            <p>{{item.description}}</p>
+            <p><b>Condition</b>: {{item.condition}}</p>
+            <p><b>Article</b>: {{item.clothing_article_type}}</p>
+            <p><b>Tags</b>:{% for tag in item.tags %} {{tag}},{% endfor %}</p>
+            <p><b>Colors</b>: {% for color in item.item_color %} {{color}},{% endfor %}</p>
+        </div>
+    </div>
+    <br/>
     <div class="item_actions">
         <form action="/item_details" method="get">
           <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">

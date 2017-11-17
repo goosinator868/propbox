@@ -46,25 +46,23 @@ SOFTWARE. -->
       <img src="/image/propboxlogo_color.png" alt="Propbox" style="width: 50%;">
     </div>
     <p id="welcome-msg">
-    {% if user.permissions != "Standard user" %}
     {{user.name}},
-    you are currently logged in as a{% if user.permissions == "Trusted user" %} trusted user.{% else %}n admin.{% endif %}</p>
-    {% endif %}
+    you are currently logged in as a{% if user.permissions == "Trusted user" %} trusted user.{% elif user.permissions == "Admin" %}n admin.{% else %} standard user.{% endif %}</p>
     <div id="actions">
       &nbsp;
       <form action='/add_item'>
-          <button type="submit"><i class='fa fa-plus-circle fa-3x' aria-hidden='true'></i><br>Add an Item</button>
+          <button type="submit" class="action_button"><i class='fa fa-plus-circle fa-3x' aria-hidden='true'></i><br>Add an Item</button>
       </form>
       {% if user.permissions != "Standard user" %}
       <form action='/review_edits' method='get'>
-          <button type="submit"><i class='fa fa-pencil fa-3x' aria-hidden='true'></i><br>Review Edits</button>
+          <button type="submit" class="action_button"><i class='fa fa-pencil fa-3x' aria-hidden='true'></i><br>Review Edits</button>
       </form>
       <form action="review_deletions">
-        <button type="submit"><i class='fa fa-trash fa-3x' aria-hidden='true'></i><br>Review Deletions</button>
+        <button type="submit" class="action_button"><i class='fa fa-trash fa-3x' aria-hidden='true'></i><br>Review Deletions</button>
       </form>
       {% if user.permissions == "Admin" %}
       <form action="manage_users">
-        <button type="submit"><i class='fa fa-user fa-3x' aria-hidden='true'></i><br>Manage Users</button>
+        <button type="submit" class="action_button"><i class='fa fa-user fa-3x' aria-hidden='true'></i><br>Manage Users</button>
       </form>
       {% endif %}
     </div>
@@ -133,14 +131,14 @@ SOFTWARE. -->
                         {% for option in ["Pink", "Brown", "Black", "White", "Gray"] %}
                           <input type="checkbox" id="{{option}}" name="filter_by_color" value="{{option}}"> {{option}} &nbsp;&nbsp;
                         {% endfor %}
-                        <br><br>
-                        <input type="radio" id="colorGroupingInclusive" name="filter_by_color_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_color_grouping, colorGroupingInclusive);"> Has One of Listed<br>
-                        <input type="radio" id="colorGroupingExclusive" name="filter_by_color_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_color_grouping, colorGroupingExclusive);"> Has All of Listed<br>
+                        <br>
+                        <input type="radio" id="colorGroupingInclusive" name="filter_by_color_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_color_grouping, colorGroupingInclusive);"> Any of the Selected Colors<br>
+                        <input type="radio" id="colorGroupingExclusive" name="filter_by_color_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_color_grouping, colorGroupingExclusive);"> All of the Selected Colors<br>
                         <br>
                         <h4> Tags </h4>
                         <textarea id="tagBox" name="filter_by_tags" placeholder="separate tags with enter key"></textarea><br>
-                        <input type="radio" id="tagGroupingInclusive" name="filter_by_tag_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, tagGroupingInclusive);"> Has One of Listed<br>
-                        <input type="radio" id="tagGroupingExclusive" name="filter_by_tag_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, tagGroupingExclusive);"> Has All of Listed<br>
+                        <input type="radio" id="tagGroupingInclusive" name="filter_by_tag_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, tagGroupingInclusive);"> Any of the Tags Listed<br>
+                        <input type="radio" id="tagGroupingExclusive" name="filter_by_tag_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, tagGroupingExclusive);"> All of the Tags Listed<br>
                         <input type="submit" value="Search" class="submitButton">
                     </form>
                     <br>

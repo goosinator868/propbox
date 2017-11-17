@@ -20,14 +20,18 @@ SOFTWARE.*/
 
 div.form {
       font-size: 1.2em;
-      padding: 8px;
-      width: 100%;
+      padding: 2vw;
+      width: 95vw;
+      max-width: 98vw;
     }
 
     div.form form {
       margin: 0 auto;
-      padding: 16px;
-      width: 1000px;
+      padding: 10px;
+      padding-left:12vw;
+      padding-right: 12vw;
+      width: 95vw;
+      max-width: 98vw;
     }
 
     input, select, textarea {
