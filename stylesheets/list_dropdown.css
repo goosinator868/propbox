@@ -64,3 +64,8 @@
     left: 3px;
     color: #99a1a7;
 }
+
+h1 {
+    margin:5px auto; 
+    text-align: center;
+}

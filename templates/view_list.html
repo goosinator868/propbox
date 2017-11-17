@@ -31,7 +31,7 @@ SOFTWARE. -->
 
   <title>Prop Box</title>
   <link rel="shortcut icon" type="image/png" href="/image/propboxicon_color.png" />
-  <link rel="stylesheet" href="/stylesheets/index.css">
+  <!-- <link rel="stylesheet" href="/stylesheets/index.css"> -->
   <link rel="stylesheet" href="/stylesheets/list_dropdown.css">
 </head>
 
@@ -42,12 +42,13 @@ SOFTWARE. -->
       <span> {{list.name}} </span>
     </div>
   </div>
-  <h2> {{ list.name }} </h2>
+  <h1> {{ list.name }} </h1>
+  <p style="font-size: 0.9em; color: gray; text-align: center; margin: 5px auto;">{% if list.public %}Public{% else %}Private{% endif %} List</p>
   <form action="/print_qr_codes" method="get">
     {% for item in items %}
       <input type="hidden" name="keys" value="{{item.key.urlsafe()}}">
     {% endfor %}
-    <input type="submit" value="Print QR codes">
+    <input type="submit" value="Print QR codes" class="submitButton" style="margin-left: 5%;">
   </form>
   {% for item in items %}
     {% include 'templates/item_template.html' %}
