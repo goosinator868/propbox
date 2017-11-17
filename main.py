@@ -224,7 +224,6 @@ class EditItem(webapp2.RequestHandler):
              # TODO: Panic should never reach this, it should be caught by the other exceptions.
              logging.critical('transaction failed without reason being determined')
 
-
 # Marks an item for deletion. DOES NOT ACTUALLY DELETE.
 # TODO: Make transactional.
 class DeleteItem(webapp2.RequestHandler):
@@ -235,12 +234,10 @@ class DeleteItem(webapp2.RequestHandler):
         user = get_current_user(self.request)
         try:
             commitDelete(item_key, user)
-        except OutdatedEditException as e:
-            # TODO: Expose this message to the user.
-            logging.info('you are trying to delete an old version of this item, please reload the page and try again if you really wish to delete this item.')
+            removeFromAllLists(item_key)
         except TransactionFailedError as e:
              # TODO: Expose this message to the user.
-            logging.info('could not purge the item, please try again')
+            logging.info('could not delete the item, please try again')
         # Redirect back to items view.
         sleep(0.1)
         if user.permissions == "Standard user":
