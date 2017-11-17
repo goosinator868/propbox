@@ -18,27 +18,32 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
 
-#qrcode {
-	margin: 50px;
-}
-
 #scanner_window {
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	z-index: 100;
-	width: 100vw;
- 	height: 100vh;
-	background-color: #E9E9E9;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
+  background-color: #E9E9E9;
 }
 
 #scanner_tooltip {
-	position: absolute;
-	left: 0px;
- 	top: 0px;
-	z-index: 101;
-	width: 100vw;
-	height: 10vh;
-	background-color:rgb(174,100,211);
- 	font-size: 20pt;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 101;
+  width: 100vw;
+  height: 10vh;
+  background-color:rgb(174,100,211);
+  font-size: 20pt;
+}
+
+#body_div {
+  margin-top: 15px;
+  padding-left: 10vw;
+}
+
+.submitButton {
+
 }

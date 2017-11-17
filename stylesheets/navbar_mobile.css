@@ -47,3 +47,7 @@ SOFTWARE.*/
 #propbox_logo {
 	height: 7.5vh;
 }
+
+#navItems a {
+    font-size: 1.0em;
+}

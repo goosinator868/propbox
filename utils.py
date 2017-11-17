@@ -38,25 +38,15 @@ from google.appengine.ext import ndb
 # | First party imports |
 # +---------------------+
 
-from warehouse_models import Item
+from warehouse_models import Item, cloneItem
 
 
 # +-----------------+
 # | Item Exceptions |
 # +-----------------+
 
-class OutdatedEditException(Exception):
-    '''Raised when trying to submit an edit to an out of date item.'''
-    def __init__(self,*args,**kwargs):
-        Exception.__init__(self,*args,**kwargs)
-
 class ItemDeletedException(Exception):
     '''Raised when trying to submit an edit to a deleted item.'''
-    def __init__(self,*args,**kwargs):
-        Exception.__init__(self,*args,**kwargs)
-
-class AlreadyCommitedException(Exception):
-    '''Raised when trying to resolve an orphan that has already been resolved.'''
     def __init__(self,*args,**kwargs):
         Exception.__init__(self,*args,**kwargs)
 
@@ -102,7 +92,7 @@ def commitPurge(item_key):
         k.delete()
 
 @ndb.transactional(xg=True, retries=1)
-def commitEdit(old_key, new_item, was_orphan=False,suggestion=False):
+def commitEdit(old_key, new_item, suggestion=False):
     '''Stores the new item and ensures that the
        parent-child relationship is enforced between the
        old item and the new item.
@@ -115,23 +105,24 @@ def commitEdit(old_key, new_item, was_orphan=False,suggestion=False):
        Args:
             old_key: The key of the item that this is an edit to.
             new_item: The new version of the item to be commited.
-            was_orphan: If the item was already stored in the database as an orphan
-                        (likely due to a edit item race)
+
+       Returns:
+            The key of the item that was commited, this could not be the new_item 
+            since it may have been mutated to work with previous versions.
     '''
     old_item = old_key.get()
+    # Check if item was deleted
     if old_item is None:
         raise ItemPurgedException()
+    # Find newest version
     if old_item.outdated:
-        raise OutdatedEditException()
+        while old_item.outdated:
+            old_item = old_item.child.get()
+        # Update the parent
+        new_item = cloneItem(new_item, parentKey=old_item.key)
+    # check if deleted but not purged
     if old_item.deleted:
         raise ItemDeletedException()
-    if was_orphan:
-        if not new_item.key.get().orphan:
-            raise AlreadyCommitedException()
-        # Create a new copy with the correct parent
-        copy = cloneItem(new_item, parentKey=old_key)
-        new_item.key.delete()
-        new_item = copy
     old_item.outdated = not suggestion
     new_key = new_item.put()
     if suggestion:
@@ -139,6 +130,7 @@ def commitEdit(old_key, new_item, was_orphan=False,suggestion=False):
     else:
         old_item.child = new_key
     old_item.put()
+    return new_item.key
 
 
 # +-----------------------+
@@ -168,10 +160,27 @@ def validateHTML(html_string):
     return html_string
 
 # Finds the most recent version of an item.
-def findUpdatedItem(item):
-    while item.outdated:
-        item = item.child.get()
-    return item
+def findUpdatedItem(item_key):
+    updated = item_key.get()
+    updated_key = item_key
+    # Ensure item exists, if not find an ancestor that does.
+    while updated is None and updated_key.parent():
+        # Checks if item has been rolled back or deleted
+        updated_key = item_key.parent()
+        updated = updated_key.get()
+    
+    # If no ancestor exists the item has been deleted/purged
+    # TODO test this case where item is deleted/purged
+    if updated is None or updated_key is None:
+        return None
+    
+    # We have a valid item, now ensure it is the most recent copy
+    else:
+        while updated.outdated:
+            updated = updated.child.get()
+    if updated.deleted:
+        return None
+    return updated
 
 # Converts text list of tags to array of tags
 def parseTags(tags_string):
@@ -255,3 +264,25 @@ def filterItems(item_name, item_type, item_condition, item_colors,
         return query1
 
     return query
+
+
+# TODO: actually remove rolled back and deleted items
+def updateList(l):
+    to_add = []
+    to_remove = []
+    for item_key in l.items:
+        updated = findUpdatedItem(item_key)
+        logging.info('Updated key:%s Item key:%s', updated.key if updated else None, item_key)
+        if updated is None:
+            to_remove.append(item_key)
+        elif updated.key != item_key:
+            to_add.append(updated.key)
+            to_remove.append(item_key)
+    
+    # logging.info("Adding %s", [i.urlsafe() for i in to_add])
+    # logging.info("Removing %s", [i.urlsafe() for i in to_remove])
+    l.items = filter(lambda a: a not in to_remove, l.items)
+    l.items.extend(to_add)
+
+    if to_add or to_remove:
+        l.put()

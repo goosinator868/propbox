@@ -18,6 +18,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
 
+.item_actions {
+  min-width: 100%;
+  float: left;
+}
+
+.item_actions form {
+  padding: 0px;
+}
+
+.item_actions .submitButton {
+    width: 120px;
+    text-align: left;
+}
+
 body {
   background-color: #E9E9E9;
   font-family: 'Quicksand', sans-serif;
@@ -103,18 +117,30 @@ body {
 
 .item_container h2, h3, h4, p {
   margin: 6px auto;
-  width: 60%;
+  width: 95%;
 }
 
 .thumbnail {
   background-color: #eeeeee;
   border: 0;
-  position: absolute;
-  float: right;
-  height: 160px;
+  /*position: absolute;
+  float: right;*/
+  max-width: 98%;
   top: 0;
   right: 0;
   padding: 8px;
+}
+
+.thumbnail_container {
+  text-align: right;
+  max-width: 52%;
+  float: right
+}
+
+.item_details_container {
+  text-align: left;
+  float: left;
+  max-width: 48%;
 }
 
 .status-button {
@@ -177,4 +203,8 @@ h2:first-child {
 
 #error i {
   color: #DF0101;
+}
+
+.list_drop_down {
+  text-align: left; 
 }

@@ -1,0 +1,31 @@
+.listview a {
+    font-size: 20px;
+    color: black;
+}
+
+.listview p {
+    font-size: 0.8em
+    color:gray;
+    margin: 2px 2px 0px 0px;
+}
+
+.item_container [type=submit] {
+	float: right;
+	display: inline-block;
+}
+
+.item_container input:not([type=submit]) {
+	/*float: left;*/
+	display: inline-block;
+	margin-top: 7px;
+}
+
+.item_container {
+	margin-left: 15%;
+	width: 70%;
+}
+
+h2 {
+	margin:5px auto; 
+	text-align: center;
+}

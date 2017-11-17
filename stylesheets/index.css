@@ -60,6 +60,11 @@ form button:hover {
 }
 
 #actions {
-  margin: 30px auto;
+  margin: 30px 30px;
   text-align: center;
+}
+
+.action_button {
+  width: 200px;
+  max-width: 200px;
 }

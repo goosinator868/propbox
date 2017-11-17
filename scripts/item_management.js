@@ -1,6 +1,6 @@
 function checkIn(key) {
     url = "/check_in?";
-    url += "to_check_in=" + key;
+    url += "keys=" + key;
     $.ajax({
       type: "POST",
       dataType: "html",
@@ -26,7 +26,7 @@ function checkOut(key) {
       type: "POST",
       dataType: "html",
       url: url ,
-      data: {'to_check_out': key, 'reason': $("#item_" + key).find(".reason").val()},
+      data: {'keys': key, 'reason': $("#item_" + key).find(".reason").val()},
       success: function(data) {
         $("#item_" + key).find(".check_out_button").hide();
         $("#item_" + key).find(".check_in_button").show();
@@ -35,6 +35,44 @@ function checkOut(key) {
     });
 }
 
-function showListSignUp(key) {
+function toggleListSignUp(key) {
+  if ($("#item_" + key).find(".list_drop_down").is(":visible")) {
+    hideListSignUp(key);
+  } else {
+    showListSignUp(key);
+  }
+}
 
+function showListSignUp(key) {
+  $("#item_" + key).find(".list_drop_down").show();
+}
+
+function hideListSignUp(key) {
+  $("#item_" + key).find(".list_drop_down").hide();
+}
+
+function addToList(list_key, item_key) {
+    url = "/add_to_list";
+    $.ajax({
+      type: "POST",
+      dataType: "html",
+      url: url ,
+      data: {'list': list_key, 'item': item_key}});
+}
+
+function removeFromList(list_key, item_key) {
+    url = "/remove_from_list";
+    $.ajax({
+      type: "POST",
+      dataType: "html",
+      url: url ,
+      data: {'list': list_key, 'item': item_key}});
+}
+
+function toggleListMembership(checkbox, list_key, item_key) {
+  if (checkbox.checked) {
+    addToList(list_key, item_key);
+  } else {
+    removeFromList(list_key, item_key);
+  }
 }

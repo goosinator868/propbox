@@ -45,3 +45,12 @@ body {
   text-align: center;
   font-size: 2.4em;
 }
+
+.thumbnail_container {
+  text-align: center;
+  max-width: 100%;
+}
+
+.thumbnail {
+  max-width: 95%;
+}
