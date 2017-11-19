@@ -716,8 +716,11 @@ class CheckIn(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
         to_check_in = self.request.get_all('keys')
-        for urlsafe_key in to_check_in:
+        while to_check_in:
+            urlsafe_key = to_check_in.pop()
             item = ndb.Key(urlsafe=urlsafe_key).get()
+            if item.key.parent() != None:
+                to_check_in.append(item.key.parent().urlsafe())
             item.checked_out = False
             item.checked_out_reason = ""
             item.checked_out_by = ""
@@ -736,16 +739,19 @@ class CheckOut(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
         user = auth.get_user_id(self.request)
-        to_check_in = self.request.get_all('keys')
+        to_check_out = self.request.get_all('keys')
         reason = self.request.get('reason')
-        for urlsafe_key in to_check_in:
+        while to_check_out:
+            urlsafe_key = to_check_out.pop()
             item = ndb.Key(urlsafe=urlsafe_key).get()
+            if item.key.parent() != None:
+                to_check_out.append(item.key.parent().urlsafe())
             item.checked_out = True
             item.checked_out_by = user
             item.checked_out_by_name = get_current_user(self.request).name
             item.checked_out_reason = reason
             item.put()
-            self.redirect("/")
+        self.redirect("/")
 
 # +-------------------+
 # | Environment Setup |
