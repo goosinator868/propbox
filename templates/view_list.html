@@ -42,8 +42,12 @@ SOFTWARE. -->
       <span> {{list.name}} </span>
     </div>
   </div>
-  <h1> {{ list.name }} </h1>
-  <p style="font-size: 0.9em; color: gray; text-align: center; margin: 5px auto;">{% if list.public %}Public{% else %}Private{% endif %} List</p>
+  <div id="page-heading">
+    <h1> {{list.name}}</h1>
+    <p style="font-size: 0.9em; color: gray; text-align: center; margin: -25px auto; padding-bottom: 15px">{% if list.public %}Public{% else %}Private{% endif %} List</p>
+  </div>
+  <br>
+  <br>
   <form action="/print_qr_codes" method="get">
     {% for item in items %}
       <input type="hidden" name="keys" value="{{item.key.urlsafe()}}">

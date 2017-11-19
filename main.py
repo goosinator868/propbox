@@ -720,6 +720,8 @@ class CheckIn(webapp2.RequestHandler):
             item = ndb.Key(urlsafe=urlsafe_key).get()
             item.checked_out = False
             item.checked_out_reason = ""
+            item.checked_out_by = ""
+            item.checked_out_by_name = ""
             item.put()
             self.redirect("/")
 
@@ -740,6 +742,7 @@ class CheckOut(webapp2.RequestHandler):
             item = ndb.Key(urlsafe=urlsafe_key).get()
             item.checked_out = True
             item.checked_out_by = user
+            item.checked_out_by_name = get_current_user(self.request).name
             item.checked_out_reason = reason
             item.put()
             self.redirect("/")

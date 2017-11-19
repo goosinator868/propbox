@@ -41,7 +41,10 @@ SOFTWARE. -->
     </div>
   </div>
 
-  <h2>Your Lists</h2>
+  <div id="page-heading">
+    <h1>My Lists</h1>
+  </div>
+  <br>
   <!-- All the lists -->
   {% for l in lists %}
   <div class="listview item_container">
@@ -58,7 +61,7 @@ SOFTWARE. -->
     <form action="/new_list" method="post">
       <input type="text" name="name" placeholder="New List Name">
       <input type="checkbox" name="public" value="public"> Make Public
-      <button class="submitButton" type="submit" style="margin-left: 0px">><i class="fa fa-plus-circle fa-1x"></i> Create New List</button>
+      <button class="submitButton" type="submit" style="margin-left: 0px"><i class="fa fa-plus-circle fa-1x"></i> Create New List</button>
       <br>
     </form>
   </div>

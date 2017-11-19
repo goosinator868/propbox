@@ -50,3 +50,8 @@ div.item_details h3, h4, h5, p {
   text-align: left;
   width: 100%;
 }
+
+.item_image {
+  min-width: 40vw;
+  max-width: 50%;
+}

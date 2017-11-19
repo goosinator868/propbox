@@ -55,6 +55,7 @@ class Item(ndb.Model):
     checked_out = ndb.BooleanProperty(default=False)
     checked_out_reason = ndb.StringProperty(default="")
     checked_out_by = ndb.StringProperty(default="")
+    checked_out_by_name = ndb.StringProperty(default="")
     #Newer Versions are children. Use Item.key.parent() to get older version.
     child = ndb.KeyProperty(required=False)
     #deleted is True if an item was deleted by a user but has not yet been purged from the system.
@@ -85,7 +86,8 @@ def cloneItem(oldItem, parentKey=None):
         tags=oldItem.tags,
         checked_out = oldItem.checked_out,
         checked_out_reason = oldItem.checked_out_reason,
-        checked_out_by = oldItem.checked_out_by)
+        checked_out_by = oldItem.checked_out_by,
+        checked_out_by_name = oldItem.checked_out_by_name)
 
 
 # +----------------------------+

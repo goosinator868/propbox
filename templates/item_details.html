@@ -77,6 +77,8 @@ SOFTWARE. -->
         <p id="size"><b>Size:</b> {{item.clothing_size_string}}, {{item.clothing_size_num}}</p>
         {% endif %}
         <p id="tags"><b>Tags:</b> {% for tag in item.tags %} {{tag}},{% endfor %}</p>
+        <br>
+        <p id="checkout_status"><b>Status:</b> {% if item.checked_out %}Checked out by {{item.checked_out_by_name}}.{% else %}Available for Checkout.{% endif %}</p>
 
         {% if pending_edit %}<p id="pending_edit">{% if user.permissions != "Standard user" %} <a href="/review_edits">{% endif %}<strong>[EDITS ARE PENDING APPROVAL]</strong>{% if user.permissions != "Standard user" %}</a>{% endif %}</p>{% endif %}
         {% if item.marked_for_deletion %}<p id="marked_for_deletion">{% if user.permissions != "Standard user" %} <a href="/review_deletions">{% endif %}<strong>[THIS ITEM HAS BEEN MARKED FOR DELETION]</strong>{% if user.permissions != "Standard user" %}</a>{% endif %}</p>{% endif %}

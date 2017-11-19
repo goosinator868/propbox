@@ -29,13 +29,15 @@ body {
 #left-pane {
     padding: 5px;
     width: 100%;
-    float: left;
+    float: none;
+    display: block;
 }
 
 #right-pane {
     padding: 5px;
     width: 100%;
-    float: right;
+    float: none;
+    display: block;
 }
 
 #page-heading h1 {
@@ -53,4 +55,12 @@ body {
 
 .thumbnail {
   max-width: 95%;
+}
+
+.mobile {
+  display: block;
+}
+
+.modal-content {
+  max-width: 85vw;
 }
