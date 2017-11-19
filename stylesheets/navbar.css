@@ -172,3 +172,9 @@ SOFTWARE.*/
 #footer #copyright {
   font-size: 1.2em;
 }
+
+@media only print {
+  #userBar, #navbar, #breadcrumb_bar, #footer {
+    display: none;
+  }
+}
