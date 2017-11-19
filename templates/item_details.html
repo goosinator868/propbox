@@ -95,11 +95,13 @@ SOFTWARE. -->
           <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
           <button type="submit" class="submitButton"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
         </form>
+        {% if user.permissions != "Standard user" %}
         <form action="/add_item" method="get">
           <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
           <button type="submit" class="submitButton"><i class="fa fa-copy fa-1x" aria-hidden="true"></i> Duplicate</button>
+        {% endif %}
         </form>
-        {% if lists %}
+        {% if lists and user.permissions != "Standard user" %}
           <div class="dropdown">
               <button onclick="toggleListSignUp('{{item.key.urlsafe()}}')" class="submitButton"><i class='fa fa-list fa-1x' aria-hidden='true'></i> Lists</button>
               <div class="list_drop_down" style='display: none'>

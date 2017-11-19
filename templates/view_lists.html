@@ -42,7 +42,7 @@ SOFTWARE. -->
   </div>
 
   <div id="page-heading">
-    <h1>My Lists</h1>
+    <h1>{% if user.permissions == "Standard user" %}Public{% else %}My{% endif %} Lists</h1>
   </div>
   <br>
   <!-- All the lists -->
@@ -51,12 +51,14 @@ SOFTWARE. -->
     <form action='/delete_list' method="post">
       <a href="/view_list?list={{l.key.urlsafe()}}">{{ l.name }} ({{l.items | length}} items)</a> 
       <input type="hidden" name="list" value="{{l.key.urlsafe()}}">
-      <button class="submitButton" type="submit"><i class="fa fa-trash fa-1x" aria-hidden="true"></i> Delete</button>
+      {% if user.permissions != "Standard user" %}
+      <button class="submitButton" type="submit"><i class="fa fa-trash fa-1x" aria-hidden="true"></i> Delete</button>{% endif %}
     </form>
     <p style="font-size: 0.8em">{% if l.public %}Public{% else %}Private{% endif %} List</p>
   </div>
   {% endfor %}
   <!-- New list form -->
+  {% if user.permissions != "Standard user" %}
   <div class="item_container">
     <form action="/new_list" method="post">
       <input type="text" name="name" placeholder="New List Name">
@@ -65,6 +67,7 @@ SOFTWARE. -->
       <br>
     </form>
   </div>
+  {% endif %}
   
   <footer id="footer_holder"></footer>
 </body>

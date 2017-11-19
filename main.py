@@ -650,7 +650,7 @@ class ViewLists(webapp2.RequestHandler):
             List.public == True,
             )).fetch()
         template = JINJA_ENVIRONMENT.get_template('templates/view_lists.html')
-        page = template.render({'lists': lists})
+        page = template.render({'lists': lists, 'user': user})
         page = page.encode('utf-8')
         self.response.write(validateHTML(page))
 

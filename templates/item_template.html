@@ -48,7 +48,7 @@
             <button class="submitButton" onclick="checkOut('{{item.key.urlsafe()}}')"><i class="fa fa-sign-out" aria-hidden="true"></i> Check Out</button>
         </div>
         <!-- Lists add/remove button -->
-        {% if lists %}
+        {% if lists and user.permissions != "Standard user" %}
             <div class="dropdown">
                 <button onclick="toggleListSignUp('{{item.key.urlsafe()}}')" class="submitButton"><i class='fa fa-list fa-1x' aria-hidden='true'></i> Lists</button>
                 <div class="list_drop_down" style='display: none'>
