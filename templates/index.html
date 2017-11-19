@@ -48,12 +48,14 @@ SOFTWARE. -->
     <p id="welcome-msg">
     {{user.name}},
     you are currently logged in as a{% if user.permissions == "Trusted user" %} trusted user.{% elif user.permissions == "Admin" %}n admin.{% else %} standard user.{% endif %}</p>
+    {% if user.permissions != "Standard user" %}
     <div id="actions">
-      &nbsp;
+      <br/>
+      
       <form action='/add_item'>
           <button type="submit" class="action_button"><i class='fa fa-plus-circle fa-3x' aria-hidden='true'></i><br>Add an Item</button>
       </form>
-      {% if user.permissions != "Standard user" %}
+      
       <form action='/review_edits' method='get'>
           <button type="submit" class="action_button"><i class='fa fa-pencil fa-3x' aria-hidden='true'></i><br>Review Edits</button>
       </form>

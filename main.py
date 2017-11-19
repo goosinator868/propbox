@@ -71,6 +71,11 @@ class ItemEncoder(json.JSONEncoder):
 class AddItem(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
+        user = get_current_user(self.request)
+        logging.info(user.permissions != wmodels.ADMIN)
+        if user.permissions != wmodels.TRUSTED_USER and user.permissions != wmodels.ADMIN:
+            self.redirect('/')
+            return
         template = JINJA_ENVIRONMENT.get_template('templates/add_item.html')
         try:
             page = ""
@@ -92,6 +97,10 @@ class AddItem(webapp2.RequestHandler):
 
     @auth.login_required
     def post(self):
+        user = get_current_user(self.request)
+        if user.permissions != wmodels.TRUSTED_USER and user.permissions != wmodels.ADMIN:
+            self.redirect('/')
+            return
         img = self.request.get('image', default_value='')
         if img == '':
             img = None
