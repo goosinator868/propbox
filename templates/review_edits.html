@@ -45,18 +45,33 @@ SOFTWARE. -->
   <div id="confirm_{{i|string}}_{{item[0].key.urlsafe()}}" class="modal">
     <div class="modal-content">
     <span class="close" onclick="iCloseConfirm('{{item[0].key.urlsafe()}}',{{i}})">&times;</span>
-      <h5 class="modal-title" style="font-size: 1.3em;">Do you really want to revert <strong>{{item[0].name}}</strong> to the earlier version of <strong>{{item[1][i].name}}</strong>?</h5>
+      <h5 class="modal-title" style="font-size: 1.3em;">Do you really want to revert <b>{{item[0].name}}</b> to the earlier version of <b>{{item[1][i].name}}</b>?</h5>
       <p>This cannot be undone.</p>
 
-      <div class="sub_item_container" style="display: inline-block;">
-        <strong>Current Version</strong>
+      <div class="sub_item_container">
+        <b>Current Version</b>
         <h2>{{item[0].name}}</h2>
+        {% if item[0].image %}
+          <img src="view_image?image_id={{item[0].key.urlsafe()}}" alt="{{item[0].name}}" style="max-width: 50%; text-align: center;" />
+        {% endif %}
         <p>{{item[0].description}}</p>
+        <p><b>Condition</b>: {{item[0].condition}}</p>
+        <p><b>Article</b>: {{item[0].clothing_article_type}}</p>
+        <p><b>Tags</b>:{% for tag in item[0].tags %} {{tag}},{% endfor %}</p>
+        <p><b>Colors</b>: {% for color in item[0].item_color %} {{color}},{% endfor %}</p>
       </div>
-      <div class="sub_item_container" style="display: inline-block;">
-        <strong>Previous Versions</strong>
+      <hr style="border-width: 1px; border-color: darkgray; max-width: 75%;">
+      <div class="sub_item_container">
+        <b>Previous Versions</b>
         <h2>{{item[1][i].name}}</h2>
+        {% if item[1][i].image %}
+          <img src="view_image?image_id={{item[1][i].key.urlsafe()}}" alt="{{item[1][i].name}}" style="max-width: 50%; text-align: center;" //>
+        {% endif %}
         <p>{{item[1][i].description}}</p>
+        <p><b>Condition</b>: {{item[1][i].condition}}</p>
+        <p><b>Article</b>: {{item[1][i].clothing_article_type}}</p>
+        <p><b>Tags</b>:{% for tag in item[1][i].tags %} {{tag}},{% endfor %}</p>
+        <p><b>Colors</b>: {% for color in item[1][i].item_color %} {{color}},{% endfor %}</p>
       </div>
 
       <br/>
@@ -78,20 +93,33 @@ SOFTWARE. -->
   <div id="confirm_{{i|string}}_{{item[0].key.urlsafe()}}" class="modal">
     <div class="modal-content">
     <span class="close" onclick="iCloseConfirm('{{item[0].key.urlsafe()}}',{{i}})">&times;</span>
-      <h5 class="modal-title" style="font-size: 1.3em;">Do you want to select version {{i+1}} of <strong>{{item[0].name}}</strong> to approve?</h5>
-      <p>This will discard other versions.</p>
+      <h5 class="modal-title" style="font-size: 1.3em;">Do you want to select version {{i+1}} of <b>{{item[0].name}}</b> to approve?</h5>
+      <p>This will discard other suggested versions.</p>
 
-      <div class="sub_item_container" style="display: inline-block;">
-        <strong>Current Version</strong>
+      <div class="sub_item_container">
+        <b>Current Version:</b>
         <h2>{{item[0].name}}</h2>
-        <h4>created by : {{item[0].creator_name}} at {{item[0].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+        {% if item[0].image %}
+          <img src="view_image?image_id={{item[0].key.urlsafe()}}" alt="{{item[0].name}}" style="max-width: 50%; text-align: center;" />
+        {% endif %}
         <p>{{item[0].description}}</p>
+        <p><b>Condition</b>: {{item[0].condition}}</p>
+        <p><b>Article</b>: {{item[0].clothing_article_type}}</p>
+        <p><b>Tags</b>:{% for tag in item[0].tags %} {{tag}},{% endfor %}</p>
+        <p><b>Colors</b>: {% for color in item[0].item_color %} {{color}},{% endfor %}</p>
         </div>
-      <div class="sub_item_container" style="display: inline-block;">
-        <strong>New Version</strong>
+      <hr style="border-width: 1px; border-color: darkgray; max-width: 75%;">
+      <div class="sub_item_container">
+        <b>New Version:</b>
         <h2>{{item[1][i].name}}</h2>
-        <h4>created by : {{item[1][i].creator_name}} at {{item[1][i].updated.strftime('%I:%M:%S%p %b %d %Y')}}</h4>
+        {% if item[1][i].image %}
+          <img src="view_image?image_id={{item[1][i].key.urlsafe()}}" alt="{{item[1][i].name}}" style="max-width: 50%; text-align: center;" //>
+        {% endif %}
         <p>{{item[1][i].description}}</p>
+        <p><b>Condition</b>: {{item[1][i].condition}}</p>
+        <p><b>Article</b>: {{item[1][i].clothing_article_type}}</p>
+        <p><b>Tags</b>:{% for tag in item[1][i].tags %} {{tag}},{% endfor %}</p>
+        <p><b>Colors</b>: {% for color in item[1][i].item_color %} {{color}},{% endfor %}</p>
       </div>
 
       <br/>
@@ -126,7 +154,7 @@ SOFTWARE. -->
       <div>
         {% for item in revert %}
           <div class="item_container">
-            <strong>Current Version</strong>
+            <b>Current Version</b>
             <h2>{{item[0].name}}</h2>
             <p>{{item[0].description}}</p>
             <p><b>Condition</b>: {{item[0].condition}}</p>
@@ -140,7 +168,7 @@ SOFTWARE. -->
             <!-- item[0] = newest, item[1] = history (list), item[2] = count (list of numbers) -->
             {% for i in item[2] %}
               <div class="sub_item_container" style="display: {% if i != 0 %} none{% else %} block{% endif %};" id="{{item[0].key.urlsafe()+'_'+i|string}}">
-                <strong>Previous Versions</strong>
+                <b>Previous Versions</b>
                 <h2>{{item[1][i].name}}</h2>
                 <p>{{item[1][i].description}}</p>
                 <p><b>Condition</b>: {{item[1][i].condition}}</p>
@@ -166,7 +194,9 @@ SOFTWARE. -->
         {% endfor %}
       </div>
     </div>
-
+    <div class="mobile">
+      <hr class="mobile">
+    </div>
     <!-- Approve changes list -->
     <div id="left-pane" class="pane">
       <h2>Items Awaiting Edit Approval</h2>
@@ -175,13 +205,13 @@ SOFTWARE. -->
       <div>
         {% for item in suggest %}
           <div class="item_container">
-            <strong>Current Version</strong>
+            <b>Current Version</b>
             <h2>{{item[0].name}}</h2>
             <p>{{item[0].description}}</p>
             <p><b>Condition</b>: {{item[0].condition}}</p>
-                <p><b>Article</b>: {{item[0].clothing_article_type}}</p>
-                <p><b>Tags</b>:{% for tag in item[0].tags %} {{tag}},{% endfor %}</p>
-                <p><b>Colors</b>: {% for color in item[0].item_color %} {{color}},{% endfor %}</p>
+            <p><b>Article</b>: {{item[0].clothing_article_type}}</p>
+            <p><b>Tags</b>:{% for tag in item[0].tags %} {{tag}},{% endfor %}</p>
+            <p><b>Colors</b>: {% for color in item[0].item_color %} {{color}},{% endfor %}</p>
             {% if item[0].image %}
               <img src="view_image?image_id={{item[0].key.urlsafe()}}" class="thumbnail" alt="{{item[0].name}}"/>
             {% endif %}
@@ -189,7 +219,7 @@ SOFTWARE. -->
             <!-- item[0] = newest, item[1] = history (list), item[2] = count (list of numbers) -->
             {% for i in item[2] %}
               <div class="sub_item_container" style="display: {% if i != 0 %} none{% else %} block{% endif %};" id="{{item[0].key.urlsafe()+'_'+i|string}}">
-                <strong>Proposed edits</strong>
+                <b>Proposed edits</b>
                 <h2>{{item[1][i].name}}</h2>
                 <p> Edit suggested by: {{item[1][i].suggested_by}}.</p>
                 <p>{{item[1][i].description}}</p>

@@ -56,7 +56,7 @@ body {
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 600px;
+  max-width: 50%;
 }
 
 .close {
@@ -207,4 +207,8 @@ h2:first-child {
 
 .list_drop_down {
   text-align: left; 
+}
+
+.mobile {
+  display: none;
 }

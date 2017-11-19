@@ -21,3 +21,16 @@ SOFTWARE.*/
 h2 {
   margin-left: 1em;
 }
+
+@media only screen and (max-device-width:480px) {
+	hr {
+		margin-top: 25px;
+		margin-bottom: 20px;
+		border-style: solid;
+		border-width: 1px;
+		border-color: darkgray;
+		background-color: darkgray;
+		max-width: 85vw;
+	}
+}
+
