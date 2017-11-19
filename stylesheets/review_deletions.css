@@ -34,3 +34,10 @@ SOFTWARE.*/
 button, form {
   display: inline;
 }
+
+@media only screen and (max-device-width:480px) {
+	.thumbnail {
+		max-width:80vw;
+		width: 80vw;
+	}
+}
