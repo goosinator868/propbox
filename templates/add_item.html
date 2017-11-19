@@ -52,7 +52,7 @@ SOFTWARE. -->
           <input name="name" type="text" placeholder="Enter the name of the item." value="{% if item is not none %}{{item.name}}{% endif %}">
           <br><br>
           <label>Image</label>
-          <input name="image" type="file" accept=".png, .gif, .jpg, .jpeg"><br>
+          <input name="image" type="file" accept=".png, .jpg, .jpeg"><br>
           <label>Describe the item.</label>
           <br>
           <textarea name="description" placeholder="Enter a description for the item.">{% if item is not none %}{{item.description}}{% endif %}</textarea><br><br>

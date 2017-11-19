@@ -78,10 +78,12 @@ SOFTWARE. -->
     <div id="right-pane">
       <div class="form">
         <h1> Edit Item </h1>
-          <form action="/edit_item" method="post" style="width: 100%;"> 
-          <input type="hidden" name="old_item_key" value="{{item.key.urlsafe()}}">
+          <form action="/edit_item" method="post" style="width: 100%;" enctype="multipart/form-data"> 
+              <input type="hidden" name="old_item_key" value="{{item.key.urlsafe()}}">
               <label>Name</label><br>
               <input name="name" type="text" value="{{item.name}}"><br><br>
+              <label>Image</label>
+              <input name="image" type="file" accept=".png, .jpg, .jpeg"><br>
               <label>Describe the item.</label><br>
               <textarea name="description">{{item.description}}</textarea><br><br>
               <label>Is this item a costume or prop?</label><br>

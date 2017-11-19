@@ -161,6 +161,10 @@ class AddItem(webapp2.RequestHandler):
 class EditItem(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
+        user = get_current_user(self.request)
+        if user.permissions != wmodels.TRUSTED_USER and user.permissions != wmodels.ADMIN:
+            self.redirect('/')
+            return
         item_id = ndb.Key(urlsafe=self.request.get('item_id'))
         item = item_id.get()
         item = findUpdatedItem(item_id)
@@ -172,12 +176,19 @@ class EditItem(webapp2.RequestHandler):
 
     @auth.login_required
     def post(self):
-        # permissions logic
+        user = get_current_user(self.request)
+        if user.permissions != wmodels.TRUSTED_USER and user.permissions != wmodels.ADMIN:
+            self.redirect('/')
+            return
         user = get_current_user(self.request)
         standard_user = user.permissions == "Standard user"
         old_item_key = ndb.Key(urlsafe=self.request.get('old_item_key'))
         old_item = old_item_key.get()
         new_item = cloneItem(old_item, old_item_key)
+        img = self.request.get('image', default_value='')
+        if img != '':
+            new_item.image = img
+
         new_item.creator_id = user.key.string_id()
         new_item.creator_name = user.name
         new_item.approved = (not standard_user)
