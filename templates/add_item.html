@@ -38,11 +38,11 @@ SOFTWARE. -->
 <body>
   <div id="navbar_holder">
     <div id="page_specific_breadcrumbs">
-      <span>Add Item</span>
+      <span>{% if item is none %}Add{% else %}Duplicate{% endif %} Item</span>
     </div>
   </div>
   <div id="page-heading">
-    <h1>Add an Item</h1>
+    <h1>{% if item is none %}Add{% else %}Duplicate{% endif %} an Item</h1>
   </div>
 
   <div class="form">
@@ -51,31 +51,39 @@ SOFTWARE. -->
           <br>
           <input name="name" type="text" placeholder="Enter the name of the item." value="{% if item is not none %}{{item.name}}{% endif %}">
           <br><br>
+          {% if item is none %}
           <label>Image</label>
+          <input type="hidden" name="duplicate" value="False"/>
+          {% else %}
+          <label>Alternate Image*</label>
+          <p style="font-size: 0.75em;">*If no alternate image is selected, the original image will be used instead.</p>
+          <input type="hidden" name="duplicate" value="True"/>
+          <input type="hidden" name="original_item" value="{{item.key.urlsafe()}}">
+          {% endif %}
           <input name="image" type="file" accept=".png, .jpg, .jpeg"><br>
-          <label>Describe the item.</label>
+          <label>Description</label>
           <br>
           <textarea name="description" placeholder="Enter a description for the item.">{% if item is not none %}{{item.description}}{% endif %}</textarea><br><br>
-          <label>Is this a costume or a prop?</label>
+          <label>Costume or Prop?</label>
           <br>
           <select name="item_type" class="addItemDropdown">
                 <option>Costume</option>
                 <option {% if item is not none and item.item_type == 'Prop' %}selected="selected"{% endif %}>Prop</option>
           </select><br><br>
-          <label>What condition is it in?</label>
+          <label>Condition</label>
           <br>
           <select name="condition" class="addItemDropdown">
               {% for option in ["Good", "Fair", "Poor", "Being repaired"] %}
                   <option {% if item is not none and item.condition == option %}selected="selected"{% endif %}> {{option}} </option>
               {% endfor %}
           </select><br><br>
-          <label>If it's a costume, what article of clothing is it?</label>
+          <label>Clothing Article Type (If Applicable)</label>
           <select name="article" class="addItemDropdown">
               {% for option in ["N/A", "Top", "Bottom", "Dress", "Shoes", "Hat", "Coat/Jacket", "Other"] %}
                   <option {% if item is not none and item.clothing_article_type == option %}selected="selected"{% endif %}> {{option}} </option>
               {% endfor %}
           </select><br><br>
-          <label>If it's a costume, what size is it?</label><br>
+          <label>Clothing Article Size (If Applicable)</label><br>
           <select name="clothing_size_number" class="addItemDropdown" style="display: inline-block; width: 100px;">
               <option>N/A</option>
               {% for option in range(26) %}
@@ -87,7 +95,8 @@ SOFTWARE. -->
                   <option {% if item is not none and item.clothing_size_string == option %}selected="selected"{% endif %}> {{option}} </option>
               {% endfor %}
           </select><br><br>
-          <label>What color is the item?</label><br>
+          <label>Item Colors</label>
+          <p style="font-size: 0.75em;">Check all that apply.</p>
               {% for option in ["Red", "Orange", "Yellow", "Green"] %}
                 <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if item is not none and option in item.item_color %}checked="checked"{% endif %}> {{option}} &nbsp;&nbsp;
               {% endfor %}
@@ -100,26 +109,33 @@ SOFTWARE. -->
                 <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if item is not none and option in item.item_color %}checked="checked"{% endif %}> {{option}} &nbsp;&nbsp;
               {% endfor %}
           <br><br>
-          <label>Place any tags here.</label>
+          <label>Extra Tags for the Item</label>
           <br>
-          <textarea name="tags" placeholder="Separate tags with the enter key.">{% if item is not none %}{% for tag in item.tags %}{{tag}}&#10;{% endfor %}{% endif %}</textarea>
+          <textarea name="tags" placeholder="Use the enter key to place each tag on a new line.">{% if item is not none %}{% for tag in item.tags %}{{tag}}&#10;{% endfor %}{% endif %}</textarea>
           <br><br>
-          <label>How many of this item would you like to add?</label>
-          <br>
+          <label>Copies</label>
+          <p style="font-size: 0.75em;">You can create extra, identical copies.</p>
           <select name="times_to_duplicate" class="addItemDropdown" style="display: inline-block; width: 100px;">
               {% for option in range(1, 50) %}
                   <option> {{option}} </option>
               {% endfor %}
           </select>
           <br><br>
-          <label>When you create this item, what do you want to do next?</label>
+
+          <div {% if item is not none %}style="display: none;"{% endif %}>
+            <label>After you create this item, what do you want to do next?</label>
+            <br>
+            <select name="next_page" class="addItemDropdown" style="display: inline-block; width: 200px;">
+                <option> Go to Home Page </option>
+                <option> Make Another Item </option>
+            </select>
+          </div>
           <br>
-          <select name="next_page" class="addItemDropdown" style="display: inline-block; width: 200px;">
-              <option> Go to Home Page </option>
-              <option> Make Another Item </option>
-          </select>
-          <br><br>
-          <button type="submit" class="submitButton" style="max-width: 100px;"><i class="fa fa-plus-circle" aria-hidden="true"></i> Create</button>
+          {% if item is none %}
+          <button type="submit" class="submitButton" style="max-width: 150px;"><i class="fa fa-plus-circle" aria-hidden="true"></i> Create</button>
+          {% else %}
+          <button type="submit" class="submitButton" style="max-width: 150px;"><i class="fa fa-copy" aria-hidden="true"></i> Duplicate</button>
+          {% endif %}
       </form>
   </div>
 

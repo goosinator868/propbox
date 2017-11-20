@@ -101,10 +101,12 @@ class AddItem(webapp2.RequestHandler):
         if user.permissions != wmodels.TRUSTED_USER and user.permissions != wmodels.ADMIN:
             self.redirect('/')
             return
-        img = self.request.get('image', default_value='')
-        if img == '':
-            img = None
         try:
+            img = self.request.get('image', default_value='')
+            if img == '':
+                img = None
+            if img == None and self.request.get('duplicate') == "True":
+                img = ndb.Key(urlsafe=self.request.get('original_item')).get().image
             article_type = self.request.get('article')
             costume_or_prop = self.request.get('item_type')
             costume_size_number = self.request.get('clothing_size_number')
