@@ -51,11 +51,11 @@ SOFTWARE. -->
     {% if user.permissions != "Standard user" %}
     <div id="actions">
       <br/>
-      
+
       <form action='/add_item'>
           <button type="submit" class="action_button"><i class='fa fa-plus-circle fa-3x' aria-hidden='true'></i><br>Add an Item</button>
       </form>
-      
+
       <form action='/review_edits' method='get'>
           <button type="submit" class="action_button"><i class='fa fa-pencil fa-3x' aria-hidden='true'></i><br>Review Edits</button>
       </form>
@@ -77,6 +77,7 @@ SOFTWARE. -->
                 <!-- Search form -->
                 <div class="form">
                     <h1> Filter Items </h1>
+                    <br>
                     <form action="/search_and_browse" method="get" onsubmit="setCheckboxValues(this);">
                         <div id="result"></div>
                         <input id="nameBox" name="filter_by_name" type="text" placeholder="Name"><br><br>
@@ -141,6 +142,13 @@ SOFTWARE. -->
                         <textarea id="tagBox" name="filter_by_tags" placeholder="separate tags with enter key"></textarea><br>
                         <input type="radio" id="tagGroupingInclusive" name="filter_by_tag_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, tagGroupingInclusive);"> Any of the Tags Listed<br>
                         <input type="radio" id="tagGroupingExclusive" name="filter_by_tag_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, tagGroupingExclusive);"> All of the Tags Listed<br>
+                        <br>
+                        <h4> Availability</h4>
+                        <input type="radio" id="availabilityAll" name="filter_by_availability" value="All"checked="checked"> All<br>
+                        <input type="radio" id="availabilityCheckedIn" name="filter_by_availability" value="checkedIn"> All Available for Check Out<br>
+                        <input type="radio" id="availabilityCheckedOut" name="filter_by_availability" value="checkedOut"> All Checked Out<br>
+                        <input type="radio" id="availabilityCheckedOut" name="filter_by_availability" value="checkedOutYou"> All Checked Out by You<br>
+                        <br>
                         <button type="submit"class="submitButton"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
                     </form>
                     <br>
@@ -162,14 +170,42 @@ SOFTWARE. -->
                           {% if item.item_type==item_type_filter %}
                               {% for item_condition in item_condition_filter%}
                                   {% if item_condition==item.condition%}
-                                    {% include 'templates/item_template.html' %}
+                                      {% if availability_filter=="checkedOut" %}
+                                          {% if item.checked_out==True %}
+                                              {% include 'templates/item_template.html' %}
+                                          {% endif %}
+                                      {% elif availability_filter=="checkedIn" %}
+                                          {% if item.checked_out==False %}
+                                              {% include 'templates/item_template.html' %}
+                                          {% endif %}
+                                      {% elif availability_filter=="checkedOutYou" %}
+                                          {% if item.checked_out==True and item.checked_out_by==user_id%}
+                                              {% include 'templates/item_template.html' %}
+                                          {% endif %}
+                                      {% else %}
+                                          {% include 'templates/item_template.html' %}
+                                      {% endif %}
                                   {% endif %}
                               {% endfor %}
                           {% endif %}
                       {% else %}
                           {% for item_condition in item_condition_filter%}
                               {% if item_condition==item.condition%}
-                                {% include 'templates/item_template.html' %}
+                                  {% if availability_filter=="checkedOut" %}
+                                      {% if item.checked_out==True %}
+                                          {% include 'templates/item_template.html' %}
+                                      {% endif %}
+                                  {% elif availability_filter=="checkedIn" %}
+                                      {% if item.checked_out==False %}
+                                          {% include 'templates/item_template.html' %}
+                                      {% endif %}
+                                  {% elif availability_filter=="checkedOutYou" %}
+                                      {% if item.checked_out==True and item.checked_out_by==user_id%}
+                                          {% include 'templates/item_template.html' %}
+                                      {% endif %}
+                                  {% else %}
+                                      {% include 'templates/item_template.html' %}
+                                  {% endif %}
                               {% endif %}
                           {% endfor %}
                       {% endif %}

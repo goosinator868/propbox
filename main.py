@@ -438,8 +438,8 @@ class ViewItemDetails(webapp2.RequestHandler):
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
         pending_edit = (len(item.suggested_edits) > 0)
         lists = List.query(ndb.OR(List.owner == user.key, List.public == True)).fetch()
-        page = template.render({'item':item, 
-                                'pending_edit':pending_edit, 
+        page = template.render({'item':item,
+                                'pending_edit':pending_edit,
                                 'user':user,
                                 'lists':lists})
         page = page.encode('utf-8')
@@ -488,6 +488,8 @@ class MainPage(webapp2.RequestHandler):
             costume_size_number_filter = self.request.get_all('filter_by_costume_size_number')
             tags_filter = self.request.get('filter_by_tags')
             tags_grouping_filter = self.request.get('filter_by_tag_grouping')
+            availability_filter = self.request.get('filter_by_availability')
+            user_id = auth.get_user_id(self.request)
 
 
             query = filterItems(
@@ -529,13 +531,15 @@ class MainPage(webapp2.RequestHandler):
 
             # send to display
             page = template.render({
-                'lists': lists, 
-                'user': user, 
-                'items': items, 
-                'item_type_filter': item_type_filter, 
-                'item_name_filter': item_name_filter, 
-                'item_condition_filter': item_condition_filter, 
-                'item_color_filter': item_color_filter})
+                'lists': lists,
+                'user': user,
+                'items': items,
+                'item_type_filter': item_type_filter,
+                'item_name_filter': item_name_filter,
+                'item_condition_filter': item_condition_filter,
+                'item_color_filter': item_color_filter,
+                'availability_filter': availability_filter,
+                'user_id': user_id})
             page = page.encode('utf-8')
             self.response.write(validateHTML(page))
 
@@ -546,9 +550,9 @@ class MainPage(webapp2.RequestHandler):
             items = query.fetch()
             logging.info(items)
             page = template.render({
-                'lists': lists, 
-                'user': user, 
-                'items': items, 
+                'lists': lists,
+                'user': user,
+                'items': items,
                 'item_type_filter': item_type_filter})
             page = page.encode('utf-8')
             self.response.write(validateHTML(page))
@@ -651,7 +655,7 @@ class DeleteList(webapp2.RequestHandler):
             l.key.delete()
         elif l.owner == user.key:
             l.key.delete()
-            
+
         self.redirect('/view_lists')
 
 class ViewLists(webapp2.RequestHandler):
