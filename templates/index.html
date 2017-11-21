@@ -144,10 +144,10 @@ SOFTWARE. -->
                         <input type="radio" id="tagGroupingExclusive" name="filter_by_tag_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, tagGroupingExclusive);"> All of the Tags Listed<br>
                         <br>
                         <h4> Availability</h4>
-                        <input type="radio" id="availabilityAll" name="filter_by_availability" value="All"checked="checked"> All<br>
-                        <input type="radio" id="availabilityCheckedIn" name="filter_by_availability" value="checkedIn"> All Available for Check Out<br>
-                        <input type="radio" id="availabilityCheckedOut" name="filter_by_availability" value="checkedOut"> All Checked Out<br>
-                        <input type="radio" id="availabilityCheckedOut" name="filter_by_availability" value="checkedOutYou"> All Checked Out by You<br>
+                        <input type="radio" id="availabilityAll" name="filter_by_availability" value="All"checked="checked" onclick="setCheckedRadioValues(filter_by_availability, availabilityAll);"> All<br>
+                        <input type="radio" id="availabilityCheckedIn" name="filter_by_availability" value="checkedIn" onclick="setCheckedRadioValues(filter_by_availability, availabilityCheckedIn);"> All Available for Check Out<br>
+                        <input type="radio" id="availabilityCheckedOut" name="filter_by_availability" value="checkedOut" onclick="setCheckedRadioValues(filter_by_availability, availabilityCheckedOut);"> All Checked Out<br>
+                        <input type="radio" id="availabilityCheckedOutYou" name="filter_by_availability" value="checkedOutYou" onclick="setCheckedRadioValues(filter_by_availability, availabilityCheckedOutYou);"> All Checked Out by You<br>
                         <br>
                         <button type="submit"class="submitButton"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
                     </form>

@@ -48,6 +48,7 @@ function setCheckboxValues(x) {
         var tagGrouping = "tagGroupingInclusive";
         var colorGrouping = "colorGroupingInclusive";
         var itemType = "All";
+        var itemAvailability = "availabilityAll";
         var nameText = document.getElementById("nameBox").value;
         var tagText = document.getElementById("tagBox").value;
         var conditionList = x.filter_by_condition;
@@ -56,6 +57,7 @@ function setCheckboxValues(x) {
         var costumeSizeNumList = x.filter_by_costume_size_number;
         var itemTypeList = document.getElementsByName("filter_by_item_type");
         var itemColorList = x.filter_by_color;
+        var itemAvailabilityList = document.getElementsByName("filter_by_availability");
 
         if (conditionList != null) {
             for (var i = 0; i < conditionList.length; i++) {
@@ -113,6 +115,14 @@ function setCheckboxValues(x) {
             }
         }
 
+        if (itemAvailabilityList != null) {
+            for (var i = 0; i < itemAvailabilityList.length; i++) {
+                if (itemAvailabilityList[i].checked) {
+                    itemAvailability = itemAvailabilityList[i].id;
+                }
+            }
+        }
+
         localStorage.setItem("ConditionFilter", JSON.stringify(conditionArray));
         localStorage.setItem("ArticleFilter", JSON.stringify(articleArray));
         localStorage.setItem("CostumeSizeStringFilter", JSON.stringify(costumeSizeStringArray));
@@ -123,6 +133,7 @@ function setCheckboxValues(x) {
         localStorage.setItem("ItemTypeFilter", itemType);
         localStorage.setItem("NameFilter", nameText);
         localStorage.setItem("TagFilter", tagText);
+        localStorage.setItem("AvailabilityFilter", itemAvailability);
     }
 }
 
@@ -138,6 +149,7 @@ function getCheckboxValues() {
         var itemType = localStorage.getItem("ItemTypeFilter");
         var nameText = localStorage.getItem("NameFilter");
         var tagText = localStorage.getItem("TagFilter");
+        var itemAvailability = localStorage.getItem("AvailabilityFilter");
 
         if (conditionArray == null) {
             conditionArray = [];
@@ -209,6 +221,12 @@ function getCheckboxValues() {
             document.getElementById("typeAll").checked = true;
         }
 
+        if (itemAvailability != null) {
+            document.getElementById(itemAvailability).checked = true;
+        } else {
+            document.getElementById("availabilityAll").checked = true;
+        }
+
         document.getElementById("nameBox").value = nameText;
         document.getElementById("tagBox").value = tagText;
 
@@ -229,5 +247,6 @@ function clearForm() {
   localStorage.setItem("ItemTypeFilter", "typeAll");
   localStorage.setItem("NameFilter", "");
   localStorage.setItem("TagFilter", "");
+  localStorage.setItem("AvailabilityFilter", "availabilityAll");
   getCheckboxValues();
 }
