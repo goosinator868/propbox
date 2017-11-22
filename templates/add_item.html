@@ -28,6 +28,7 @@ SOFTWARE. -->
       SetUpNavBar(SetUpFirebase);
     });
   </script>
+  <script type="text/javascript" src="/scripts/add_item.js"></script>
 
   <link rel="stylesheet" href="/stylesheets/add_item.css">
 
@@ -45,7 +46,7 @@ SOFTWARE. -->
     <h1>{% if item is none %}Add{% else %}Duplicate{% endif %} an Item</h1>
   </div>
 
-  <div class="form">
+  <div class="form" id="add_item_form">
       <form action="/add_item" enctype="multipart/form-data" method="post">
           <label>Name</label>
           <br>
@@ -60,7 +61,13 @@ SOFTWARE. -->
           <input type="hidden" name="duplicate" value="True"/>
           <input type="hidden" name="original_item" value="{{item.key.urlsafe()}}">
           {% endif %}
-          <input name="image" type="file" accept=".png, .jpg, .jpeg"><br>
+
+          <!-- Image preview and upload data -->
+          <input type="file" id="image_upload_input" onchange="updatePreview()"><br>
+          <input name="image" type="hidden" id="downscaled_image">
+          <canvas id="preview_canvas" width='500px' height='500px' style="border:1px solid #c3c3c3;">Browser does not support canvas, please use another browser</canvas>
+          <!-- End image preview and upload data -->
+
           <label>Description</label>
           <br>
           <textarea name="description" placeholder="Enter a description for the item.">{% if item is not none %}{{item.description}}{% endif %}</textarea><br><br>
