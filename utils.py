@@ -25,7 +25,7 @@
 
 import requests
 import logging
-
+from hashlib import sha1
 
 # +---------------------+
 # | Third party imports |
@@ -158,6 +158,40 @@ def removeFromAllLists(item_key):
 # +-----------------------+
 # | Miscellaneous Helpers |
 # +-----------------------+
+
+def getImageHash(image_data):
+    m = sha1()
+    m.update(image_data)
+    return m.hexdigest()
+
+def saveImageInGCS(image_data):
+    # ======================
+    # Save file in GCS
+    # ======================
+    bucket_name = os.environ.get('BUCKET_NAME',
+                         app_identity.get_default_gcs_bucket_name())
+
+
+    bucket = '/' + bucket_name
+    filename = bucket + '/' + getImageHash(image_data) + '.png'
+    write_retry_params = gcs.RetryParams(backoff_factor=1.1)
+    gcs_file = gcs.open(filename,
+                        'w',
+                        content_type='image/png',
+                        options={'x-goog-meta-foo': 'foo',
+                                 'x-goog-meta-bar': 'bar'},
+                        retry_params=write_retry_params)
+    gcs_file.write(image_data)
+    gcs_file.close()
+
+    gcs_object_name = '/gs' + filename
+    # logging.info(gcs_object_name)
+    blob_key = blobstore.create_gs_key(gcs_object_name)
+    image_url =  images.get_serving_url(blob_key)
+    return image_url
+    # ======================
+    # End saving file to GCS
+    # ======================
 
 # Validates an html string using the w3 validator.
 def validateHTML(html_string):

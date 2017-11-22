@@ -42,7 +42,7 @@ class Item(ndb.Model):
     creator_name = ndb.StringProperty(required=True)
     updated = ndb.DateTimeProperty(auto_now_add=True)
     name = ndb.StringProperty(required=True)
-    image = ndb.BlobProperty(required=False)
+    image_url = ndb.StringProperty(required=False)
     description = ndb.TextProperty(required=False)
     qr_code = ndb.IntegerProperty(required=False)
     item_type = ndb.StringProperty(required=True)
@@ -76,7 +76,7 @@ def cloneItem(oldItem, parentKey=None):
         description=oldItem.description,
         qr_code=oldItem.qr_code,
         approved=oldItem.approved,
-        image=oldItem.image,
+        image_url=oldItem.image_url,
         parent=parentKey,
         item_type=oldItem.item_type,
         condition=oldItem.condition,

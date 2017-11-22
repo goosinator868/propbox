@@ -52,8 +52,8 @@ SOFTWARE. -->
     <div id="left-pane">
       <h2>Current version of {{item.name}}:</h2>
       <div class="item_details">
-          <a href="view_image?image_id={{item.key.urlsafe()}}">
-            <img src="view_image?image_id={{item.key.urlsafe()}}" class="item_image" alt="Picture of {{item.name}}"/>
+          <a href="{{item.image_url}}">
+            <img src="{{item.image_url}}" class="item_image" alt="Picture of {{item.name}}"/>
           </a>
           <br/><br/>
           <h3>{{item.description}}</h3>

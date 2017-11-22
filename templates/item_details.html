@@ -61,9 +61,9 @@ SOFTWARE. -->
   </div>
 
   <div id="item_{{item.key.urlsafe()}}">
-  {% if item.image %}
-    <a href="view_image?image_id={{item.key.urlsafe()}}">
-    <img src="view_image?image_id={{item.key.urlsafe()}}" alt="image of {{item.name}}" class="item_image" />
+  {% if item.image_url %}
+    <a href="{{item.image_url}}">
+    <img src="{{item.image_url}}" alt="image of {{item.name}}" class="item_image" />
     </a>
   {% endif %}
     <div id="item_details">

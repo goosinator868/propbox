@@ -31,13 +31,16 @@ import webapp2
 import jinja2
 from time import sleep
 
-
 # +---------------------+
 # | Third party imports |
 # +---------------------+
 
+from google.appengine.api import app_identity
+from google.appengine.api import images
+from google.appengine.ext import blobstore
 from google.appengine.ext import ndb
 from google.appengine.ext.db import TransactionFailedError
+import cloudstorage as gcs
 
 
 # +---------------------+
@@ -102,11 +105,13 @@ class AddItem(webapp2.RequestHandler):
             self.redirect('/')
             return
         try:
-            img = self.request.get('image', default_value='')
-            if img == '':
-                img = None
-            if img == None and self.request.get('duplicate') == "True":
-                img = ndb.Key(urlsafe=self.request.get('original_item')).get().image
+            image_data = self.request.get('image', default_value='')
+            image_url = ''
+            if image_data == '' and self.request.get('duplicate') == "True":
+                image_url = ndb.Key(urlsafe=self.request.get('original_item')).get().image_url
+            elif image_data != '':
+                image_url = saveImageInGCS(image_data)
+
             article_type = self.request.get('article')
             costume_or_prop = self.request.get('item_type')
             costume_size_number = self.request.get('clothing_size_number')
@@ -136,7 +141,7 @@ class AddItem(webapp2.RequestHandler):
                     creator_id=auth.get_user_id(self.request),
                     creator_name=auth.get_user_name(self.request),
                     name=self.request.get('name'),
-                    image=img,
+                    image_url=image_url,
                     item_type=costume_or_prop,
                     condition=self.request.get('condition'),
                     item_color=self.request.get_all('color'),
@@ -187,9 +192,10 @@ class EditItem(webapp2.RequestHandler):
         old_item_key = ndb.Key(urlsafe=self.request.get('old_item_key'))
         old_item = old_item_key.get()
         new_item = cloneItem(old_item, old_item_key)
-        img = self.request.get('image', default_value='')
-        if img != '':
-            new_item.image = img
+        image_data = self.request.get('image', default_value='')
+        image_url = ''
+        if image_data != '':
+            new_item.image_url = saveImageInGCS(image_data)
 
         new_item.creator_id = user.key.string_id()
         new_item.creator_name = user.name
@@ -266,14 +272,6 @@ class DeleteItem(webapp2.RequestHandler):
             self.redirect('/item_details?'+urllib.urlencode({'item_id':item_key.urlsafe()}))
         else:
             self.redirect("/search_and_browse")
-
-
-class ViewImage(webapp2.RequestHandler):
-    def get(self):
-        item_key = ndb.Key(urlsafe=self.request.get('image_id'))
-        item = item_key.get()
-        self.response.headers['Content-Type'] = 'image/png'
-        self.response.out.write(item.image)
 
 
 # Deletes an item from the database for good. THIS CANNOT BE UNDONE.
@@ -778,6 +776,17 @@ class CheckOut(webapp2.RequestHandler):
             item.put()
         self.redirect("/")
 
+# Example deleting files, not yet implemented for images but I am keeping this
+# here for a reference when I decide to implement deleting images.
+  # def delete_files(self):
+  #   self.response.write('Deleting files...\n')
+  #   for filename in self.tmp_filenames_to_clean_up:
+  #     self.response.write('Deleting file %s\n' % filename)
+  #     try:
+  #       gcs.delete(filename)
+  #     except gcs.NotFoundError:
+  #       pass
+
 # +-------------------+
 # | Environment Setup |
 # +-------------------+
@@ -793,7 +802,6 @@ app = webapp2.WSGIApplication([
     ('/delete_item_forever', DeleteItemForever),
     ('/undelete_item', UndeleteItem),
     ('/add_item', AddItem),
-    ('/view_image', ViewImage),
     ('/edit_item', EditItem),
     ('/enforce_auth', AuthHandler),
     ('/review_edits', ReviewEdits),
