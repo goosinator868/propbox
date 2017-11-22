@@ -22,17 +22,21 @@
 # +-------------------------+
 # | Python built-in imports |
 # +-------------------------+
-
+import os
 import requests
 import logging
 from hashlib import sha1
+import base64
 
 # +---------------------+
 # | Third party imports |
 # +---------------------+
 
 from google.appengine.ext import ndb
-
+from google.appengine.api import app_identity
+from google.appengine.api import images
+from google.appengine.ext import blobstore
+import cloudstorage as gcs
 
 # +---------------------+
 # | First party imports |
@@ -168,6 +172,7 @@ def saveImageInGCS(image_data):
     # ======================
     # Save file in GCS
     # ======================
+    image_data = base64.b64decode(image_data)#image_data.encode('utf-8')
     bucket_name = os.environ.get('BUCKET_NAME',
                          app_identity.get_default_gcs_bucket_name())
 
