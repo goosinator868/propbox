@@ -33,7 +33,7 @@ SOFTWARE.*/
 }
 
 body {
-  background-color: #E9E9E9;
+  background-color: #FFF;
   font-family: 'Quicksand', sans-serif;
 }
 
@@ -67,7 +67,7 @@ body {
 }
 
 .item_container {
-  background-color: #f0f0f0;
+  background-color: #EAEAEA;
   padding: 8px;
   display: inline-block;
   border-radius: 5px;
@@ -98,7 +98,7 @@ body {
     padding: 5px 10px 5px 10px;
     border-radius: 8px 8px 8px 8px;
     border: 0px;
-    background-color: #ae64d3;
+    background-color: rgb(16,114,182);
     transition: background-color 0.1s ease, color 0.1s ease;
     -webkit-transition: background-color 0.1s ease, color 0.1s ease;
     -moz-transition: background-color 0.1s ease, color 0.1s ease;
@@ -106,7 +106,7 @@ body {
 }
 
 .submitButton:hover {
-    background-color: #cb9ce3;
+    background-color: rgb(23,147,212);
     color: #fff;
 }
 
@@ -121,7 +121,7 @@ body {
 }
 
 .thumbnail {
-  background-color: #eeeeee;
+  background-color: #eaeaea;
   border: 0;
   /*position: absolute;
   float: right;*/
@@ -153,12 +153,12 @@ body {
 }
 
 #page-heading {
-  background-color: #efefef;
+  background-color: rgb(221,232,244);
   color: #FFF;
 }
 
   #page-heading h1 {
-    color: #DA81F5;
+    color: rgb(23,147,212);
     margin: 0;
     padding: 0.4em 0;
     text-align: center;
