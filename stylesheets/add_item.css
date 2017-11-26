@@ -35,8 +35,10 @@ div.form {
     }
 
     input, select, textarea {
-      border: 0;
-      border-radius: 6px;
+      border: 2px;
+      border-color: rgb(221,232,244);
+      border-style: solid;
+      border-radius: 4px;
       padding: 6px;
       width: 100%;
     }

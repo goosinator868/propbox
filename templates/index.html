@@ -43,7 +43,7 @@ SOFTWARE. -->
   </div>
   <div id="home-pg-container">
     <div id="logo" style="margin: auto; width: 50%; text-align: center;">
-      <img src="/image/propboxlogo_color.png" alt="Propbox" style="width: 50%;">
+      <img src="/image/propboxlogo_black.png" alt="Propbox" style="width: 60%; max-height: 385px;">
     </div>
     <p id="welcome-msg">
     {{user.name}},
@@ -53,18 +53,18 @@ SOFTWARE. -->
       <br/>
 
       <form action='/add_item'>
-          <button type="submit" class="action_button"><i class='fa fa-plus-circle fa-3x' aria-hidden='true'></i><br>Add an Item</button>
+          <button type="submit" class="submitButton action_button"><i class='fa fa-plus-circle fa-3x' aria-hidden='true'></i><br>Add an Item</button>
       </form>
 
       <form action='/review_edits' method='get'>
-          <button type="submit" class="action_button"><i class='fa fa-pencil fa-3x' aria-hidden='true'></i><br>Review Edits</button>
+          <button type="submit" class="submitButton action_button"><i class='fa fa-pencil fa-3x' aria-hidden='true'></i><br>Review Edits</button>
       </form>
       <form action="review_deletions">
-        <button type="submit" class="action_button"><i class='fa fa-trash fa-3x' aria-hidden='true'></i><br>Review Deletions</button>
+        <button type="submit" class="submitButton action_button"><i class='fa fa-trash fa-3x' aria-hidden='true'></i><br>Review Deletions</button>
       </form>
       {% if user.permissions == "Admin" %}
       <form action="manage_users">
-        <button type="submit" class="action_button"><i class='fa fa-user fa-3x' aria-hidden='true'></i><br>Manage Users</button>
+        <button type="submit" class="submitButton action_button"><i class='fa fa-user fa-3x' aria-hidden='true'></i><br>Manage Users</button>
       </form>
       {% endif %}
     </div>

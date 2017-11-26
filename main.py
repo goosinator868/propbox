@@ -29,7 +29,7 @@ import json
 import logging
 import webapp2
 import jinja2
-from time import sleep
+# from time import sleep
 
 # +---------------------+
 # | Third party imports |
@@ -152,7 +152,7 @@ class AddItem(webapp2.RequestHandler):
                     clothing_size_string=costume_size_word,
                     tags=tags_list).put()
                 d = d - 1;
-                sleep(0.1)
+                #sleep(0.1)
 
             next_page = self.request.get("next_page")
             if next_page == "Make Another Item":
@@ -243,7 +243,7 @@ class EditItem(webapp2.RequestHandler):
 
         try:
             new_item_key = commitEdit(old_item_key, new_item,suggestion=standard_user)
-            sleep(0.1)
+            #sleep(0.1)
             self.redirect("/item_details?" + urllib.urlencode({'item_id':(old_item_key if standard_user else new_item_key).urlsafe()}))
         except (ItemPurgedException, ItemDeletedException) as e:
             # TODO: Make this visible to the user.
@@ -267,7 +267,7 @@ class DeleteItem(webapp2.RequestHandler):
              # TODO: Expose this message to the user.
             logging.info('could not delete the item, please try again')
         # Redirect back to items view.
-        sleep(0.1)
+        #sleep(0.1)
         if user.permissions == "Standard user":
             self.redirect('/item_details?'+urllib.urlencode({'item_id':item_key.urlsafe()}))
         else:
@@ -285,7 +285,7 @@ class DeleteItemForever(webapp2.RequestHandler):
         except TransactionFailedError as e:
              # TODO: Expose this message to the user.
             logging.info('could not purge the item, pelase try again')
-        sleep(0.1)
+        #sleep(0.1)
         self.redirect('/review_deletions')
 
 
@@ -299,7 +299,7 @@ class UndeleteItem(webapp2.RequestHandler):
         except TransactionFailedError as e:
              # TODO: Expose this message to the user.
             logging.info('could not un-delete the item, please try again')
-        sleep(0.1) #CUT FOR DEPLOYING
+        #sleep(0.1) #CUT FOR DEPLOYING
         self.redirect('/review_deletions')
 
 
@@ -380,7 +380,7 @@ class KeepRevision(webapp2.RequestHandler):
             parent.put()
         item.approved = True
         item.put()
-        sleep(0.1)
+        #sleep(0.1)
         self.redirect('/review_edits')
 
 
@@ -410,7 +410,7 @@ class DiscardRevision(webapp2.RequestHandler):
             item.suggested_edits = []
             item.approved = True
             item.put()
-        sleep(0.1)
+        #sleep(0.1)
         self.redirect('/review_edits')
 
 
@@ -424,7 +424,7 @@ class RevertItem(webapp2.RequestHandler):
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
         item.approved = False
         item.put()
-        sleep(0.1)
+        #sleep(0.1)
         self.redirect('/review_edits')
 
 class ViewItemDetails(webapp2.RequestHandler):

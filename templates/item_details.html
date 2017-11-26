@@ -126,10 +126,10 @@ SOFTWARE. -->
         {% if user.permissions != "Standard user" %}
           <form action="/revert_item" method="post">
             <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-            <button type="submit" class="submitButton" style="background-color: gold; color: black;"><i class='fa fa-undo fa-1x' aria-hidden="true"></i> <b>Revert To Earlier Version</b></button>
+            <button type="submit" class="submitButton" style="background-color: goldenrod;"><i class='fa fa-undo fa-1x' aria-hidden="true"></i> Revert To Earlier Version</button>
           </form>
         {% endif %}
-        <button onclick="showConfirm('delete')" class="submitButton" style="background-color:{% if user.permissions=="Standard user" %} gold{% else %} red{% endif %}; color: black;"><i class="fa fa-trash fa-1x" aria-hidden="true"></i> <b>Delete</b></button>
+        <button onclick="showConfirm('delete')" class="submitButton" style="background-color:{% if user.permissions=="Standard user" %} goldenrod{% else %} firebrick{% endif %};"><i class="fa fa-trash fa-1x" aria-hidden="true"></i> Delete</button>
         {% endif %}
         
       </div>
