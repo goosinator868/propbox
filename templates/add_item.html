@@ -63,11 +63,15 @@ SOFTWARE. -->
           {% endif %}
 
           <!-- Image preview and upload data -->
-          <input type="file" id="image_upload_input" onchange="updatePreview()"><br>
+          <input type="file" id="image_upload_input" onchange="onImageUpload()"><br>
           <input name="image" type="hidden" id="downscaled_image">
-          <canvas id="preview_canvas" width='500px' height='500px' style="border:1px solid #c3c3c3;">Browser does not support canvas, please use another browser</canvas>
-          <button type="button" onclick="rotateCanvas(false)">Rotate left</button>
-          <button type="button" onclick="rotateCanvas(true)">Rotate right</button>
+          <div>
+            <button type="button" onclick="rotateCanvas(false)"><i class="fa fa-undo" aria-hidden="true"></i> Rotate left</button>
+            <button type="button" onclick="rotateCanvas(true)"><i class="fa fa-repeat" aria-hidden="true"></i> Rotate right</button>
+          </div>
+          <br>
+          <canvas id="preview_canvas" width='250px' height='250px' style="border:1px solid #c3c3c3;">Browser does not support canvas, please use another browser</canvas>
+          <br>
           <!-- End image preview and upload data -->
 
           <label>Description</label>
