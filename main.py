@@ -680,9 +680,19 @@ class ViewList(webapp2.RequestHandler):
             return
         items = [k.get() for k in l.items]
         template = JINJA_ENVIRONMENT.get_template('templates/view_list.html')
-        page = template.render({'list': l, 'items': items})
+        page = template.render({'list': l, 'items': items, 'user': user})
         page = page.encode('utf-8')
         self.response.write(validateHTML(page))
+
+class ChangeListPermissions(webapp2.RequestHandler):
+    @auth.login_required
+    def post(self):
+        user = get_current_user(self.request)
+        l = ndb.Key(urlsafe=self.request.get('list')).get()
+        if l.owner == user.key:
+            l.public = self.request.get('public') == 'public'
+            l.put()
+        self.redirect('/view_list?list=' + l.key.urlsafe())
 
 class AddToList(webapp2.RequestHandler):
     @auth.login_required
@@ -819,6 +829,7 @@ app = webapp2.WSGIApplication([
     ('/item_from_qr_code', ItemFromQRCode),
     # Lists
     ('/new_list', NewList),
+    ('/change_list_permissions', ChangeListPermissions),
     ('/delete_list', DeleteList),
     ('/view_lists', ViewLists),
     ('/view_list', ViewList),

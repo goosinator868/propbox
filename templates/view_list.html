@@ -48,6 +48,20 @@ SOFTWARE. -->
   </div>
   <br>
   <br>
+  {% if user.key == list.owner%}
+  <form action="/change_list_permissions" method="post">
+    <input type="hidden" name="list" value="{{list.key.urlsafe()}}">
+    
+    {% if list.public %}
+      <input type="hidden" name="public" value="private">
+      <button class="submitButton" type="submit" style="margin-left: 5%;">Make private</button>
+    {% else %}
+      <input type="hidden" name="public" value="public">
+      <button class="submitButton" type="submit" style="margin-left: 5%;">Make public</button>
+    {% endif %}
+  </form>
+
+  {% endif %}
   <form action="/print_qr_codes" method="get">
     {% for item in items %}
       <input type="hidden" name="keys" value="{{item.key.urlsafe()}}">
