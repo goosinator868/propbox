@@ -29,6 +29,8 @@ SOFTWARE. -->
     });
   </script>
 
+  <script type="text/javascript" src="/scripts/image_upload.js"></script>
+
   <script type="text/javascript" src="/scripts/popup_confirm.js"></script>
 
   <link rel="stylesheet" href="/stylesheets/edit_item.css">
@@ -83,7 +85,15 @@ SOFTWARE. -->
               <label>Name</label><br>
               <input name="name" type="text" value="{{item.name}}"><br><br>
               <label>Image</label>
-              <input name="image" type="file" accept=".png, .jpg, .jpeg"><br>
+
+              <!-- Image preview and upload data -->
+              <input type="file" id="image_upload_input" onchange="updatePreview()"><br>
+              <input name="image" type="hidden" id="downscaled_image">
+              <canvas id="preview_canvas" width='500px' height='500px' style="border:1px solid #c3c3c3;">Browser does not support canvas, please use another browser</canvas>
+              <button type="button" onclick="rotateCanvas(false)">Rotate left</button>
+              <button type="button" onclick="rotateCanvas(true)">Rotate right</button>
+              <!-- End image preview and upload data -->
+
               <label>Describe the item.</label><br>
               <textarea name="description">{{item.description}}</textarea><br><br>
               <label>Is this item a costume or prop?</label><br>

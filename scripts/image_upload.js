@@ -28,6 +28,17 @@
 
 MAX_WIDTH = 500;
 MAX_HEIGHT = 500;
+image_rotation_degrees = 0;
+
+function rotateCanvas(clockwise) {
+    if (clockwise) {
+        image_rotation_degrees += 90;
+    } else {
+        image_rotation_degrees -= 90;
+    }
+    
+    updatePreview();
+}
 
 function updatePreview(e){
   input = document.getElementById('image_upload_input').files[0];
@@ -45,10 +56,21 @@ function updatePreview(e){
         }
 
         preview = document.getElementById('preview_canvas');
-        preview.width = width;
-        preview.height = height;
-        var ctx = preview.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
+        if (Math.abs(image_rotation_degrees % 180) == 90) {
+            preview.width = height;
+            preview.height = width;
+        } else {
+            preview.width = width;
+            preview.height = height;
+        }
+        var context = preview.getContext('2d');
+
+        context.clearRect(0,0,preview.width,preview.height);
+        context.save();
+        context.translate(preview.width/2,preview.height/2);
+        context.rotate(image_rotation_degrees * Math.PI / 180);
+        context.drawImage(img,-width/2,-height/2, width, height);
+        context.restore();
         updateFinalImage();
     } 
     img.src = window.URL.createObjectURL(input);

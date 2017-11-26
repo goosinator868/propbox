@@ -28,7 +28,7 @@ SOFTWARE. -->
       SetUpNavBar(SetUpFirebase);
     });
   </script>
-  <script type="text/javascript" src="/scripts/add_item.js"></script>
+  <script type="text/javascript" src="/scripts/image_upload.js"></script>
 
   <link rel="stylesheet" href="/stylesheets/add_item.css">
 
@@ -66,6 +66,8 @@ SOFTWARE. -->
           <input type="file" id="image_upload_input" onchange="updatePreview()"><br>
           <input name="image" type="hidden" id="downscaled_image">
           <canvas id="preview_canvas" width='500px' height='500px' style="border:1px solid #c3c3c3;">Browser does not support canvas, please use another browser</canvas>
+          <button type="button" onclick="rotateCanvas(false)">Rotate left</button>
+          <button type="button" onclick="rotateCanvas(true)">Rotate right</button>
           <!-- End image preview and upload data -->
 
           <label>Description</label>
