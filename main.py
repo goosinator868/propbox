@@ -75,7 +75,7 @@ class AddItem(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         user = get_current_user(self.request)
-        logging.info(user.permissions != wmodels.ADMIN)
+        # logging.info(user.permissions != wmodels.ADMIN)
         if user.permissions != wmodels.TRUSTED_USER and user.permissions != wmodels.ADMIN:
             self.redirect('/')
             return
@@ -368,7 +368,7 @@ class KeepRevision(webapp2.RequestHandler):
             return
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
         if self.request.get('proposed_edit') == "True":
-            logging.info("Accepting the proposed edit.")
+            # logging.info("Accepting the proposed edit.")
             parent = ndb.Key(urlsafe=self.request.get('parent_id')).get()
             parent.child = item.key
             for edit in parent.suggested_edits:
@@ -430,7 +430,7 @@ class RevertItem(webapp2.RequestHandler):
 class ViewItemDetails(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
-        logging.info("View Item Details")
+        # logging.info("View Item Details")
         user = get_current_user(self.request)
         template = JINJA_ENVIRONMENT.get_template('templates/item_details.html')
         item = ndb.Key(urlsafe=self.request.get('item_id')).get()
@@ -448,7 +448,7 @@ class ViewItemDetails(webapp2.RequestHandler):
 class ReviewDeletions(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
-        logging.info("Manage Deletions")
+        # logging.info("Manage Deletions")
         user = get_current_user(self.request)
         if (user.permissions == "Standard user"):
             self.redirect('/')
@@ -546,7 +546,7 @@ class MainPage(webapp2.RequestHandler):
             # first time opening or item has been added
             query = Item.query()
             items = query.fetch()
-            logging.info(items)
+            # logging.info(items)
             page = template.render({
                 'lists': lists,
                 'user': user,

@@ -21,7 +21,8 @@ SOFTWARE.*/
 .item_image {
 	margin: 20px auto;
 	display: block;
-	width: 40vw;
+	max-width: 40vw;
+	max-height: 300px;
 }
 
 #item_details {
