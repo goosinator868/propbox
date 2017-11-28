@@ -54,9 +54,11 @@ SOFTWARE. -->
     <div id="left-pane">
       <h2>Current version of {{item.name}}:</h2>
       <div class="item_details">
+          {% if item.image_url %}
           <a href="{{item.image_url}}">
             <img id="item_image" src="{{item.image_url}}" class="item_image" alt="Picture of {{item.name}}"/>
           </a>
+          {% endif %}
           <br/><br/>
           <h3>{{item.description}}</h3>
           <br/>
