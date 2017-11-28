@@ -29,6 +29,8 @@ SOFTWARE. -->
     });
   </script>
 
+  <script type="text/javascript" src="/scripts/image_upload.js"></script>
+
   <script type="text/javascript" src="/scripts/popup_confirm.js"></script>
 
   <link rel="stylesheet" href="/stylesheets/edit_item.css">
@@ -52,9 +54,11 @@ SOFTWARE. -->
     <div id="left-pane">
       <h2>Current version of {{item.name}}:</h2>
       <div class="item_details">
-          <a href="view_image?image_id={{item.key.urlsafe()}}">
-            <img src="view_image?image_id={{item.key.urlsafe()}}" class="item_image" alt="Picture of {{item.name}}"/>
+          {% if item.image_url %}
+          <a href="{{item.image_url}}">
+            <img id="item_image" src="{{item.image_url}}" class="item_image" alt="Picture of {{item.name}}"/>
           </a>
+          {% endif %}
           <br/><br/>
           <h3>{{item.description}}</h3>
           <br/>
@@ -83,7 +87,20 @@ SOFTWARE. -->
               <label>Name</label><br>
               <input name="name" type="text" value="{{item.name}}"><br><br>
               <label>Image</label>
-              <input name="image" type="file" accept=".png, .jpg, .jpeg"><br>
+
+              <!-- Image preview and upload data -->
+              <input type="file" id="image_upload_input" onchange="onImageUpload()"><br>
+              <input name="image" type="hidden" id="downscaled_image">
+              <div>
+                <button type="button" onclick="rotateCanvas(false)"><i class="fa fa-undo" aria-hidden="true"></i> Rotate left</button>
+                <button type="button" onclick="rotateCanvas(true)"><i class="fa fa-repeat" aria-hidden="true"></i> Rotate right</button>
+              </div>
+              <br>
+              <canvas id="preview_canvas" width='250px' height='250px' style="border:1px solid #c3c3c3;">Browser does not support canvas, please use another browser</canvas>
+              <br>
+
+              <!-- End image preview and upload data -->
+
               <label>Describe the item.</label><br>
               <textarea name="description">{{item.description}}</textarea><br><br>
               <label>Is this item a costume or prop?</label><br>
