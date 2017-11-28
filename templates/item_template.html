@@ -15,6 +15,7 @@
             {% if not item.clothing_article_type == "N/A" %}<p><b>Article</b>: {{item.clothing_article_type}}</p>{% endif %}
             {% if item.tags|length > 0 %}<p><b>Tags</b>:{% for tag in item.tags %} {{tag}},{% endfor %}</p>{% endif %}
             {% if item.item_color|length > 0 %}<p><b>Colors</b>: {% for color in item.item_color %} {{color}},{% endfor %}</p>{% endif %}
+            {% if item.checked_out %}<br><p><b>Checked out by:</b> {{item.checked_out_by_name}}</p>{% endif %}
         </div>
     </div>
     <br/>
