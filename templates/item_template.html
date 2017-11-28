@@ -1,5 +1,4 @@
 <div class="item_container" id="item_{{item.key.urlsafe()}}">
-    <h2>{{item.name}}</h2>
     <div style="min-width: 100%">
         {% if item.image_url %}
             <div class="thumbnail_container">
@@ -9,13 +8,13 @@
             </div>
         {% endif %}
         <div class="item_details_container">
-            <h3>{{item.item_type}}</h3>
-            <h4>Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</h4>
-            <p>{{item.description}}</p>
+            <h2>{{item.name}}</h2>
+            <p><b>Description:</b> {{item.description}} <br><br></p>
+            <p><b>Item Type:</b> {{item.item_type}}</p>
             <p><b>Condition</b>: {{item.condition}}</p>
-            <p><b>Article</b>: {{item.clothing_article_type}}</p>
-            <p><b>Tags</b>:{% for tag in item.tags %} {{tag}},{% endfor %}</p>
-            <p><b>Colors</b>: {% for color in item.item_color %} {{color}},{% endfor %}</p>
+            {% if not item.clothing_article_type == "N/A" %}<p><b>Article</b>: {{item.clothing_article_type}}</p>{% endif %}
+            {% if item.tags|length > 0 %}<p><b>Tags</b>:{% for tag in item.tags %} {{tag}},{% endfor %}</p>{% endif %}
+            {% if item.item_color|length > 0 %}<p><b>Colors</b>: {% for color in item.item_color %} {{color}},{% endfor %}</p>{% endif %}
         </div>
     </div>
     <br/>

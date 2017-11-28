@@ -66,8 +66,8 @@ SOFTWARE. -->
           <input type="file" id="image_upload_input" onchange="onImageUpload()"><br>
           <input name="image" type="hidden" id="downscaled_image">
           <div>
-            <button type="button" onclick="rotateCanvas(false)"><i class="fa fa-undo" aria-hidden="true"></i> Rotate left</button>
-            <button type="button" onclick="rotateCanvas(true)"><i class="fa fa-repeat" aria-hidden="true"></i> Rotate right</button>
+            <button type="button" onclick="rotateCanvas(false)" class="submitButton"><i class="fa fa-undo" aria-hidden="true"></i> Rotate left</button>
+            <button type="button" onclick="rotateCanvas(true)" class="submitButton"><i class="fa fa-repeat" aria-hidden="true"></i> Rotate right</button>
           </div>
           <br>
           <canvas id="preview_canvas" width='250px' height='250px' style="border:1px solid #c3c3c3;">Browser does not support canvas, please use another browser</canvas>
@@ -110,17 +110,11 @@ SOFTWARE. -->
           </select><br><br>
           <label>Item Colors</label>
           <p style="font-size: 0.75em;">Check all that apply.</p>
-              {% for option in ["Red", "Orange", "Yellow", "Green"] %}
-                <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if item is not none and option in item.item_color %}checked="checked"{% endif %}> {{option}} &nbsp;&nbsp;
-              {% endfor %}
-              <br>
-              {% for option in ["Cyan", "Blue", "Indigo", "Purple"] %}
-                <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if item is not none and option in item.item_color %}checked="checked"{% endif %}> {{option}} &nbsp;&nbsp;
-              {% endfor %}
-              <br>
-              {% for option in ["Pink", "Brown", "Black", "White"] %}
-                <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if item is not none and option in item.item_color %}checked="checked"{% endif %}> {{option}} &nbsp;&nbsp;
-              {% endfor %}
+          <div style="display: inline-block; max-width: 250px;">
+            {% for option in ["Red", "Orange", "Yellow", "Green", "Cyan", "Blue", "Indigo", "Purple","Pink", "Brown", "Black", "White", "Gray"] %}
+              <span style="float: left; width: 80px; padding-right: 3px; box-sizing: border-box;"><input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if item is not none and option in item.item_color %}checked="checked"{% endif %}> {{option}}</span>
+            {% endfor %}
+          </div>>
           <br><br>
           <label>Extra Tags for the Item</label>
           <br>
