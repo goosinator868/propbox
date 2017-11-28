@@ -135,23 +135,17 @@ SOFTWARE. -->
                         </div>
                         <br>
                         <div id="filter-container-block">
-                        <h4> Color </h4>
-                        {% for option in ["Red", "Orange", "Yellow", "Green"] %}
-                          <input type="checkbox" id="{{option}}" name="filter_by_color" value="{{option}}"> {{option}} &nbsp;&nbsp;
-                        {% endfor %}
-                        <br>
-                        {% for option in ["Cyan", "Blue", "Indigo", "Purple"] %}
-                          <input type="checkbox" id="{{option}}" name="filter_by_color" value="{{option}}"> {{option}} &nbsp;&nbsp;
-                        {% endfor %}
-                        <br>
-                        {% for option in ["Pink", "Brown", "Black", "White"] %}
-                          <input type="checkbox" id="{{option}}" name="filter_by_color" value="{{option}}"> {{option}} &nbsp;&nbsp;
-                        {% endfor %}
-                        <br>
-                        <input type="checkbox" id="Gray" name="filter_by_color" value="Gray"> Gray &nbsp;&nbsp;
-                        <br>
-                        <input type="radio" id="colorGroupingInclusive" name="filter_by_color_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_color_grouping, colorGroupingInclusive);"> Any of the Selected Colors<br>
-                        <input type="radio" id="colorGroupingExclusive" name="filter_by_color_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_color_grouping, colorGroupingExclusive);"> All of the Selected Colors<br>
+                          <h4> Color </h4>
+                          <div style="display: inline-block;">
+                            {% for option in ["Red", "Orange", "Yellow", "Green", "Cyan", "Blue", "Indigo", "Purple","Pink", "Brown", "Black", "White", "Gray"] %}
+                              <span style="float: left; width: 80px; padding-right: 3px; box-sizing: border-box;"><input type="checkbox" id="{{option}}" name="filter_by_color" value="{{option}}"> {{option}}</span>
+                            {% endfor %}
+                          </div>
+                          <br>
+                          <div>
+                            <input type="radio" id="colorGroupingInclusive" name="filter_by_color_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_color_grouping, colorGroupingInclusive);"> Any of the Selected Colors<br>
+                            <input type="radio" id="colorGroupingExclusive" name="filter_by_color_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_color_grouping, colorGroupingExclusive);"> All of the Selected Colors<br>
+                          </div>
                         </div>
                         <br>
                         <div id="filter-container-block">

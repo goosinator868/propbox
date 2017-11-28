@@ -72,13 +72,15 @@ SOFTWARE. -->
         <br/>
         <p id="item_type"><b>Item Type:</b> {{item.item_type}}</p>
         <p id="condition"><b>Condition</b>: {{item.condition}}</p>
-        <p id="article_type"><b>Article:</b> {{item.clothing_article_type}}</p>
+        {% if item.item_type == "Costume" %}<p id="article_type"><b>Article:</b> {{item.clothing_article_type}}</p>{% endif %}
         {% if item.clothing_size_string != "N/A" or item.clothing_size_num != "N/A" %}
-        <p id="size"><b>Size:</b> {{item.clothing_size_string}}, {{item.clothing_size_num}}</p>
+        }<p id="size"><b>Size:</b> {{item.clothing_size_string}}, {{item.clothing_size_num}}</p>
         {% endif %}
-        <p id="tags"><b>Tags:</b> {% for tag in item.tags %} {{tag}},{% endfor %}</p>
+        {% if item.tags|length > 0 %}<p id="tags"><b>Tags:</b> {% for tag in item.tags %} {{tag}},{% endfor %}</p>{% endif %}
         <br>
-        <p id="checkout_status"><b>Status:</b> {% if item.checked_out %}Checked out by {{item.checked_out_by_name}}.{% else %}Available for Checkout.{% endif %}</p>
+        <p id="checkout_status"><b>Status:</b> {% if item.checked_out %}Checked out by {{item.checked_out_by_name}}.</p>
+        <p id="chekout_reason"><b>Reason for checkout:</b> {{item.checked_out_reason}}</p>
+        {% else %}Available for Checkout.</p>{% endif %}
 
         {% if pending_edit %}<p id="pending_edit">{% if user.permissions != "Standard user" %} <a href="/review_edits">{% endif %}<strong>[EDITS ARE PENDING APPROVAL]</strong>{% if user.permissions != "Standard user" %}</a>{% endif %}</p>{% endif %}
         {% if item.marked_for_deletion %}<p id="marked_for_deletion">{% if user.permissions != "Standard user" %} <a href="/review_deletions">{% endif %}<strong>[THIS ITEM HAS BEEN MARKED FOR DELETION]</strong>{% if user.permissions != "Standard user" %}</a>{% endif %}</p>{% endif %}
@@ -89,12 +91,8 @@ SOFTWARE. -->
           <input type="hidden" name="keys" value="{{item.key.urlsafe()}}">
           <button type="submit" class="submitButton"><i class="fa fa-print" aria-hidden="true"></i> Print QR Code</button>
         </form>
-        <br/>
+        
         {% if not item.marked_for_deletion %}
-        <form action="/edit_item" method="get">
-          <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
-          <button type="submit" class="submitButton"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
-        </form>
         <!-- Check in / out -->
         <button 
             class="submitButton check_in_button" 
@@ -115,9 +113,15 @@ SOFTWARE. -->
             Check out
         </button>
         <div style='display: none' class="popup">
+            <br>
             Reason <textarea class="reason"></textarea><br>
             <button class="submitButton" onclick="checkOut('{{item.key.urlsafe()}}')"><i class="fa fa-sign-out" aria-hidden="true"></i> Check Out</button>
         </div>
+        <br/>
+        <form action="/edit_item" method="get">
+          <input type="hidden" name="item_id" value="{{item.key.urlsafe()}}">
+          <button type="submit" class="submitButton"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+        </form>
         <!-- End check in / out -->
         {% if user.permissions != "Standard user" %}
         <form action="/add_item" method="get">
@@ -157,6 +161,7 @@ SOFTWARE. -->
         {% endif %}
         
       </div>
+      <br>
       <p id="creator">Created by {{item.creator_name}} at {{item.updated.strftime('%I:%M%p on %b %d, %Y').lstrip('0')}}</p>
     </div>
     <br/><br/>
