@@ -22,6 +22,8 @@ div.form {
   font-size: 1.2em;
   padding: 8px;
   width: 100%;
+  background-color: #DCE7F3;
+  border-radius: 4px
 }
 
 div.form form {
