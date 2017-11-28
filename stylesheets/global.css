@@ -67,18 +67,18 @@ body {
 }
 
 .item_container {
-  background-color: #EAEAEA;
+  background-color: rgb(221,232,244);
   padding: 8px;
   display: inline-block;
   border-radius: 5px;
-  margin: 5px;
+  margin: 0px 15px 15px 15px;
   margin-left: 5%;
   position: relative;
   width: 90%;
 }
 
 .sub_item_container {
-  background-color: #FFF;
+  background-color: rgb(221,232,244);
   padding: 7px;
   display: inline-block;
   border-radius: 5px;
@@ -181,14 +181,28 @@ h2:first-child {
 #left-pane {
     padding: 5px;
     padding-left: 50px;
-    width: 50%;
+    width: 30%;
     float: left;
 }
 
 #right-pane {
     padding: 5px;
-    width: 50%;
+    width: 70%;
     float: right;
+}
+
+#filter-container {
+    padding: 10px 10px 10px 18px;
+    width: auto;
+    border-radius: 4px;
+    background-color: rgb(221,232,244);
+}
+
+#filter-container-block {
+    padding: 5px 10px 10px 10px;
+    border-radius: 4px;
+    background-color: rgb(157, 189, 224);
+    width: auto;
 }
 
 #error {
@@ -206,7 +220,7 @@ h2:first-child {
 }
 
 .list_drop_down {
-  text-align: left; 
+  text-align: left;
 }
 
 .mobile {

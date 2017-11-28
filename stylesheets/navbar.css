@@ -37,7 +37,7 @@ SOFTWARE.*/
 #breadcrumb_bar {
 	width: 100%;
 	height: 30px;
-	background-color: rgb(241,185,43);
+	background-color: rgb(162,211,244);
 }
 
 #breadcrumbs {
@@ -107,7 +107,7 @@ SOFTWARE.*/
 }
 
 #navItems li:hover {
-  background-color: rgb(252,217,62);
+  background-color: rgb(27,115,180);
 }
 
 #navItems form {
