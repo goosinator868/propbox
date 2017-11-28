@@ -52,6 +52,6 @@ div.item_details h3, h4, h5, p {
 }
 
 .item_image {
-  min-width: 40vw;
+  min-width: 20vw;
   max-width: 50%;
 }

@@ -84,7 +84,11 @@ function updatePreview(e){
     pre_existing_img = document.getElementById("item_image");
     // If there is an image that already exists (when we are editing an item)
     if (pre_existing_img) {
-      drawImageToPreviewWindow(pre_existing_img, true);
+      var img = document.createElement('img');
+      img.onload = function(){
+        drawImageToPreviewWindow(img, true);
+      };
+      img.src = pre_existing_img.src;
     // If this is a brand new item or it does not have an image.
     } else {
       ctx = document.getElementById("preview_canvas").getContext('2d');
