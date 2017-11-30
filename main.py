@@ -76,7 +76,7 @@ class AddItem(webapp2.RequestHandler):
     def get(self):
         user = get_current_user(self.request)
         # logging.info(user.permissions != wmodels.ADMIN)
-        if user.permissions != wmodels.TRUSTED_USER and user.permissions != wmodels.ADMIN:
+        if (user.permissions == wmodels.PENDING_USER or user.permissions == wmodels.DEACTIVATED_USER):
             self.redirect('/')
             return
         template = JINJA_ENVIRONMENT.get_template('templates/add_item.html')
@@ -101,7 +101,7 @@ class AddItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
         user = get_current_user(self.request)
-        if user.permissions != wmodels.TRUSTED_USER and user.permissions != wmodels.ADMIN:
+        if (user.permissions == wmodels.PENDING_USER or user.permissions == wmodels.DEACTIVATED_USER):
             self.redirect('/')
             return
         try:
@@ -169,7 +169,7 @@ class EditItem(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         user = get_current_user(self.request)
-        if user.permissions != wmodels.TRUSTED_USER and user.permissions != wmodels.ADMIN:
+        if (user.permissions == wmodels.DEACTIVATED_USER or user.permissions == wmodels.PENDING_USER):
             self.redirect('/')
             return
         item_id = ndb.Key(urlsafe=self.request.get('item_id'))
@@ -184,7 +184,7 @@ class EditItem(webapp2.RequestHandler):
     @auth.login_required
     def post(self):
         user = get_current_user(self.request)
-        if user.permissions != wmodels.TRUSTED_USER and user.permissions != wmodels.ADMIN:
+        if (user.permissions == wmodels.DEACTIVATED_USER or user.permissions == wmodels.PENDING_USER):
             self.redirect('/')
             return
         user = get_current_user(self.request)
