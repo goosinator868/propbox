@@ -185,28 +185,14 @@ h2:first-child {
 #left-pane {
     padding: 5px;
     padding-left: 50px;
-    width: 30%;
+    width: 35%;
     float: left;
 }
 
 #right-pane {
     padding: 5px;
-    width: 70%;
+    width: 65%;
     float: right;
-}
-
-#filter-container {
-    padding: 10px 10px 10px 18px;
-    width: auto;
-    border-radius: 4px;
-    background-color: rgb(221,232,244);
-}
-
-#filter-container-block {
-    padding: 5px 10px 10px 10px;
-    border-radius: 4px;
-    background-color: rgb(157, 189, 224);
-    width: auto;
 }
 
 #error {
