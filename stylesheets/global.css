@@ -78,7 +78,7 @@ body {
 }
 
 .sub_item_container {
-  background-color: rgb(221,232,244);
+  background-color: rgb(162,211,244);
   padding: 7px;
   display: inline-block;
   border-radius: 5px;
@@ -185,13 +185,13 @@ h2:first-child {
 #left-pane {
     padding: 5px;
     padding-left: 50px;
-    width: 35%;
+    width: 50%;
     float: left;
 }
 
 #right-pane {
     padding: 5px;
-    width: 65%;
+    width: 50%;
     float: right;
 }
 

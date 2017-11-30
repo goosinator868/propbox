@@ -86,11 +86,13 @@ SOFTWARE. -->
   </div>
   <!-- New content here -->
   {% for item in items %}
-  <div class="item_seperator">
-    <h2 class="qr_code_caption">{{item.name}}</h2>
-    <div class="qr_code_image">{{item.qr_code}}</div>
+  <div id="pane_container">
+    <div class="item_seperator">
+      <h2 class="qr_code_caption">{{item.name}}</h2>
+      <div class="qr_code_image">{{item.qr_code}}</div>
+    </div>
+    {% endfor %}
   </div>
-  {% endfor %}
   <footer id="footer_holder"></footer>
 </body>
 </html>
