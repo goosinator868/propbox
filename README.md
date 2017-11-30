@@ -1,6 +1,9 @@
 # PropBoxProto
 An experiment with AppEngine to make a junior design project prototype.
 
+## Propbox 1.0
+[Release Notes](Propbox_1.0_Release_Notes.pdf)
+
 ## FAQ and install instructions
 [https://docs.google.com/document/d/150tjfQCVWj44AUbpQ-3HOCYtCxwx4G8quTkFvtUQkTU/edit?usp=sharing](https://docs.google.com/document/d/150tjfQCVWj44AUbpQ-3HOCYtCxwx4G8quTkFvtUQkTU/edit?usp=sharing)
 
