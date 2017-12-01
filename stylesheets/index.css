@@ -72,6 +72,20 @@ form button:hover {
     background-color: rgb(221,232,244);
 }
 
+@media only screen and (max-device-width:480px) {
+  #filter-container {
+    min-width: 95vw;
+    width: 95vw;
+    max-width: 95vw;
+  }
+
+  .item_container {
+    min-width: 90vw;
+    width: 90vw;
+    max-width: 90vw;
+  }
+}
+
 .filter-container-block {
     padding: 5px 10px;
     border-radius: 4px;
