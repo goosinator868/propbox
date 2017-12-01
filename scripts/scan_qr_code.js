@@ -33,7 +33,7 @@ function scanQRCode(callback) {
   Instascan.Camera.getCameras().then(function (cameras) {
     if (cameras.length == 0) {
       // desktop
-      scanner.start(cameras[0]);
+      alert("No cameras found");
     } else if (cameras.length > 0) {
       // mobile
       scanner.start(cameras[cameras.length - 1]);
