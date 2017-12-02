@@ -490,7 +490,7 @@ class MainPage(webapp2.RequestHandler):
             user_id = auth.get_user_id(self.request)
 
 
-            query = filterItems(
+            items = filterItems(
                 item_name_filter,
                 item_type_filter,
                 item_condition_filter,
@@ -500,43 +500,14 @@ class MainPage(webapp2.RequestHandler):
                 costume_size_string_filter,
                 costume_size_number_filter,
                 tags_filter,
-                tags_grouping_filter)
-
-            items = query.fetch()
-            if (len(item_condition_filter) == 0):
-                item_condition_filter.append("Good")
-                item_condition_filter.append("Fair")
-                item_condition_filter.append("Poor")
-                item_condition_filter.append("Being repaired")
-
-            if (item_type_filter == "" or item_type_filter == None):
-                item_type_filter = "All"
-
-            if (len(item_color_filter) == 0):
-                item_color_filter.append("Red")
-                item_color_filter.append("Orange")
-                item_color_filter.append("Yellow")
-                item_color_filter.append("Green")
-                item_color_filter.append("Cyan")
-                item_color_filter.append("Blue")
-                item_color_filter.append("Indigo")
-                item_color_filter.append("Purple")
-                item_color_filter.append("Pink")
-                item_color_filter.append("Brown")
-                item_color_filter.append("Black")
-                item_color_filter.append("White")
-                item_color_filter.append("Gray")
+                tags_grouping_filter,
+                outdated=False)
 
             # send to display
             page = template.render({
                 'lists': lists,
                 'user': user,
                 'items': items,
-                'item_type_filter': item_type_filter,
-                'item_name_filter': item_name_filter,
-                'item_condition_filter': item_condition_filter,
-                'item_color_filter': item_color_filter,
-                'availability_filter': availability_filter,
                 'user_id': user_id})
             page = page.encode('utf-8')
             self.response.write(validateHTML(page))

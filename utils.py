@@ -271,43 +271,27 @@ def parseTags(tags_string):
 # Filters viewable items based on selected boxes in MainPage
 def filterItems(item_name, item_type, item_condition, item_colors,
     item_color_grouping, costume_article, costume_size_string,
-    costume_size_number, tags_filter, tag_grouping):
+    costume_size_number, tags_filter, tag_grouping, outdated=False):
     query = Item.query()
-    # Check if costume or prop is selected individually
+
+    query = query.filter(Item.outdated == outdated)
+
+    # Costume specific features
     if (item_type == "Costume"):
-        if (len(costume_size_string) == 9):
-            costume_size_string.append("N/A")
-        elif (len(costume_size_string) == 0):
-            costume_size_string.append("N/A")
-            costume_size_string.append("XXS")
-            costume_size_string.append("XS")
-            costume_size_string.append("S")
-            costume_size_string.append("M")
-            costume_size_string.append("L")
-            costume_size_string.append("XL")
-            costume_size_string.append("XXL")
-            costume_size_string.append("XXXL")
+        if (len(costume_article) != 0):
+            query = query.filter(Item.clothing_article_type.IN(costume_article))
 
-        if (len(costume_article) == 0):
-            costume_article.append("Top")
-            costume_article.append("Bottom")
-            costume_article.append("Dress")
-            costume_article.append("Shoes")
-            costume_article.append("Hat")
-            costume_article.append("Coat/Jacket")
-            costume_article.append("Other")
+        if (len(costume_size_string) != 0):
+            query = query.filter(Item.clothing_size_string.IN(costume_size_string))
 
-        # Query separated into an if statement to diminish search time
-        if (len(costume_size_number) == 0 or len(costume_size_number) == 26):
-            query = Item.query(ndb.AND(Item.clothing_article_type.IN(costume_article),
-                Item.clothing_size_string.IN(costume_size_string))).order(Item.name)
-        else:
-            query = Item.query(ndb.AND(Item.clothing_article_type.IN(costume_article),
-                Item.clothing_size_string.IN(costume_size_string),
-                Item.clothing_size_num.IN(costume_size_number))).order(Item.name)
-    else:
-        query = Item.query().order(Item.name)
+        if (len(costume_size_number) != 0):
+            query = query.filter(Item.clothing_size_num.IN(costume_size_number))
 
+    # Item Condition
+    if (len(item_condition) != 0):
+        query = query.filter(Item.condition.IN(item_condition))
+
+    # Tags
     tags_list = parseTags(tags_filter)
     if len(tags_list) != 0:
         if tag_grouping == "inclusive":
@@ -316,16 +300,15 @@ def filterItems(item_name, item_type, item_condition, item_colors,
             for tag in tags_list:
                 query = query.filter(Item.tags == tag)
 
+    # Colors
     if len(item_colors) != 0:
-        query1 = query;
         if item_color_grouping == "inclusive":
-            query1 = query.filter(Item.item_color.IN(item_colors))
+            query = query.filter(Item.item_color.IN(item_colors))
         else:
             for color in item_colors:
-                query1 = query1.filter(Item.item_color == color)
-        return query1
+                query = query.filter(Item.item_color == color)
 
-    return query
+    return query.fetch()
 
 
 # TODO: actually remove rolled back and deleted items

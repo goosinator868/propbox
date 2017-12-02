@@ -23,5 +23,11 @@ indexes:
 
 - kind: Item
   properties:
+  - name: item_color
+  - name: tags
+  - name: name
+
+- kind: Item
+  properties:
   - name: tags
   - name: name
