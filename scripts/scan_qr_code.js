@@ -36,7 +36,12 @@ function scanQRCode(callback) {
       alert("No cameras found");
     } else if (cameras.length > 0) {
       // mobile
-      scanner.start(cameras[cameras.length - 1]);
+      var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+      if (!iOS) {
+        scanner.start(cameras[cameras.length - 1]);
+      } else {
+        scanner.start(cameras[0]);
+      }
     } else {
       console.error('No cameras found.');
       alert("No cameras found.");
