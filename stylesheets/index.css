@@ -64,3 +64,35 @@ form button:hover {
   transition: background-color 0.1s ease;
   -webkit-transition: background-color 0.1s ease;
 }
+
+#filter-container {
+    /*padding: 10px 10px 10px 10px;*/
+    width: auto;
+    border-radius: 4px;
+    background-color: rgb(221,232,244);
+}
+
+@media only screen and (max-device-width:480px) {
+  #filter-container {
+    min-width: 95vw;
+    width: 95vw;
+    max-width: 95vw;
+  }
+
+  .item_container {
+    min-width: 90vw;
+    width: 90vw;
+    max-width: 90vw;
+  }
+}
+
+.filter-container-block {
+    padding: 5px 10px;
+    border-radius: 4px;
+    background-color: rgb(157, 189, 224);
+    width: 90%;
+}
+
+#nameBox, #tagBox {
+  max-width: 100%;
+}

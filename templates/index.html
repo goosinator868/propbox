@@ -72,7 +72,7 @@ SOFTWARE. -->
   </div>
   <br/><br/>
   <div id="pane_container">
-      <div id="left-pane">
+      <div id="left-pane" style="width: 35%;">
             <div id="filter-container">
                 <!-- Search form -->
                 <div class="form">
@@ -80,12 +80,12 @@ SOFTWARE. -->
                     <br>
                     <form action="/search_and_browse" method="get" onsubmit="setCheckboxValues(this);">
                         <div id="result"></div>
-                        <div id="filter-container-block">
+                        <div class="filter-container-block">
                         <h4> Name </h4>
                         <input id="nameBox" name="filter_by_name" type="text" placeholder="Name">
                         </div>
                         <br>
-                        <div id="filter-container-block">
+                        <div class="filter-container-block">
                         <h4> Type </h4>
                         <input type="radio" id="typeAll" name="filter_by_item_type" value="All" checked="checked" onclick="hideFilterCostumeForm(this); setCheckboxValues('filter_by_item_type', 'typeAll');"> All<br>
                         <input type="radio" id="typeCostume" name="filter_by_item_type" value="Costume" onclick="displayFilterCostumeForm(this);"> Costume<br>
@@ -94,7 +94,7 @@ SOFTWARE. -->
                         <!-- Alternatively, disabled="disabled" for hiding this section? -->
                         <div id="costume_specific_forms">
                             <br>
-                            <div id="filter-container-block">
+                            <div class="filter-container-block">
                             <h4> Article </h4>
                             {% for option in ["Top", "Bottom", "Dress", "Shoes", "Hat", "Coat/Jacket", "Other"] %}
                               {% if option == "Coat/Jacket" %}
@@ -107,7 +107,7 @@ SOFTWARE. -->
                             {% endfor %}
                             </div>
                             <br>
-                            <div id="filter-container-block">
+                            <div class="filter-container-block">
                             <h4> Size </h4>
                             {% for option in ["N/A", "XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"] %}
                               <input type="checkbox" id="sizeString{{option}}" name="filter_by_costume_size_string" value="{{option}}"> {{option}}<br>
@@ -123,7 +123,7 @@ SOFTWARE. -->
                             </div>
                         </div>
                         <br>
-                        <div id="filter-container-block">
+                        <div class="filter-container-block">
                         <h4> Condition </h4>
                         {% for option in ["Good", "Fair", "Poor", "Being repaired"] %}
                           {% if option == "Being repaired" %}
@@ -134,7 +134,7 @@ SOFTWARE. -->
                         {% endfor %}
                         </div>
                         <br>
-                        <div id="filter-container-block">
+                        <div class="filter-container-block">
                           <h4> Color </h4>
                           <div style="display: inline-block;">
                             {% for option in ["Red", "Orange", "Yellow", "Green", "Cyan", "Blue", "Indigo", "Purple","Pink", "Brown", "Black", "White", "Gray"] %}
@@ -148,14 +148,14 @@ SOFTWARE. -->
                           </div>
                         </div>
                         <br>
-                        <div id="filter-container-block">
+                        <div class="filter-container-block">
                         <h4> Tags </h4>
                         <textarea id="tagBox" name="filter_by_tags" placeholder="separate tags with enter key"></textarea><br>
                         <input type="radio" id="tagGroupingInclusive" name="filter_by_tag_grouping" value="inclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, tagGroupingInclusive);"> Any of the Tags Listed<br>
                         <input type="radio" id="tagGroupingExclusive" name="filter_by_tag_grouping" value="exclusive" onclick="setCheckedRadioValues(filter_by_tag_grouping, tagGroupingExclusive);"> All of the Tags Listed<br>
                         </div>
                         <br>
-                        <div id="filter-container-block">
+                        <div class="filter-container-block">
                         <h4> Availability</h4>
                         <input type="radio" id="availabilityAll" name="filter_by_availability" value="All"checked="checked" onclick="setCheckedRadioValues(filter_by_availability, availabilityAll);"> All<br>
                         <input type="radio" id="availabilityCheckedIn" name="filter_by_availability" value="checkedIn" onclick="setCheckedRadioValues(filter_by_availability, availabilityCheckedIn);"> All Available for Check Out<br>
@@ -173,8 +173,12 @@ SOFTWARE. -->
                 </div>
             </div>
       </div>
-
-      <div id="right-pane">
+      <div class="mobile">
+        <br>
+        <hr>
+        <br>
+      </div>
+      <div id="right-pane" style="width: 65%;">
           <!-- View current items -->
           <div>
             <!-- TODO: clean this up so no filter logic is happening, it should all happen on the server -->

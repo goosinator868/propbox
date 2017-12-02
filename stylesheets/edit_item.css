@@ -22,8 +22,8 @@ div.form {
   font-size: 1.2em;
   padding: 8px;
   width: 100%;
-  background-color: #DCE7F3;
-  border-radius: 4px
+  /*background-color: #DCE7F3;
+  border-radius: 4px*/
 }
 
 div.form form {
@@ -53,7 +53,20 @@ div.item_details h3, h4, h5, p {
   width: 100%;
 }
 
+div.item_details {
+  background-color: rgb(221,232,244);
+}
+
 .item_image {
   min-width: 20vw;
   max-width: 50%;
+}
+
+input, select, textarea {
+  border: 2px;
+  border-color: rgb(221,232,244);
+  border-style: solid;
+  border-radius: 4px;
+  padding: 6px;
+  width: 100%;
 }

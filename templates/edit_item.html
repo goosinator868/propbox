@@ -52,8 +52,8 @@ SOFTWARE. -->
   </div>
   <div id="pane_container">
     <div id="left-pane">
-      <h2>Current version of {{item.name}}:</h2>
       <div class="item_details">
+          <h2>Current version of {{item.name}}:</h2>
           {% if item.image_url %}
           <a href="{{item.image_url}}">
             <img id="item_image" crossOrigin="anonymous" src="{{item.image_url}}" class="item_image" alt="Picture of {{item.name}}"/>
@@ -81,7 +81,6 @@ SOFTWARE. -->
 
     <div id="right-pane">
       <div class="form">
-        <h1> Edit Item </h1>
           <form action="/edit_item" method="post" style="width: 100%;" enctype="multipart/form-data"> 
               <input type="hidden" name="old_item_key" value="{{item.key.urlsafe()}}">
               <label>Name</label><br>
@@ -92,8 +91,8 @@ SOFTWARE. -->
               <input type="file" id="image_upload_input" onchange="onImageUpload()"><br>
               <input name="image" type="hidden" id="downscaled_image">
               <div>
-                <button type="button" onclick="rotateCanvas(false)"><i class="fa fa-undo" aria-hidden="true"></i> Rotate left</button>
-                <button type="button" onclick="rotateCanvas(true)"><i class="fa fa-repeat" aria-hidden="true"></i> Rotate right</button>
+                <button type="button" onclick="rotateCanvas(false)" class="submitButton"><i class="fa fa-undo" aria-hidden="true"></i> Rotate left</button>
+                <button type="button" onclick="rotateCanvas(true)" class="submitButton"><i class="fa fa-repeat" aria-hidden="true"></i> Rotate right</button>
               </div>
               <br>
               <canvas id="preview_canvas" width='250px' height='250px' style="border:1px solid #c3c3c3;">Browser does not support canvas, please use another browser</canvas>
@@ -132,18 +131,13 @@ SOFTWARE. -->
                   <option {% if item.clothing_size_string == option|string() %} selected {% endif %}> {{option}} </option>
                 {% endfor %}
               </select><br><br>
-              <label>What color is the item?</label><br>
-                  {% for option in ["Red", "Orange", "Yellow", "Green"] %}
-                    <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if option in item.item_color %}checked="checked"{% endif %}> {{option}} &nbsp;&nbsp;
+              <label>Item Colors</label>
+                <p style="font-size: 0.75em;">Check all that apply.</p>
+                <div style="display: inline-block; max-width: 250px;">
+                  {% for option in ["Red", "Orange", "Yellow", "Green", "Cyan", "Blue", "Indigo", "Purple","Pink", "Brown", "Black", "White", "Gray"] %}
+                  <span style="float: left; width: 80px; padding-right: 3px; box-sizing: border-box;"><input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if option in item.item_color %}checked="checked"{% endif %}> {{option}}</span>
                   {% endfor %}
-                  <br>
-                  {% for option in ["Cyan", "Blue", "Indigo", "Purple"] %}
-                    <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if option in item.item_color %}checked="checked"{% endif %}> {{option}} &nbsp;&nbsp;
-                  {% endfor %}
-                  <br>
-                  {% for option in ["Pink", "Brown", "Black", "White"] %}
-                    <input type="checkbox" id="sizeString{{option}}" name="color" value="{{option}}" {% if option in item.item_color %}checked="checked"{% endif %}> {{option}} &nbsp;&nbsp;
-                  {% endfor %}
+                </div>
               <br><br>
               <label>Tags</label><br>
               <!-- See http://jinja.pocoo.org/docs/2.9/templates/#whitespace-control -->
@@ -166,7 +160,7 @@ SOFTWARE. -->
             </div>
           </div>
 
-          <button onclick="showConfirm('popup')" type="button" class="submitButton"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit Edit{% if user.permissions=="STANDARD_USER" %} Request{% endif %}</button>
+          <button onclick="showConfirm('popup')" type="button" class="submitButton"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit Edit{% if user.permissions=="Standard user" %} Request{% endif %}</button>
         </form>
       </div>
     </div>

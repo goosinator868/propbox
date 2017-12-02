@@ -35,7 +35,7 @@ SOFTWARE.*/
   z-index: 101;
   width: 100vw;
   height: 10vh;
-  background-color:rgb(174,100,211);
+  background-color:rgb(162,211,244);
   font-size: 20pt;
 }
 
@@ -44,6 +44,9 @@ SOFTWARE.*/
   padding-left: 10vw;
 }
 
-.submitButton {
-
+#tooltipText {
+  padding-left:10px;
+  padding-top: 10px;
+  color: white;
+  font-weight: bold;
 }
