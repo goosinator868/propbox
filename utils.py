@@ -308,7 +308,13 @@ def filterItems(item_name, item_type, item_condition, item_colors,
             for color in item_colors:
                 query = query.filter(Item.item_color == color)
 
-    return query.fetch()
+    results = query.order(Item.updated).fetch()
+    # Name
+    if item_name != '':
+        results = [x for x in results if x.name.lower().find(item_name.lower()) >= 0]
+
+
+    return results
 
 
 # TODO: actually remove rolled back and deleted items

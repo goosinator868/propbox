@@ -29,5 +29,16 @@ indexes:
 
 - kind: Item
   properties:
+  - name: name
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
   - name: tags
   - name: name

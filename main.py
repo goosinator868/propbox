@@ -470,61 +470,44 @@ class MainPage(webapp2.RequestHandler):
     @auth.login_required
     def get(self):
         user = get_current_user(self.request)
-        #template = JINJA_ENVIRONMENT.get_template('templates/search_and_browse_items.html')
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
         user = get_current_user(self.request);
         lists = List.query(ndb.OR(List.owner == user.key, List.public == True)).fetch()
-        try:
-            # Filter search items
-            item_name_filter = self.request.get('filter_by_name')
-            item_type_filter = self.request.get('filter_by_item_type')
-            item_condition_filter = self.request.get_all('filter_by_condition')
-            item_color_filter = self.request.get_all('filter_by_color')
-            item_color_grouping_filter = self.request.get('filter_by_color_grouping')
-            item_article_filter = self.request.get_all('filter_by_article')
-            costume_size_string_filter = self.request.get_all('filter_by_costume_size_string')
-            costume_size_number_filter = self.request.get_all('filter_by_costume_size_number')
-            tags_filter = self.request.get('filter_by_tags')
-            tags_grouping_filter = self.request.get('filter_by_tag_grouping')
-            availability_filter = self.request.get('filter_by_availability')
-            user_id = auth.get_user_id(self.request)
+        item_name_filter = self.request.get('filter_by_name')
+        item_type_filter = self.request.get('filter_by_item_type')
+        item_condition_filter = self.request.get_all('filter_by_condition')
+        item_color_filter = self.request.get_all('filter_by_color')
+        item_color_grouping_filter = self.request.get('filter_by_color_grouping')
+        item_article_filter = self.request.get_all('filter_by_article')
+        costume_size_string_filter = self.request.get_all('filter_by_costume_size_string')
+        costume_size_number_filter = self.request.get_all('filter_by_costume_size_number')
+        tags_filter = self.request.get('filter_by_tags')
+        tags_grouping_filter = self.request.get('filter_by_tag_grouping')
+        availability_filter = self.request.get('filter_by_availability')
+        user_id = auth.get_user_id(self.request)
 
 
-            items = filterItems(
-                item_name_filter,
-                item_type_filter,
-                item_condition_filter,
-                item_color_filter,
-                item_color_grouping_filter,
-                item_article_filter,
-                costume_size_string_filter,
-                costume_size_number_filter,
-                tags_filter,
-                tags_grouping_filter,
-                outdated=False)
+        items = filterItems(
+            item_name_filter,
+            item_type_filter,
+            item_condition_filter,
+            item_color_filter,
+            item_color_grouping_filter,
+            item_article_filter,
+            costume_size_string_filter,
+            costume_size_number_filter,
+            tags_filter,
+            tags_grouping_filter,
+            outdated=False)
 
-            # send to display
-            page = template.render({
-                'lists': lists,
-                'user': user,
-                'items': items,
-                'user_id': user_id})
-            page = page.encode('utf-8')
-            self.response.write(validateHTML(page))
-
-        # TODO: make this more specific OR preferably remove try/except infrastructure
-        except:
-            # first time opening or item has been added
-            query = Item.query()
-            items = query.fetch()
-            # logging.info(items)
-            page = template.render({
-                'lists': lists,
-                'user': user,
-                'items': items,
-                'item_type_filter': item_type_filter})
-            page = page.encode('utf-8')
-            self.response.write(validateHTML(page))
+        # send to display
+        page = template.render({
+            'lists': lists,
+            'user': user,
+            'items': items,
+            'user_id': user_id})
+        page = page.encode('utf-8')
+        self.response.write(validateHTML(page))
 
 
 class ManageUsers(webapp2.RequestHandler):
