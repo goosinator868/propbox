@@ -22,6 +22,7 @@ SOFTWARE. -->
 <head>
 {% include 'templates/common.html' %}
   <!-- QR-CODE reader import -->
+  <script type="text/javascript" src="/scripts/webrtc_adapter.js"></script>
   <script type="text/javascript" src="/scripts/instascan.min.js"></script>
   <script>
     $(document).ready(function(){
@@ -55,7 +56,7 @@ SOFTWARE. -->
       <div id="scanner_tooltip">
         <p id="tooltipText">Click anywhere to exit</p>
       </div>
-      <video id="scanner_window"></video>
+      <video id="scanner_window" playsinline></video>
     </div>
     <h2>Scanned Items</h2>
     <ul id="scanned_list"></ul>
