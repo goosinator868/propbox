@@ -272,6 +272,7 @@ def parseTags(tags_string):
 def filterItems(item_name, item_type, item_condition, item_colors,
     item_color_grouping, costume_article, costume_size_string,
     costume_size_number, tags_filter, tag_grouping):
+    query = Item.query()
     # Check if costume or prop is selected individually
     if (item_type == "Costume"):
         if (len(costume_size_string) == 9):
