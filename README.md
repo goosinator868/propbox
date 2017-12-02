@@ -4,11 +4,17 @@ An experiment with AppEngine to make a junior design project prototype.
 ## Propbox 1.0
 [Release Notes](Propbox_1.0_Release_Notes.pdf)
 
-## FAQ and install instructions
-[https://docs.google.com/document/d/150tjfQCVWj44AUbpQ-3HOCYtCxwx4G8quTkFvtUQkTU/edit?usp=sharing](https://docs.google.com/document/d/150tjfQCVWj44AUbpQ-3HOCYtCxwx4G8quTkFvtUQkTU/edit?usp=sharing)
+## Installation Instructions
+These instructions are for anyone from the UAH theater department who wants to use uah-propbox.appspot.com.
+
+1. Navigate to the [site](https://uah-propbox.appspot.com), no setup required.
+
+## Developer Installation Instructions
+These instructions are for someone who wants to help contribute to the propbox project.
+[Developer Guide](https://docs.google.com/document/d/150tjfQCVWj44AUbpQ-3HOCYtCxwx4G8quTkFvtUQkTU/edit?usp=sharing)
 
 ## Coding standards
-[https://docs.google.com/document/d/1ku-Ik56ovVwMY8OQi6WWcSATdy10ZfXoBIvz5S2qlDM/edit?usp=sharing](https://docs.google.com/document/d/1ku-Ik56ovVwMY8OQi6WWcSATdy10ZfXoBIvz5S2qlDM/edit?usp=sharing)
+[Standards Goolge Doc](https://docs.google.com/document/d/1ku-Ik56ovVwMY8OQi6WWcSATdy10ZfXoBIvz5S2qlDM/edit?usp=sharing)
 
 ## Files
 
