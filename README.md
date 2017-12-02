@@ -7,7 +7,7 @@ An experiment with AppEngine to make a junior design project prototype.
 ## Installation Instructions
 These instructions are for anyone from the UAH theater department who wants to use uah-propbox.appspot.com.
 
-1. Navigate to the site, no setup required.
+1. Navigate to the [site](https://uah-propbox.appspot.com), no setup required.
 
 ## Developer Installation Instructions
 These instructions are for someone who wants to help contribute to the propbox project.
