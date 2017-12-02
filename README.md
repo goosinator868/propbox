@@ -1,5 +1,5 @@
 # PropBoxProto
-An experiment with AppEngine to make a junior design project prototype.
+A prop and costume management web application initially made for UAH.
 
 ## Propbox 1.0
 [Release Notes](Propbox_1.0_Release_Notes.pdf)
