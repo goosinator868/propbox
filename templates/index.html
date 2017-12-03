@@ -110,17 +110,24 @@ SOFTWARE. -->
                             <br>
                             <div class="filter-container-block">
                             <h4> Size </h4>
+                            <select id="select_size_string">
                             {% for option in ["N/A", "XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"] %}
-                              <input type="checkbox" id="sizeString{{option}}" name="filter_by_costume_size_string" value="{{option}}"> {{option}}<br>
+                              <!-- <input type="checkbox" id="sizeString{{option}}" name="filter_by_costume_size_string" value="{{option}}"> {{option}}<br> -->
+                              <option value="{{option}}" name="filter_by_costume_size_string">{{option}}</option>
                             {% endfor %}
+                            </select>
                             <br>
-                            {% for i in range(26) %}
-                              {% if (i + 1) % 4 == 0 %}
-                                <input type="checkbox" id="sizeNum{{i}}" name="filter_by_costume_size_number" value="{{i}}"> {{i}} &nbsp;&nbsp;<br>
-                              {% else %}
-                                <input type="checkbox" id="sizeNum{{i}}" name="filter_by_costume_size_number" value="{{i}}"> {{i}} &nbsp;&nbsp;
-                              {% endif %}
-                            {% endfor %}
+                            <br>
+                            
+                            <input name="excludeUnknownSize" type="checkbox" id="excludeUnknownSize" value="true">
+                            <label for="excludeUnknownSize">Hide Unknown Sizes</label>
+                            <br>
+                            <label for="size-min">Min</label>
+                            <input id="size-min" type="number" name="filter_by_costume_size_min" style="width:50px" value="0" min="0" max="26">
+                            
+                            <label for="size-max">Max</label>
+                            <input id="size-max" type="number" name="filter_by_costume_size_max" style="width:50px" value="26" min="0" max="26">
+                            
                             </div>
                         </div>
                         <br>

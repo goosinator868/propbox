@@ -75,21 +75,11 @@ function setCheckboxValues(x) {
             }
         }
 
-        if (costumeSizeStringList != null) {
-            for (var i = 0; i < costumeSizeStringList.length; i++) {
-                if (costumeSizeStringList[i].checked) {
-                    costumeSizeStringArray.push(costumeSizeStringList[i].id);
-                }
-            }
-        }
+        costumeSizeString = $('#select_size_string').find(":selected").text();
 
-        if (costumeSizeNumList != null) {
-            for (var i = 0; i < costumeSizeNumList.length; i++) {
-                if (costumeSizeNumList[i].checked) {
-                    costumeSizeNumArray.push(costumeSizeNumList[i].id);
-                }
-            }
-        }
+        minSizeNum = document.getElementById("size-min").value;
+        maxSizeNum = document.getElementById("size-max").value;
+        excludeUnknownSize = document.getElementById("excludeUnknownSize").checked;
 
         if (document.getElementById("colorGroupingExclusive").checked) {
             colorGrouping = "colorGroupingExclusive";
@@ -125,8 +115,10 @@ function setCheckboxValues(x) {
 
         localStorage.setItem("ConditionFilter", JSON.stringify(conditionArray));
         localStorage.setItem("ArticleFilter", JSON.stringify(articleArray));
-        localStorage.setItem("CostumeSizeStringFilter", JSON.stringify(costumeSizeStringArray));
-        localStorage.setItem("CostumeSizeNumFilter", JSON.stringify(costumeSizeNumArray));
+        localStorage.setItem("CostumeSizeStringFilter", costumeSizeString);
+        localStorage.setItem("MinSizeNum", minSizeNum);
+        localStorage.setItem("MaxSizeNum", maxSizeNum);
+        localStorage.setItem("excludeUnknownSize", excludeUnknownSize);
         localStorage.setItem("ColorFilter", JSON.stringify(colorArray));
         localStorage.setItem("ColorGroupingFilter", colorGrouping);
         localStorage.setItem("TagGroupingFilter", tagGrouping);
@@ -141,8 +133,13 @@ function getCheckboxValues() {
     if (typeof(Storage) !== "undefined") {
         var conditionArray = JSON.parse(localStorage.getItem("ConditionFilter"));
         var articleArray = JSON.parse(localStorage.getItem("ArticleFilter"));
-        var costumeSizeStringArray = JSON.parse(localStorage.getItem("CostumeSizeStringFilter"));
-        var costumeSizeNumArray = JSON.parse(localStorage.getItem("CostumeSizeNumFilter"));
+
+        var costumeSizeString = localStorage.getItem("CostumeSizeStringFilter");
+        
+        var minSizeNum = localStorage.getItem("MinSizeNum");
+        var maxSizeNum = localStorage.getItem("MaxSizeNum");
+        var excludeUnknownSize = localStorage.getItem("excludeUnknownSize");
+
         var colorArray = JSON.parse(localStorage.getItem("ColorFilter"));
         var colorGrouping = localStorage.getItem("ColorGroupingFilter");
         var tagGrouping = localStorage.getItem("TagGroupingFilter");
@@ -156,12 +153,6 @@ function getCheckboxValues() {
         }
         if (articleArray == null) {
             articleArray = [];
-        }
-        if (costumeSizeStringArray == null) {
-            costumeSizeStringArray = [];
-        }
-        if (costumeSizeNumArray == null) {
-            costumeSizeNumArray = [];
         }
         if (colorArray == null) {
             colorArray = [];
@@ -185,17 +176,10 @@ function getCheckboxValues() {
             }
         }
 
-        for (var i = 0; i < costumeSizeStringArray.length; i++) {
-            if (document.getElementById(costumeSizeStringArray[i]) != null) {
-                document.getElementById(costumeSizeStringArray[i]).checked = true;
-            }
-        }
-
-        for (var i = 0; i < costumeSizeNumArray.length; i++) {
-            if (document.getElementById(costumeSizeNumArray[i]) != null) {
-                document.getElementById(costumeSizeNumArray[i]).checked = true;
-            }
-        }
+        $('#select_size_string').val(costumeSizeString);
+        document.getElementById("excludeUnknownSize").checked = excludeUnknownSize == "true";
+        document.getElementById("size-min").value = minSizeNum;
+        document.getElementById("size-max").value = maxSizeNum;
 
         for (var i = 0; i < colorArray.length; i++) {
             if (document.getElementById(colorArray[i]) != null) {
@@ -239,8 +223,10 @@ function getCheckboxValues() {
 function clearForm() {
   localStorage.setItem("ConditionFilter", JSON.stringify([]));
   localStorage.setItem("ArticleFilter", JSON.stringify([]));
-  localStorage.setItem("CostumeSizeStringFilter", JSON.stringify([]));
-  localStorage.setItem("CostumeSizeNumFilter", JSON.stringify([]));
+  localStorage.setItem("CostumeSizeStringFilter", 'N/A');
+  localStorage.setItem("MinSizeNum", "0");
+  localStorage.setItem("MaxSizeNum", "26");
+  localStorage.setItem("excludeUnknownSize", "False");
   localStorage.setItem("ColorFilter", JSON.stringify([]));
   localStorage.setItem("ColorGroupingFilter", "colorGroupingInclusive");
   localStorage.setItem("TagGroupingFilter", "tagGroupingInclusive");

@@ -49,7 +49,7 @@ class Item(ndb.Model):
     item_color = ndb.StringProperty(repeated=True)
     condition = ndb.StringProperty(required=True)
     clothing_size_string = ndb.StringProperty(required=False)
-    clothing_size_num = ndb.StringProperty(required=False)
+    clothing_size_num = ndb.IntegerProperty(required=False)
     clothing_article_type = ndb.StringProperty(required=False)
     tags = ndb.StringProperty(repeated=True)
     checked_out = ndb.BooleanProperty(default=False)

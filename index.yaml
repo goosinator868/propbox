@@ -12,24 +12,1320 @@ indexes:
 
 - kind: Item
   properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
   - name: clothing_article_type
   - name: clothing_size_string
-  - name: name
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
 
 - kind: Item
   properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_string
+  - name: condition
   - name: item_color
-  - name: name
-
-- kind: Item
-  properties:
-  - name: item_color
+  - name: item_type
+  - name: outdated
   - name: tags
-  - name: name
+  - name: clothing_size_num
+  - name: updated
 
 - kind: Item
   properties:
-  - name: name
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_num
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_num
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_num
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_num
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_num
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_num
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: checked_out_by
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_string
+  - name: condition
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: clothing_size_string
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: condition
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_article_type
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_num
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_num
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_num
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_num
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_num
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_num
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_num
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_string
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: condition
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: clothing_size_num
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: tags
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: condition
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out
+  - name: item_color
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: checked_out_by
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: clothing_article_type
+  - name: clothing_size_num
+  - name: clothing_size_string
+  - name: condition
+  - name: item_type
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: condition
+  - name: outdated
+  - name: updated
+
+- kind: Item
+  properties:
+  - name: item_type
   - name: outdated
   - name: updated
 
@@ -37,8 +1333,3 @@ indexes:
   properties:
   - name: outdated
   - name: updated
-
-- kind: Item
-  properties:
-  - name: tags
-  - name: name

@@ -115,6 +115,10 @@ class AddItem(webapp2.RequestHandler):
             article_type = self.request.get('article')
             costume_or_prop = self.request.get('item_type')
             costume_size_number = self.request.get('clothing_size_number')
+            if costume_size_number == "N/A":
+                costume_size_number = -1
+            else:
+                costume_size_number = int(costume_size_number)
             costume_size_word = self.request.get('clothing_size_string')
             tags_string = self.request.get('tags')
             # Override certain inputs due to costume and prop defaults
@@ -125,7 +129,7 @@ class AddItem(webapp2.RequestHandler):
             elif costume_or_prop == "Prop":
                 # Props do not have sizes or article types
                 article_type = "N/A"
-                costume_size_number = "N/A"
+                costume_size_number = -1
                 costume_size_word = "N/A"
 
             # tags is a string. Needs to parsed into an array
@@ -471,23 +475,29 @@ class MainPage(webapp2.RequestHandler):
     def get(self):
         user = get_current_user(self.request)
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
-        user = get_current_user(self.request);
         lists = List.query(ndb.OR(List.owner == user.key, List.public == True)).fetch()
         item_name_filter = self.request.get('filter_by_name')
         item_type_filter = self.request.get('filter_by_item_type')
         item_condition_filter = self.request.get_all('filter_by_condition')
         item_color_filter = self.request.get_all('filter_by_color')
         item_color_grouping_filter = self.request.get('filter_by_color_grouping')
-        item_article_filter = self.request.get_all('filter_by_article')
-        costume_size_string_filter = self.request.get_all('filter_by_costume_size_string')
-        costume_size_number_filter = self.request.get_all('filter_by_costume_size_number')
+        item_article_filter = self.request.get('filter_by_article')
+        costume_size_string_filter = self.request.get('filter_by_costume_size_string')
+        costume_size_number_min = self.request.get('filter_by_costume_size_min')
+        costume_size_number_max = self.request.get('filter_by_costume_size_max')
+        if not costume_size_number_max:
+            costume_size_number_max = "26"
+        if not costume_size_number_min:
+            costume_size_number_min = "0"
+
+        exclude_unknown_size = self.request.get('excludeUnknownSize', '') == "true" 
         tags_filter = self.request.get('filter_by_tags')
         tags_grouping_filter = self.request.get('filter_by_tag_grouping')
         availability_filter = self.request.get('filter_by_availability')
         user_id = auth.get_user_id(self.request)
 
-
         items = filterItems(
+            user_id,
             item_name_filter,
             item_type_filter,
             item_condition_filter,
@@ -495,9 +505,12 @@ class MainPage(webapp2.RequestHandler):
             item_color_grouping_filter,
             item_article_filter,
             costume_size_string_filter,
-            costume_size_number_filter,
+            costume_size_number_min,
+            costume_size_number_max,
+            exclude_unknown_size,
             tags_filter,
             tags_grouping_filter,
+            availability_filter,
             outdated=False)
 
         # send to display
