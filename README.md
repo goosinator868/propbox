@@ -1,4 +1,4 @@
-# PropBoxProto
+# Propbox
 A prop and costume management web application initially made for UAH.
 
 ## Propbox 1.0
