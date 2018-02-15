@@ -14,7 +14,7 @@ These instructions are for someone who wants to help contribute to the propbox p
 [Developer Guide](https://docs.google.com/document/d/150tjfQCVWj44AUbpQ-3HOCYtCxwx4G8quTkFvtUQkTU/edit?usp=sharing)
 
 ## Coding standards
-[Standards Goolge Doc](https://docs.google.com/document/d/1ku-Ik56ovVwMY8OQi6WWcSATdy10ZfXoBIvz5S2qlDM/edit?usp=sharing)
+[Standards Google Doc](https://docs.google.com/document/d/1ku-Ik56ovVwMY8OQi6WWcSATdy10ZfXoBIvz5S2qlDM/edit?usp=sharing)
 
 ## Files
 
